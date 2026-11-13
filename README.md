@@ -1,5 +1,7 @@
 # Akıllı Tam Desen Eşleştirme ve Kod Bilimi Atölyesi (IoS: `sequence.pattern-match.exact`)
 
+**Canlı site:** <https://baki-b.github.io/YZM327-Odev-3/> · atölye: [`web/`](https://baki-b.github.io/YZM327-Odev-3/web/) · sunum: [`docs/sunum/`](https://baki-b.github.io/YZM327-Odev-3/docs/sunum/) · rapor: [`docs/rapor/Rapor.pdf`](docs/rapor/Rapor.pdf)
+
 Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log) bir ya da daha çok desenin geçtiği bütün yerleri bulan **yedi yeni atom** (+ Boyer-Moore), girdinin şekline bakıp en hızlısını seçen **ExactMatch molekülü** ve bunları yazılım mühendisliğinde kullanan tarayıcı tabanlı bir iş akışı düzenleyicisi: **Kod Bilimi Atölyesi**. Seçim, ölçümle kalibre edilmiş bir maliyet modeliyle yapılır.
 
 **Sonuç (model v4, kalibrasyonda ve hiçbir kararda kullanılmamış taze kümeler, birer kez ölçüldü):**
@@ -66,8 +68,9 @@ Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), y
 | `npm run figures` | Rapor şekilleri (`docs/rapor/*.svg`) |
 | `npm run mutation` | Mutasyon denetimi (12 bilerek konmuş hata) → `docs/mutasyon.md` |
 | `npm run web` | Bağımlılıksız yerel sunucu (atölye, site, sunum) |
-| `npm run paketler` | Hazır paketleri iş akışı motoruyla çalıştırıp komut satırıyla karşılaştırır (`../forum` gerekir) |
-| `npm run ornekler` | Atölyenin örnek verilerini depodaki gerçek dosyalardan üretir (`web/data/`) |
+| `npm run paketler` | Hazır paketleri iş akışı motoruyla çalıştırıp komut satırıyla karşılaştırır (Agora örneğini `web/data/agora.json`'dan `ornek-agora/` klasörüne açar) |
+| `npm run ornekler` | Atölyenin örnek verilerini gerçek dosyalardan üretir (`web/data/`; Agora örneği yalnızca Agora kaynağı yanındayken yenilenir) |
+| `node scripts/agora-ac.js` | Agora örneğini (`web/data/agora.json`, 114 dosya) `ornek-agora/` klasörüne gerçek dosyalar olarak açar |
 | `node scripts/site-uret.js` | Siteyi ve slaytları `bench/results/`'tan üretir (sayılar elle yazılmaz) |
 | `node scripts/uml-ciz.js --pdf` | UML diyagramları (`docs/uml/`) |
 | `node scripts/sayi-denetimi.js` | Rapor, README, sunum, site ve kontrol listesindeki her sayıyı kaynak dosyalara karşı denetler |
@@ -87,7 +90,11 @@ node bin/ios.js explain --patterns GATC,GGATCC < tests/data/lambda_NC_001416.fa
 ```
 
 ```bash
-node bin/ios.js scan --preset todo ../forum
+node scripts/agora-ac.js
+```
+
+```bash
+node bin/ios.js scan --preset todo ornek-agora/forum
 ```
 
 - `run`: stdout'a satır başına bir `Sequence.Match` (JSONL) yazar; karar özeti stderr'e gider. Bileşen adı `ExactMatch` ya da bir atomun adı olabilir.
@@ -125,39 +132,23 @@ docs/            rapor, sunum, UML, sapmalar, mutasyon, anlatım, kontrol listes
 scripts/         sunucu, örnek veri, paket karşılaştırması, site/UML üretimi, denetimler, PDF
 ```
 
-## Teslim yapısı (ödev depo kökünde `src/`, `bin/`, `package.json` bekliyor)
+## Depo ve geçmiş
 
-Proje bu deponun `vize/` klasöründe. Ödevin beklediği kök düzeni için önerilen yol: **yalnızca `vize/` geçmişini taşıyan ayrı bir dal**. Bu, mevcut dalları ve geçmişi değiştirmez; yeni bir dal oluşturur. Komutlar depo kökünden, `vize/` değişiklikleri commit edildikten sonra:
+Proje ilk olarak `Baki-B/YZM327-Odevler` deposunun `vize/` klasöründe geliştirildi. Ödevin beklediği kök düzeni (`src/`, `bin/`, `package.json` depo kökünde) için o klasörün geçmişi `git subtree split --prefix=vize` ile ayrılıp bu depoya taşındı: `vize/` klasörünü değiştiren her commit, yol önekleri atılmış hâliyle buradaki geçmişte yer alır. Proje Agora'nın kaynak koduna bağlı değildir; Agora örneği (`web/data/agora.json`) ve kaynak kod korpusu (`bench/corpus/kod.txt`) depoya dahildir.
 
-```bash
-git subtree split --prefix=vize -b vize-teslim
-```
+Teslim .zip olarak isteniyorsa:
 
 ```bash
-git push -u origin vize-teslim
+git archive --format=zip -o kod-bilimi-atolyesi.zip HEAD
 ```
-
-`vize-teslim` dalının kökünde doğrudan `src/`, `bin/`, `package.json`, `tests/` bulunur ve `vize/` klasörünü değiştiren her commit (yol önekleri atılmış hâliyle) geçmişte yer alır. Denetim: dalı ayrı bir klasöre alıp `npm test` çalıştırın (testler `vize/` dışındaki hiçbir dosyaya bağlı değil):
-
-```bash
-git worktree add ../teslim vize-teslim
-```
-
-```bash
-cd ../teslim && npm test
-```
-
-Sınır: `npm run paketler` ve `scripts/arayuz-denetimi.js` Agora karşılaştırması için `../forum` klasörünü kullanır; teslim dalında bu iki betik yalnızca ana depoda çalışır (atölyenin örnek verisi `web/data/agora.json` dala dahildir). Teslim .zip olarak isteniyorsa: `git archive --format=zip -o vize-teslim.zip vize-teslim` (ödev `.git` klasörünü istiyorsa dal ayrı bir klasöre klonlanıp sıkıştırılmalı).
 
 ## GitHub Pages'te yayınlama
 
-Yayın adresi: **<https://baki-b.github.io/YZM327-Odevler/>** (kök siteye yönlendirir; atölye `…/web/`, sunum `…/docs/sunum/`, rapor `…/docs/rapor/Rapor.pdf`).
+Yayın adresi: **<https://baki-b.github.io/YZM327-Odev-3/>** (kökteki `index.html` siteye yönlendirir).
 
-Depodaki `.github/workflows/sayfalar.yml` artık Agora yerine bu projeyi yayınlıyor: `main` dalına her gönderimde Node 22 ile `npm test` çalıştırır (başarısızsa yayımlamaz), `vize/` klasörünü olduğu gibi siteye koyar ve yayınlar. Actions sekmesinden elle de başlatılabilir. Pages kaynağı zaten "GitHub Actions" olduğu için ayarlarda değişiklik gerekmez; dal `main`'e birleşmeden yayın güncellenmez.
+`.github/workflows/sayfalar.yml`, `main` dalına her gönderimde Node 22 ile `npm test` çalıştırır; testler geçmezse yayımlamaz. Geçerse depoyu olduğu gibi siteye koyar ve yayınlar; Actions sekmesinden elle de başlatılabilir. Site, atölye, sunum ve rapor statik dosyalardır ve göreli yollarla çalışır; derleme adımı yoktur. `.github/workflows/testler.yml` her gönderimde ve pull request'te testleri çalıştırır.
 
-Site, atölye, sunum ve rapor statik ve göreli yollarla çalışır; bu yüzden alt yol (`/YZM327-Odevler/`) altında da çalışır.
-
-**Ayrı depo (isteğe bağlı):** `vize-teslim` dalını yeni bir depoya gönderirseniz: depo **Settings → Pages → Build and deployment → Source: "Deploy from a branch"**, **Branch: `main` (ya da `vize-teslim`), klasör `/ (root)`** → Save. Birkaç dakika sonra adres `https://<kullanıcı>.github.io/<depo>/` olur.
+Pages ilk kez açılırken iş akışı Pages'i kendisi etkinleştirmeyi dener. Bu başarısız olursa bir kez elle yapın: depo **Settings → Pages → Build and deployment → Source: "GitHub Actions"**, ardından **Actions → GitHub Pages → Run workflow**.
 
 ## Veri kaynakları
 

@@ -3,7 +3,7 @@
 // `java -jar plantuml.jar -charset UTF-8 -tsvg docs/uml/*.puml` ile de üretilebilir). Bu ortamda
 // PlantUML kurulamadığı için çizim bu betikle yapılır; içerik iki tarafta aynıdır.
 // --pdf verilirse bütün diyagramlar docs/uml/UML_Diyagramlari.pdf dosyasında toplanır (Playwright gerekir).
-// Kullanım (vize/ klasöründen): node scripts/uml-ciz.js [--pdf]
+// Kullanım (proje kökünden): node scripts/uml-ciz.js [--pdf]
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';

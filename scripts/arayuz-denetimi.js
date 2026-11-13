@@ -7,13 +7,15 @@
 //   3. 1280 px ve 390 px'te yatay taşma yok; açık ve koyu tema.
 //   4. Bütün sayfalarda konsol hatası yok.
 // Ekran görüntüleri: docs/ekran/*.png
-// Kullanım (vize/ klasöründen): node scripts/arayuz-denetimi.js
+// Kullanım (proje kökünden): node scripts/arayuz-denetimi.js
 import { createRequire } from 'node:module';
 import { spawn, execSync } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { PACKAGES } from '../src/workflows/packages.js';
+import { agoraKlasoru } from './agora-ac.js';
 
+agoraKlasoru(); // komut satırı Agora örneğini ornek-agora/ klasöründen tarar
 const require = createRequire(import.meta.url);
 let chromium;
 try {

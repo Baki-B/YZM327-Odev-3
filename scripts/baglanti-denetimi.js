@@ -1,5 +1,5 @@
 // Site, slaytlar ve atölyedeki bütün göreli bağlantıları (href, src, data) yerel sunucudan ister;
-// 200 dönmeyeni listeler. Kullanım (vize/ klasöründen): node scripts/baglanti-denetimi.js
+// 200 dönmeyeni listeler. Kullanım (proje kökünden): node scripts/baglanti-denetimi.js
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 

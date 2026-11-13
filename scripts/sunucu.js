@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Bağımlılıksız, salt okunur statik dosya sunucusu (yalnızca Node'un kendi modülleri).
 // Atölye ES modülleri ve Web Worker kullandığı için file:// ile değil, bir sunucudan açılmalıdır.
-//   node scripts/sunucu.js            → http://localhost:8327/  (vize/ klasörünü sunar)
+//   node scripts/sunucu.js            → http://localhost:8327/  (proje kökünü sunar)
 //   node scripts/sunucu.js --port 9000 --root ..
 // Yalnızca 127.0.0.1'e bağlanır; klasör dışına çıkan yollar reddedilir.
 import { createServer } from 'node:http';

@@ -107,14 +107,14 @@ function biyoloji() {
 }
 
 /**
- * Paket listesi. `cli`: aynı sonucu veren komut(lar) (vize/ klasöründen); `expected`:
+ * Paket listesi. `cli`: aynı sonucu veren komut(lar) (proje kökünden); `expected`:
  * beklenen bulgu sayısı her "Eşleşme → Bulgu" kutusu için.
  */
 export const PACKAGES = [
   {
     id: 'teknik-borc', channel: 'teknik-borç-avı', build: teknikBorc,
     summary: 'Agora projesinin forum/ klasöründe bırakılmış TODO, FIXME, HACK ve XXX notlarını dosya:satır:sütun olarak listeler.',
-    cli: ['node bin/ios.js scan --preset todo ../forum'],
+    cli: ['node bin/ios.js scan --preset todo ornek-agora/forum'],
     expected: { bulgu: 18 },
   },
   {
@@ -126,7 +126,7 @@ export const PACKAGES = [
   {
     id: 'yasakli-api', channel: 'yasaklı-api', build: yasakliApi,
     summary: 'Agora kodunda eval(, exec(, innerHTML, pickle.loads, os.system( gibi güvenlik açısından riskli çağrıları bulur.',
-    cli: ['node bin/ios.js scan --preset banned-api ../forum'],
+    cli: ['node bin/ios.js scan --preset banned-api ornek-agora/forum'],
     expected: { bulgu: 3 },
   },
   {

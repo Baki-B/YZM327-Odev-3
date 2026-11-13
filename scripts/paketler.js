@@ -1,12 +1,14 @@
 // Hazır paketleri Node'da iş akışı motoruyla çalıştırır ve her "Eşleşme → Bulgu" kutusunun
 // bulgu sayısını aynı işi yapan komut satırının (bin/ios.js) çıktı satırı sayısıyla karşılaştırır.
-// Kullanım (vize/ klasöründen): node scripts/paketler.js
+// Kullanım (proje kökünden): node scripts/paketler.js
 import { execSync } from 'node:child_process';
 import { createCatalog } from '../src/workflows/catalog.js';
 import { deserializeWorkflow, runWorkflow } from '../src/workflows/engine.js';
 import { PACKAGES } from '../src/workflows/packages.js';
+import { agoraKlasoru } from './agora-ac.js';
 import { loadSampleNode } from '../src/workflows/samplesNode.js';
 
+agoraKlasoru(); // komut satırı Agora örneğini ornek-agora/ klasöründen tarar
 const catalog = createCatalog();
 const VIZE = new URL('..', import.meta.url).pathname;
 let allOk = true;

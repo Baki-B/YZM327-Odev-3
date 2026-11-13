@@ -1,7 +1,7 @@
 // Proje sitesini (site/) ve sunum slaytlarını (docs/sunum/index.html) ölçüm dosyalarından üretir: bütün sayılar bench/results/*.json'dan
 // okunur, elle yazılmaz. Sayfalar statik ve bağımlılıksızdır; göreli yollarla çalışır.
 //   site/index.html, bilesenler.html, bilesen/<Ad>.html, sonuclar.html, rapor.html, ekip.html
-// Kullanım (vize/ klasöründen): node scripts/site-uret.js
+// Kullanım (proje kökünden): node scripts/site-uret.js
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { registry } from '../src/registry.js';
 import { ExactMatch } from '../src/molecules/ExactMatch.js';
@@ -44,7 +44,7 @@ function page(file, title, body, { depth = 0, description = '' } = {}) {
 <main>
 ${body}
 </main>
-<footer class="foot"><div class="in"><span>IoS atom/molekül sözleşmesine uygun bileşenler · <code>sequence.pattern-match.exact</code></span><span>Sayılar <code>bench/results/</code> dosyalarından üretildi (<code>node scripts/site-uret.js</code>).</span></div></footer>
+<footer class="foot"><div class="in"><span>IoS atom/molekül sözleşmesine uygun bileşenler · <code>sequence.pattern-match.exact</code></span><span>Sayılar <code>bench/results/</code> dosyalarından üretildi (<code>node scripts/site-uret.js</code>) · <a href="https://github.com/Baki-B/YZM327-Odev-3">Kaynak kod (GitHub)</a></span></div></footer>
 </body>
 </html>
 `;
@@ -308,7 +308,7 @@ console.log(`site/: ${6 + atoms.length} sayfa yazıldı (model ${coefficients.mo
     `<h2>Doğrulama (taze D, v4, ${SETS.D.data.cases.length} vaka)</h2>${mini(D, [AUTO, E2E, bestD[0], 'her zaman AhoCorasickSearch', 'Allmer 2016 kuralı'])}<p class="muted">Tek desen (E): seçilen ${f3(E[AUTO].geomeanSlowdown)}, uçtan uca ${f3(E[E2E].geomeanSlowdown)}; Allmer ${f3(E['Allmer 2016 kuralı'].geomeanSlowdown)}, hep Horspool ${f3(E['her zaman HorspoolSearch'].geomeanSlowdown)}.</p>`,
     `<h2>Bir yanlış seçim: D, vaka ${w.id}</h2><p>${w.alphabet === 'text' ? 'İngilizce benzeri metin (kalibrasyonda yok)' : w.alphabet}, n = ${int(w.n)}, k = ${w.k}, m = ${w.lengths.join('/')}</p>${table(['Atom', { t: 'Tahmin (ms)', n: 1 }, { t: 'Ölçülen (ms)', n: 1 }], [w.selected, w.best].map((n) => ({ cells: [n.replace('Search', '') + (n === w.selected ? ' (seçilen)' : ' (en hızlı)'), ms(est(n)), ms(tm(n))] })))}<ul><li>Yavaşlama ${wx(tm(w.selected) / w.bestMs)}: iki tahmin <b>ters yönde</b> yanıldı (${dec(tm(w.selected) / est(w.selected), 2)}× az, ${dec(est(w.best) / tm(w.best), 2)}× fazla).</li><li>Model metni tekdüze rastgele sayar. Olası neden: kelimelerden oluşan metinde sık q-gramlar desende de geçer, q-gram kayması öngörülenden kısa kalır; Wu-Manber'in blok tablosu ise bu metinde öngörülenden seyrek doğrulama yapar. (Doğrulamadan sonra model değiştirilmedi.)</li></ul>`,
     `<h2>Sınırlar</h2><ul><li><b>Tek desen</b>: seçim zayıf; uçtan uca molekül hep Horspool / Allmer kuralının gerisinde (E)</li><li><b>İkili alfabe</b>: E'nin en kötü 5 vakasının 5'i</li><li><b>Karar ilk kayda göre</b> (sözleşme): ilk dosya küçükse seçim kötü olabilir</li><li><b>Ölçüm</b>: D'de uçtan uca oran 1'in altına düştü (medyan ${f3(overheadD)}) → düzenek küçük farkı ayıramıyor; karar süresi ayrıca ölçüldü (medyan ${pct(KD.ratio)})</li><li>v3 ve v4 farklı makinelerde ölçüldü; fark ayrıştırılamaz</li></ul>`,
-    `<h2>Ekip ve katkılar</h2>${table(['Üye', 'Katkı'], [{ cells: ['Baki <span class="ph">[soyad, numara]</span>', '<span class="ph">[...]</span>'] }, { cells: ['<span class="ph">[Üye 2 ad soyad, numara]</span>', '<span class="ph">[...]</span>'] }])}<p class="muted">Yapay zekâ kullanımı ders politikasında serbest; kod, testler, atölye, site, rapor ve bu slaytlar Claude Code ile üretildi, sayılar çalıştırılan komutlardan. Sorular: <code>docs/sunum.md</code>.</p>`,
+    `<h2>Ekip ve katkılar</h2>${table(['Üye', 'Katkı'], [{ cells: ['Baki <span class="ph">[soyad, numara]</span>', '<span class="ph">[...]</span>'] }, { cells: ['<span class="ph">[Üye 2 ad soyad, numara]</span>', '<span class="ph">[...]</span>'] }])}<p class="muted">Yapay zekâ kullanımı ders politikasında serbest; kod, testler, atölye, site, rapor ve bu slaytlar Claude Code ile üretildi, sayılar çalıştırılan komutlardan. Sorular: <code>docs/sunum.md</code>.</p><p class="muted">Kod: <b>github.com/Baki-B/YZM327-Odev-3</b> · Site: <b>baki-b.github.io/YZM327-Odev-3</b></p>`,
   ];
   const html = `<!doctype html>
 <html lang="tr">

@@ -5,7 +5,7 @@
 // (D'de molekül, kendi seçtiği atomdan medyanda kısa ölçüldü). Burada karar adımı tek
 // başına, çok kez tekrarlanarak ölçülür. Bu betik modeli değiştirmez ve D/E sonuçlarına
 // dokunmaz; yalnızca D ve E vakalarının girdilerini yeniden üretir.
-// Kullanım (vize/ klasöründen): node --expose-gc scripts/karar-yuku.js
+// Kullanım (proje kökünden): node --expose-gc scripts/karar-yuku.js
 // Çıktı: bench/results/karar-yuku-v4.json, bench/results/karar-yuku-v4.md
 
 import { readFileSync } from 'node:fs';

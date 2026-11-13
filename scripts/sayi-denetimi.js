@@ -5,7 +5,7 @@
 // gerekçesiyle yazılıysa kabul edilir (ödev metnindeki sabitler, yıllar, kod sabitleri...).
 // Bir sayı, kaynaktaki bir değerin aynı ondalık basamağa yuvarlanmış hâliyle (ya da yüzde
 // olarak 100 katıyla) eşleşirse "bulundu" sayılır.
-// Kullanım (vize/ klasöründen): node scripts/sayi-denetimi.js   (bulunmayan varsa çıkış kodu 1)
+// Kullanım (proje kökünden): node scripts/sayi-denetimi.js   (bulunmayan varsa çıkış kodu 1)
 import { readFileSync, readdirSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { PACKAGES } from '../src/workflows/packages.js';

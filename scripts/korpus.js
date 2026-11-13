@@ -1,7 +1,7 @@
 // Kaynak kod korpusunu üretir: bench/corpus/kod.txt
 // Bu deponun kendi kaynak dosyaları (Agora projesi: Python, JavaScript, HTML)
 // birleştirilir. Kalibrasyonda "kaynak kod" alfabesi buradan örneklenir.
-// Kullanım: node scripts/korpus.js   (vize/ klasöründen)
+// Kullanım: node scripts/korpus.js   (proje kökünden)
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, extname } from 'node:path';
 
@@ -21,6 +21,11 @@ function walk(dir) {
 }
 for (const d of DIRS) {
   try { walk(join(ROOT, d)); } catch { /* klasör yoksa geç */ }
+}
+if (files.length === 0) {
+  // Agora'nın kaynağı yalnızca ilk depoda (YZM327-Odevler) vardır; burada korpus olduğu gibi kalır.
+  console.log('Agora kaynak klasörleri bulunamadı: bench/corpus/kod.txt olduğu gibi bırakıldı');
+  process.exit(0);
 }
 let out = '';
 for (const f of files) out += readFileSync(f, 'utf8').replaceAll('\r\n', '\n') + '\n';

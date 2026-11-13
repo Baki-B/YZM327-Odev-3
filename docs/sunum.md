@@ -5,10 +5,6 @@
 ## Hazırlık (sunumdan önce, bir kez)
 
 ```bash
-cd vize
-```
-
-```bash
 npm test
 ```
 
@@ -73,7 +69,11 @@ node bin/ios.js scan --patterns def,class,return,import,self,lambda,yield,await,
 3. Agora projesinde riskli API taraması:
 
 ```bash
-node bin/ios.js scan --preset banned-api ../forum
+node scripts/agora-ac.js
+```
+
+```bash
+node bin/ios.js scan --preset banned-api ornek-agora/forum
 ```
 
 ## Olası sorular ve kısa yanıtlar

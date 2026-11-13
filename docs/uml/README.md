@@ -12,7 +12,7 @@ Hepsi tek dosyada: **[UML_Diyagramlari.pdf](UML_Diyagramlari.pdf)**. Kaynaklar P
 | [Sıralı 3](svg/3c_sirali_baglanti.svg) | İki ucu bağlama; uyumsuz bağlantının nedeniyle reddi |
 | [Paket (katman)](svg/4_katmanlar.svg) | Modüller ve bağımlılık yönü |
 
-Yeniden üretmek (vize/ klasöründen):
+Yeniden üretmek (proje kökünden):
 
 ```bash
 node scripts/uml-ciz.js --pdf

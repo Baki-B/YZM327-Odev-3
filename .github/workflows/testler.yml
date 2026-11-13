@@ -1,0 +1,21 @@
+name: Testler
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  testler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Birim testleri
+        run: npm test
+      - name: Hazır paketler = komut satırı
+        run: node scripts/paketler.js

@@ -1,7 +1,7 @@
 // v3 (calibration-v3.json) ve v4 (calibration.json) kalibrasyon ölçümlerini karşılaştırır:
 // iki ölçüm aynı 180 vakayı, aynı atomlarla, farklı makinelerde ölçtü.
 // Çıktı: bench/results/makine-karsilastirma.md
-// Kullanım (vize/ klasöründen): node scripts/makine-karsilastir.js
+// Kullanım (proje kökünden): node scripts/makine-karsilastir.js
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const RES = new URL('../bench/results/', import.meta.url);

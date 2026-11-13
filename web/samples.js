@@ -1,5 +1,5 @@
 // Örnek veri yükleyicisi, tarayıcı sürümü (ana iş parçacığında ve Web Worker içinde çalışır).
-// Dosyalar vize/ klasörüne göre göreli yollardan fetch ile okunur; bir kez okunan önbellekte kalır.
+// Dosyalar proje köküne göre göreli yollardan fetch ile okunur; bir kez okunan önbellekte kalır.
 import { SAMPLES } from '../src/workflows/catalog.js';
 
 const VIZE = new URL('../', import.meta.url);

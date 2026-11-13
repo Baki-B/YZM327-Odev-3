@@ -1,13 +1,13 @@
 // Atölyenin örnek verilerini depodaki gerçek dosyalardan üretir (web/data/).
 // (Log örneği .txt uzantılıdır: depo kökündeki .gitignore *.log dosyalarını dışarıda bırakır.)
-//   web/data/agora.json   ../forum klasöründeki metin dosyaları [{ path, text }]
+//   web/data/agora.json   ../forum klasöründeki metin dosyaları [{ path, text }] (klasör yoksa dokunulmaz)
 //                         (ios scan'in dosya gezme kurallarıyla: gizli/derleme klasörleri,
 //                         ikili dosyalar ve 5 MB'tan büyükler atlanır)
 //   web/data/gizli.json   web/data/gizli/ içindeki SAHTE örnek dosyalar
 //   web/data/ornek-log.txt bench/data.js log üreticisi (doğrulamadaki "log" alfabesi, tohum 20261113)
 //                         + 3 örnek Traceback / Exception bloğu (elle yazıldı, açıkça örnek)
-// Kullanım (vize/ klasöründen): node scripts/ornekler.js
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+// Kullanım (proje kökünden): node scripts/ornekler.js
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { makeText } from '../bench/data.js';
 
@@ -31,8 +31,15 @@ function* walk(path) {
 
 const bundle = (dir, base) => [...walk(dir)].map((f) => ({ path: relative(base, f.abs), text: f.text }));
 
-const agora = bundle(join(ROOT, 'forum'), ROOT);
-writeFileSync(join(VIZE, 'web/data/agora.json'), JSON.stringify(agora));
+// Agora'nın kaynağı (../forum) yalnızca ilk depoda (YZM327-Odevler) vardır; yoksa mevcut agora.json korunur.
+let agora;
+if (existsSync(join(ROOT, 'forum'))) {
+  agora = bundle(join(ROOT, 'forum'), ROOT);
+  writeFileSync(join(VIZE, 'web/data/agora.json'), JSON.stringify(agora));
+} else {
+  agora = JSON.parse(readFileSync(join(VIZE, 'web/data/agora.json'), 'utf8'));
+  console.log('../forum yok: web/data/agora.json olduğu gibi bırakıldı');
+}
 const gizli = bundle(join(VIZE, 'web/data/gizli'), join(VIZE, 'web/data'));
 writeFileSync(join(VIZE, 'web/data/gizli.json'), JSON.stringify(gizli));
 
