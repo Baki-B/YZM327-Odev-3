@@ -4,10 +4,29 @@
 import { createCatalog, mergePatternSets } from '../src/workflows/catalog.js';
 import { deserializeWorkflow, runWorkflow } from '../src/workflows/engine.js';
 import { raceAtoms } from '../src/workflows/race.js';
+import { sha256Hex } from '../src/workflows/provenance.js';
 import { loadSampleBrowser } from './samples.js';
 
 const catalog = createCatalog();
 let last = null;
+
+/**
+ * Kaynak kutularının (Source.File üreten) çıktısındaki her dosyanın SHA-256 özeti: çalıştırma
+ * kaydı (provenance) girdilerin aynı olup olmadığını bununla gösterir. Web Crypto yoksa boş.
+ */
+async function inputDigests(wf, res) {
+  const out = {};
+  if (!globalThis.crypto?.subtle) return out;
+  for (const node of wf.nodes) {
+    const comp = catalog.get(node.type);
+    const port = comp?.outputs.find((p) => p.type === 'Source.File');
+    const files = port && res.nodes[node.id]?.status === 'bitti' ? res.nodes[node.id].outputs?.[port.name] : null;
+    if (!Array.isArray(files)) continue;
+    out[node.id] = [];
+    for (const f of files) out[node.id].push({ path: f.path, chars: f.text.length, sha256: await sha256Hex(f.text) });
+  }
+  return out;
+}
 
 /** İş akışını çalıştırır; düğüm çıktılarını (büyük metinler) değil, yalnızca bilgileri döndürür. */
 export async function runSerialized(data, onNode = () => {}) {
@@ -22,7 +41,9 @@ export async function runSerialized(data, onNode = () => {}) {
   last = { wf, res };
   const nodes = {};
   for (const [id, r] of Object.entries(res.nodes)) nodes[id] = { status: r.status, ms: r.ms, info: r.info, error: r.error };
-  return { ok: res.ok, problems: res.problems, order: res.order, totalMs, nodes };
+  let inputs = {};
+  try { inputs = await inputDigests(wf, res); } catch { /* özet hesaplanamazsa kayıt özetsiz olur */ }
+  return { ok: res.ok, problems: res.problems, order: res.order, totalMs, nodes, inputs };
 }
 
 /** Son çalıştırmada verilen arama kutusunun (molekül ya da atom) girdileriyle atomları yarıştırır. */

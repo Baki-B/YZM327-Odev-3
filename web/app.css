@@ -260,6 +260,31 @@ table.race .fill.est { background: var(--muted); }
 .scrim { display: none; }
 
 /* ------------------------------------------------------------ dar ekran (telefon) */
+/* --- geri al / yinele, denetim, kısayol penceresi */
+.canvas-tools .sep { width: 1px; align-self: stretch; background: var(--line); margin: 2px 2px; }
+.canvas-tools button:disabled { opacity: .4; cursor: default; }
+.node[data-lint="hata"] { box-shadow: 0 0 0 2px var(--danger), var(--shadow); }
+.node[data-lint="uyarı"] { box-shadow: 0 0 0 2px var(--warn), var(--shadow); }
+.node[data-lint="hata"] .node-head::after, .node[data-lint="uyarı"] .node-head::after { content: "!"; margin-left: auto; font-weight: 700; padding: 0 6px; border-radius: 9px; color: #fff; background: var(--warn); }
+.node[data-lint="hata"] .node-head::after { background: var(--danger); }
+.lint-list { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 6px; }
+.lint-list li { border-left: 3px solid var(--muted); padding: 4px 8px; background: var(--soft); border-radius: 0 var(--r-s) var(--r-s) 0; }
+.lint-list li[data-level="hata"] { border-color: var(--danger); background: var(--danger-soft); }
+.lint-list li[data-level="uyarı"] { border-color: var(--warn); }
+.lint-list li .linkish { margin-left: 6px; }
+button.linkish { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; }
+.tabs [role="tab"][data-level="hata"] { color: var(--danger); }
+.tabs [role="tab"][data-level="uyarı"] { color: var(--warn); }
+td.rule { font-size: 12px; color: var(--ink2); white-space: nowrap; }
+td.rule[data-severity="error"] { color: var(--danger); }
+td.rule[data-severity="warning"] { color: var(--warn); }
+dialog#kisayollar { border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--ink); max-width: min(560px, calc(100vw - 32px)); padding: 14px 18px; box-shadow: 0 10px 40px rgba(0, 0, 0, .25); }
+dialog#kisayollar::backdrop { background: rgba(10, 5, 15, .45); }
+.dlg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dlg-head h2 { margin: 0; font-size: 17px; }
+table.kisayol { border-collapse: collapse; width: 100%; margin: 10px 0; }
+table.kisayol td { padding: 5px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.kisayol td:first-child { white-space: nowrap; }
 @media (max-width: 900px) {
   .work { grid-template-columns: minmax(0, 1fr) 280px; }
 }

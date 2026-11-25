@@ -6,11 +6,9 @@
 <title>Kod Bilimi Atölyesi</title>
 <meta name="description" content="Kaynak kod, log ve dizilerde tam desen arayan IoS atomlarını ve ExactMatch molekülünü tarayıcıda bağlayıp çalıştıran iş akışı düzenleyicisi.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233a1238'/%3E%3Cpath d='M9 11h6M9 16h10M9 21h6' stroke='%23f2c14e' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='21' r='3' fill='%2336c2b4'/%3E%3C/svg%3E">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <link rel="stylesheet" href="app.css">
-<script>
-  // Tema: kayıtlı tercih yoksa sistem ayarı. (localStorage erişilemezse sessizce geç.)
-  try { const t = localStorage.getItem('kba-tema'); if (t) document.documentElement.dataset.theme = t; } catch {}
-</script>
+<script src="tema.js"></script>
 </head>
 <body>
 <a class="skip" href="#tuval">Tuvale geç</a>
@@ -65,7 +63,11 @@
           <span id="olcek" class="zoom">100%</span>
           <button class="icon-btn" id="yaklas" aria-label="Yakınlaştır">+</button>
           <button id="sigdir">Sığdır</button>
+          <span class="sep" aria-hidden="true"></span>
+          <button class="icon-btn" id="geri-al" aria-label="Geri al" title="Geri al (Ctrl+Z)" disabled>↶</button>
+          <button class="icon-btn" id="yinele" aria-label="Yinele" title="Yinele (Ctrl+Shift+Z)" disabled>↷</button>
           <button id="temizle">Temizle</button>
+          <button class="icon-btn" id="kisayol-ac" aria-label="Klavye kısayolları" title="Klavye kısayolları (?)">?</button>
         </div>
         <div class="scroller" id="tuval" tabindex="-1">
           <div class="sizer">
@@ -86,12 +88,14 @@
         <button role="tab" id="sekme-ozet" aria-controls="panel-ozet" aria-selected="false">Özet</button>
         <button role="tab" id="sekme-aciklama" aria-controls="panel-aciklama" aria-selected="false">Açıklama</button>
         <button role="tab" id="sekme-yaris" aria-controls="panel-yaris" aria-selected="false">Atom yarışı</button>
+        <button role="tab" id="sekme-denetim" aria-controls="panel-denetim" aria-selected="false">Denetim</button>
         <button class="icon-btn collapse" id="sonuc-katla" aria-label="Sonuç panelini daralt" aria-expanded="true">▾</button>
       </div>
       <div class="tabpanel" role="tabpanel" id="panel-bulgular" aria-labelledby="sekme-bulgular"><p class="empty">Henüz çalıştırılmadı. Soldan bir hazır paket seçin ya da kutuları bağlayıp "Tarayıcıda çalıştır"a basın.</p></div>
       <div class="tabpanel" role="tabpanel" id="panel-ozet" aria-labelledby="sekme-ozet" hidden><p class="empty">Özet, çalıştırmadan sonra burada görünür.</p></div>
       <div class="tabpanel" role="tabpanel" id="panel-aciklama" aria-labelledby="sekme-aciklama" hidden><p class="empty">"Açıkla" düğmesi iş akışını düz Türkçe cümlelerle anlatır.</p></div>
       <div class="tabpanel" role="tabpanel" id="panel-yaris" aria-labelledby="sekme-yaris" hidden><p class="empty">Bir ExactMatch kutusunu seçip özellikler panelindeki "Atomları yarıştır" düğmesine basın (önce iş akışını çalıştırın).</p></div>
+      <div class="tabpanel" role="tabpanel" id="panel-denetim" aria-labelledby="sekme-denetim" hidden><p class="empty">Denetim, iş akışındaki olası hataları çalıştırmadan önce listeler.</p></div>
     </section>
 
     <footer class="foot">
@@ -102,6 +106,11 @@
   </div>
 </div>
 <div id="toast" class="toast" role="alert" hidden></div>
+<dialog id="kisayollar" aria-labelledby="kisayol-baslik">
+  <div class="dlg-head"><h2 id="kisayol-baslik">Klavye kısayolları</h2><button class="icon-btn" id="kisayol-kapat" aria-label="Kapat">✕</button></div>
+  <table class="kisayol"><tbody id="kisayol-listesi"></tbody></table>
+  <p class="sub">Yazı alanlarındayken Ctrl+Z / Ctrl+C / Ctrl+V tarayıcının kendi davranışını yapar. Değişiklikler bu tarayıcıda otomatik saklanır; sayfa yeniden açılınca son iş akışı geri gelir.</p>
+</dialog>
 <script type="module" src="app.js"></script>
 </body>
 </html>

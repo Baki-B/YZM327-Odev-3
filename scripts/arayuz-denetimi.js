@@ -4,8 +4,11 @@
 //      bulgu sayısı aynı girdide komut satırının (bin/ios.js) verdiği sayıyla karşılaştırılır.
 //   2. Sürükle-bırak, uçtan uca bağlantı, uyumsuz bağlantının reddi, klavyeyle ekleme ve bağlama,
 //      dışa/içe aktarma, paylaşılabilir bağlantı, Açıkla, Atomları yarıştır.
-//   3. 1280 px ve 390 px'te yatay taşma yok; açık ve koyu tema.
-//   4. Bütün sayfalarda konsol hatası yok.
+//   3. Geri al / yinele, çoğalt, kopyala-yapıştır, tuş tuş yazma, denetim sekmesi, kısayol penceresi,
+//      Mermaid ve çalıştırma kaydı indirme, otomatik kayıt, tuvale JSON bırakma, tam sözcük süzgeci
+//      (atölye = komut satırı), SARIF (atölye = komut satırı, gizli değer maskeli), XSS ve CSP.
+//   4. 1280 px ve 390 px'te yatay taşma yok; açık ve koyu tema.
+//   5. Bütün sayfalarda konsol hatası yok.
 // Ekran görüntüleri: docs/ekran/*.png
 // Kullanım (proje kökünden): node scripts/arayuz-denetimi.js
 import { createRequire } from 'node:module';
@@ -209,6 +212,138 @@ try {
   await ed.keyboard.press('Delete');
   check('Delete ile kutu silme (bağlantılarıyla)', (await nodeCount(ed)) === 5 && (await edgeCount(ed)) === 4);
 
+  // ------------------------------------------------------------ 2b. geri al / yinele, çoğalt, kopyala-yapıştır
+  await ed.evaluate(() => document.getElementById('tuval').focus());
+  await ed.keyboard.press('Control+z');
+  check('Ctrl+Z: silinen kutu bağlantılarıyla geri gelir', (await nodeCount(ed)) === 6 && (await edgeCount(ed)) === 5);
+  await ed.keyboard.press('Control+Shift+z');
+  check('Ctrl+Shift+Z: yineler', (await nodeCount(ed)) === 5 && (await edgeCount(ed)) === 4);
+  await ed.click('#geri-al');
+  const undoTitle = await ed.getAttribute('#yinele', 'title');
+  check('geri al / yinele düğmeleri ve ipucu', (await nodeCount(ed)) === 6 && /Yinele: Kutu silme/.test(undoTitle ?? ''), undoTitle);
+  await ed.click(`.node[data-id="${src}"] .node-head`);
+  await ed.keyboard.press('Control+d');
+  const dup = await ed.evaluate(() => window.__atolye.state.wf.nodes.at(-1).id);
+  check('Ctrl+D: seçili kutuyu çoğaltır', dup === `${src}_kopya` && (await nodeCount(ed)) === 7, dup);
+  const copied = await ed.evaluate(() => {
+    const dt = new DataTransfer();
+    document.dispatchEvent(new ClipboardEvent('copy', { clipboardData: dt, bubbles: true, cancelable: true }));
+    const text = dt.getData('text/plain');
+    const dt2 = new DataTransfer();
+    dt2.setData('text/plain', text);
+    document.dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt2, bubbles: true, cancelable: true }));
+    return { text, last: window.__atolye.state.wf.nodes.at(-1).id };
+  });
+  check('kopyala / yapıştır: panoya JSON parçası, yapıştırınca yeni kimlik', /kod-bilimi-atolyesi\/fragment/.test(copied.text) && copied.last === `${dup}2`, copied.last);
+  await ed.evaluate(() => document.getElementById('tuval').focus());
+  for (let i = 0; i < 2; i++) await ed.keyboard.press('Control+z');
+  check('iki adım geri alınır (yapıştır, çoğalt)', (await nodeCount(ed)) === 6, String(await nodeCount(ed)));
+
+  // ------------------------------------------------------------ 2c. özellikler panelinde tuş tuş yazma (odak kaybolmamalı)
+  await ed.click(`.node[data-id="${src}"] .node-head`);
+  await ed.click('#props textarea');
+  await ed.keyboard.press('Control+a');
+  await ed.keyboard.type('a = 1  # TODO tuş tuş');
+  const typed = await ed.evaluate((id) => ({ v: window.__atolye.state.wf.nodes.find((n) => n.id === id).params.text, f: document.activeElement?.tagName }), src);
+  check('özellikler panelinde tuş tuş yazma: metin tam, odak alanda', typed.v === 'a = 1  # TODO tuş tuş' && typed.f === 'TEXTAREA', JSON.stringify(typed));
+  await ed.evaluate(() => document.getElementById('tuval').focus());
+  await ed.keyboard.press('Control+z');
+  const afterUndo = await ed.evaluate((id) => window.__atolye.state.wf.nodes.find((n) => n.id === id).params.text, src);
+  check('yazma tek adımda geri alınır', afterUndo === 'x = 1  # TODO bir\n# FIXME iki\n', JSON.stringify(afterUndo));
+
+  // ------------------------------------------------------------ 2d. denetim (lint), kısayol penceresi, diyagram, kayıt
+  await ed.click('.pal-item[data-type="cikti.ozet"]');
+  const loner = await ed.evaluate(() => window.__atolye.state.wf.nodes.at(-1).id);
+  const lintMark = await ed.getAttribute(`.node[data-id="${loner}"]`, 'data-lint');
+  await ed.click('#sekme-denetim');
+  const lintText = await ed.textContent('#panel-denetim');
+  check('denetim: bağlanmamış kutu işaretlenir ve sekmede listelenir', lintMark === 'hata' && /bağlı değil/.test(lintText) && /\(\d+\)/.test(await ed.textContent('#sekme-denetim')), `${lintMark}; ${await ed.textContent('#sekme-denetim')}`);
+  await hideToast(ed);
+  await ed.screenshot({ path: SHOTS + 'atolye-denetim.png' });
+  await ed.keyboard.press('Control+z');
+  await ed.evaluate(() => document.getElementById('tuval').focus());
+  await ed.keyboard.press('?');
+  const dlgOpen = await ed.evaluate(() => document.getElementById('kisayollar').open);
+  const rows = await ed.locator('#kisayol-listesi tr').count();
+  await ed.screenshot({ path: SHOTS + 'atolye-kisayollar.png' });
+  await ed.keyboard.press('Escape');
+  const dlgClosed = await ed.evaluate(() => !document.getElementById('kisayollar').open);
+  check('"?" kısayol penceresini açar, Esc kapatır', dlgOpen && dlgClosed && rows >= 10, `${rows} kısayol`);
+  await ed.click('#sekme-aciklama');
+  const [mm] = await Promise.all([ed.waitForEvent('download'), ed.click('#mermaid-indir')]);
+  const mermaid = readFileSync(await mm.path(), 'utf8');
+  check('diyagram: Mermaid olarak indirilir', /^flowchart LR/.test(mermaid) && (mermaid.match(/-->\|/g) ?? []).length === (await edgeCount(ed)), mm.suggestedFilename());
+  await runAndWait(ed);
+  await ed.click('#sekme-ozet');
+  const [rk] = await Promise.all([ed.waitForEvent('download'), ed.click('#kayit-indir')]);
+  const rec = JSON.parse(readFileSync(await rk.path(), 'utf8'));
+  const sha = rec.inputs?.[0]?.files?.[0]?.sha256 ?? '';
+  check('çalıştırma kaydı: biçim, sürüm, girdi SHA-256, düğümler', rec.format === 'kod-bilimi-atolyesi/run-record' && /^[0-9a-f]{64}$/.test(sha) && rec.nodes.length === (await nodeCount(ed)) && rec.result.findings === 2, `${rk.suggestedFilename()}; ${sha.slice(0, 12)}…`);
+
+  // ------------------------------------------------------------ 2e. otomatik kayıt, tuvale JSON bırakma, paket yüklemeyi geri alma
+  const nameBefore = await ed.evaluate(() => window.__atolye.state.wf.name);
+  await ed.waitForTimeout(500);
+  await ed.goto(`${BASE}/web/?yeniden=1`, { waitUntil: 'networkidle' });
+  const restored = await ed.evaluate(() => ({ name: window.__atolye.state.wf.name, n: window.__atolye.state.wf.nodes.length }));
+  check('otomatik kayıt: sayfa yeniden açılınca son iş akışı gelir', restored.name === nameBefore && restored.n === 6, JSON.stringify(restored));
+  const dropped = JSON.parse(JSON.stringify(PACKAGES.find((p) => p.id === 'log').build()));
+  dropped.name = 'Bırakılan iş akışı';
+  await ed.evaluate((json) => {
+    const dt = new DataTransfer();
+    dt.items.add(new File([json], 'birakilan.json', { type: 'application/json' }));
+    document.getElementById('tuval').dispatchEvent(new DragEvent('drop', { dataTransfer: dt, bubbles: true, cancelable: true }));
+  }, JSON.stringify(dropped));
+  await ed.waitForFunction(() => window.__atolye.state.wf.name === 'Bırakılan iş akışı');
+  check('tuvale JSON dosyası bırakınca içe aktarılır', (await nodeCount(ed)) === dropped.nodes.length);
+  await ed.click('#paketler button >> nth=0');
+  await ed.keyboard.press('Control+z');
+  check('paket açmak da geri alınır', (await ed.evaluate(() => window.__atolye.state.wf.name)) === 'Bırakılan iş akışı');
+
+  // ------------------------------------------------------------ 2f. tam sözcük süzgeci: atölye = komut satırı
+  await ed.goto(`${BASE}/web/#paket=tek-desen`, { waitUntil: 'networkidle' });
+  await ed.click('.node[data-id="tek_bulgu"] .node-head');
+  await ed.check('#p-tek_bulgu-word');
+  await runAndWait(ed);
+  const wordCount = await ed.evaluate(() => window.__atolye.state.run.nodes.tek_bulgu.info.count);
+  const wordCli = Number(execSync('node bin/ios.js scan --patterns return --word bench/corpus/kod.txt 2>/dev/null | wc -l', { cwd: VIZE, shell: '/bin/bash' }).toString().trim());
+  check('tam sözcük süzgeci: atölye = komut satırı (--word)', wordCount === wordCli && wordCount < 882, `atölye ${wordCount}, komut satırı ${wordCli}`);
+
+  // ------------------------------------------------------------ 2g. SARIF: atölye kutusu, gizli değer maskeli
+  await ed.goto(`${BASE}/web/#paket=gizli-bilgi`, { waitUntil: 'networkidle' });
+  await ed.click('.pal-item[data-type="cikti.sarif"]');
+  const sarifNode = await ed.evaluate(() => window.__atolye.state.wf.nodes.at(-1).id);
+  await dragBetween(ed, portSel('bulgu', 'findings', 'out'), portSel(sarifNode, 'findings', 'in'));
+  await runAndWait(ed);
+  await ed.click('#sekme-ozet');
+  const [sf] = await Promise.all([ed.waitForEvent('download'), ed.click('.sarif-indir')]);
+  const sarifText = readFileSync(await sf.path(), 'utf8');
+  const sarif = JSON.parse(sarifText);
+  const cliSarif = JSON.parse(execSync('node bin/ios.js scan --preset secrets --format sarif web/data/gizli 2>/dev/null', { cwd: VIZE }).toString());
+  const ruleIds = (d) => d.runs[0].results.map((r) => r.ruleId).join(',');
+  check('SARIF: atölye ve komut satırı aynı kurallar; gizli değer maskeli', sarif.version === '2.1.0' && ruleIds(sarif) === ruleIds(cliSarif) && !sarifText.includes('IOSFODNN7EXAMPLE') && sarifText.includes('****'), `${sarif.runs[0].results.length} sonuç`);
+
+  // ------------------------------------------------------------ 2h. güvenlik: paylaşılan bağlantıda HTML/betik çalışmaz; CSP satır içi betiği engeller
+  const evil = { ...dropped, name: '<img src=x onerror="window.__xss=1">Kötü ad' };
+  evil.nodes = evil.nodes.map((n) => (n.type === 'desen.ozel' ? { ...n, params: { ...n.params, patterns: '<script>window.__xss=2</script>' } } : n));
+  const evilLink = `${BASE}/web/#wf=${Buffer.from(JSON.stringify(evil)).toString('base64url')}`;
+  const xss = await newPage({ width: 1280, height: 800 });
+  await xss.goto(evilLink, { waitUntil: 'networkidle' });
+  await runAndWait(xss);
+  await xss.click('#acikla');
+  const xssState = await xss.evaluate(() => ({ flag: window.__xss ?? null, imgs: document.querySelectorAll('.titles img, #panel-aciklama img, #props img').length, name: document.getElementById('wf-ad').value }));
+  check('XSS: bağlantıdaki HTML metin olarak kalır, betik çalışmaz', xssState.flag === null && xssState.imgs === 0 && xssState.name.startsWith('<img'), JSON.stringify(xssState));
+  const cspPage = await browser.newPage();
+  await cspPage.goto(`${BASE}/web/`, { waitUntil: 'networkidle' });
+  const csp = await cspPage.evaluate(async () => {
+    const sc = document.createElement('script');
+    sc.textContent = 'window.__inline = 1';
+    document.head.append(sc);
+    await new Promise((r) => setTimeout(r, 50));
+    return { meta: Boolean(document.querySelector('meta[http-equiv="Content-Security-Policy"]')), ran: window.__inline ?? null };
+  });
+  await cspPage.close();
+  check('CSP: sayfaya sonradan sokulan satır içi betik çalışmaz', csp.meta && csp.ran === null, JSON.stringify(csp));
+
   // ------------------------------------------------------------ 3. telefon (390 px)
   const mob = await newPage({ width: 390, height: 844 }, { deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   await mob.goto(`${BASE}/web/#paket=gizli-bilgi`, { waitUntil: 'networkidle' });
@@ -223,6 +358,8 @@ try {
   await mob.screenshot({ path: SHOTS + 'atolye-mobil-menu.png' });
   await mob.click('.pal-item[data-type="desen.errors"]');
   check('390 px: menüden dokunarak kutu ekleme', (await nodeCount(mob)) === 9);
+  const overflowMob2 = await mob.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  check('390 px: yeni araç düğmeleriyle de yatay taşma yok', overflowMob2 <= 0, `${overflowMob2} px`);
   check('ekran görüntüsü: telefon 390 px', true, 'docs/ekran/atolye-mobil.png');
 } finally {
   await browser.close();

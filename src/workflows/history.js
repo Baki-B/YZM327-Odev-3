@@ -290,13 +290,15 @@ export function setFieldCommand(field, before, after) {
  * @param {Workflow} before
  * @param {Workflow} after
  * @param {string} [label]
- * @returns {Command}
+ * @param {{ before?: unknown, after?: unknown }} [meta]  arayüzün geri almada geri getireceği ek bilgi (ör. açık paket)
+ * @returns {Command & { meta: { before?: unknown, after?: unknown } }}
  */
-export function replaceWorkflowCommand(before, after, label = 'İş akışını değiştirme') {
+export function replaceWorkflowCommand(before, after, label = 'İş akışını değiştirme', meta = {}) {
   const b = cloneWorkflow(before);
   const a = cloneWorkflow(after);
   return {
     label,
+    meta,
     do(doc) { doc.wf = cloneWorkflow(a); },
     undo(doc) { doc.wf = cloneWorkflow(b); },
   };
