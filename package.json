@@ -1,6 +1,6 @@
 {
   "name": "ios-exact-match",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Akıllı tam desen eşleştirme: IoS atomları ve seçici bir molekül (sequence.pattern-match.exact)",
   "type": "module",
   "private": true,

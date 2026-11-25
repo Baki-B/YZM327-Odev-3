@@ -1,0 +1,17 @@
+# Kural örnekleri: "todo" hazır kümesi. Biçim: "#> kural-kimliği ..." bir sonraki satırın
+# hangi kuralları tetiklemesi gerektiğini, "#> -" hiçbirini tetiklememesi gerektiğini söyler.
+# İşaretsiz satırlarda hiç bulgu olmamalı. (tests/unit/scan.test.js)
+#> todo/todo
+# TODO: önbelleği temizle
+#> todo/fixme todo/xxx
+# FIXME XXX: iki iş notu bir satırda
+#> todo/hack
+x = 1  # HACK geçici çözüm
+#> -
+# todo küçük harfle yazılmış not sayılmaz (desenler büyük/küçük harf duyarlı)
+#> -
+# TODO bilerek bırakıldı  ios:ignore
+# ios:ignore-next-line
+# TODO bu satır da bastırılır (bir üstteki yorum)
+#> todo/xxx
+beden = "XXXL"  # bilinen yanlış pozitif: tam eşleşme sözcük sınırına bakmaz, --word ile elenir

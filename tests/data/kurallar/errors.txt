@@ -1,0 +1,15 @@
+# Kural örnekleri: "errors" hazır kümesi (log dosyaları).
+#> errors/error
+2026-11-25 10:00:01 ERROR db: bağlantı koptu
+#> errors/fatal
+FATAL: disk dolu
+#> errors/traceback
+Traceback (most recent call last):
+#> errors/exception
+java.lang.NullPointerException: x
+#> errors/panic
+panic: runtime error: index out of range
+#> -
+INFO: her şey yolunda
+#> -
+error küçük harf sayılmaz

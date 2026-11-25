@@ -15,6 +15,14 @@ import { ExactMatch } from '../molecules/ExactMatch.js';
 import { parseFasta } from '../fasta.js';
 import { sourceToEntry, lineStarts, toLineColumn } from '../adapters/sourceToEntry.js';
 import { PRESETS } from './presets.js';
+import { isSuppressed, isWholeWord, lineAt } from '../scan/filters.js';
+import { ruleForPattern, rulesOfFindings } from '../scan/rules.js';
+import { addFingerprints, maskAfter, snippetOf, toSarif, TOOL } from '../scan/report.js';
+
+/**
+ * @typedef {import('./engine.js').Component} Component
+ * @typedef {import('./engine.js').Catalog} Catalog
+ */
 
 export const TYPES = {
   'Source.File': 'Kaynak dosya(lar): yol + metin',
@@ -62,8 +70,8 @@ function countBy(items, key) {
   return [...m.entries()].sort((a, b) => b[1] - a[1]);
 }
 
-/** Bir eşleşmeyi taşıyan satırın kısa önizlemesi (en fazla 160 karakter). */
-function previewOf(text, starts, line, position, length) {
+/** Bir eşleşmeyi taşıyan satırın kısa önizlemesi (en fazla 160 karakter); gizli bilgide değer maskelenir. */
+function previewOf(text, starts, line, position, length, secret = false) {
   const from = starts[line - 1];
   let to = line < starts.length ? starts[line] - 1 : text.length;
   if (to - from > 4000) to = from + 4000; // FASTA gibi tek satırlık dev kayıtlarda tümünü alma
@@ -75,23 +83,51 @@ function previewOf(text, starts, line, position, length) {
   }
   const before = text.slice(a, position);
   const hit = text.slice(position, position + length);
-  const after = text.slice(position + length, b);
-  return { before: (a > from ? '…' : '') + before.replace(/^\s+/, a > from ? '' : ''), hit, after: after.replace(/\r$/, '') + (b < to ? '…' : '') };
+  let after = text.slice(position + length, b).replace(/\r$/, '');
+  if (secret) after = maskAfter(after, hit);
+  return { before: (a > from ? '…' : '') + before.replace(/^\s+/, a > from ? '' : ''), hit, after: after + (b < to ? '…' : '') };
 }
 
-function matchesToFindings(value) {
+/**
+ * Eşleşmeleri bulgulara çevirir; komut satırındaki CodeScan ile aynı süzgeçleri kullanır.
+ * details: true iken CodeScan'in details seçeneğiyle aynı ek alanları (kural, önem, maskeli
+ * satır özeti, parmak izi) da ekler.
+ * @param {{ matches: Array<{ header: string, pattern: string, position: number, length: number }>, entries: Array<{ header: string, seq: string }> }} value
+ * @param {{ inlineIgnore?: boolean, word?: boolean, details?: boolean }} [options]
+ */
+function matchesToFindings(value, { inlineIgnore = true, word = false, details = false } = {}) {
   const index = new Map();
   for (const e of value.entries) {
     if (!index.has(e.header)) index.set(e.header, { text: e.seq, starts: null, file: e.header.replace(/^>/, '') });
   }
   const findings = [];
+  let suppressed = 0;
+  let notWholeWord = 0;
   for (const m of value.matches) {
     const f = index.get(m.header);
     if (f.starts === null) f.starts = lineStarts(f.text);
     const { line, column } = toLineColumn(f.starts, m.position);
-    findings.push({ file: f.file, line, column, pattern: m.pattern, position: m.position, length: m.length, preview: previewOf(f.text, f.starts, line, m.position, m.length) });
+    if (word && !isWholeWord(f.text, m.position, m.length)) { notWholeWord++; continue; }
+    if (inlineIgnore && isSuppressed(f.text, f.starts, line)) { suppressed++; continue; }
+    const rule = ruleForPattern(m.pattern);
+    const finding = { file: f.file, line, column, pattern: m.pattern, position: m.position, length: m.length };
+    if (details) {
+      const lineText = lineAt(f.text, f.starts, line);
+      Object.assign(finding, { ruleId: rule.id, severity: rule.severity, lineText, snippet: snippetOf(lineText, column, m.length, rule.secret) });
+    }
+    finding.preview = previewOf(f.text, f.starts, line, m.position, m.length, rule.secret);
+    findings.push(finding);
   }
-  return { findings, files: index.size };
+  if (details) {
+    addFingerprints(/** @type {any} */ (findings));
+    for (const x of findings) delete x.lineText;
+  }
+  return { findings, files: index.size, suppressed, notWholeWord };
+}
+
+/** Bir bulgunun JSON satırı: `ios scan --json` ile aynı beş alan, aynı sıra. */
+export function findingJson(f) {
+  return JSON.stringify({ file: f.file, line: f.line, column: f.column, pattern: f.pattern, position: f.position });
 }
 
 function atomComponent(Atom) {
@@ -234,12 +270,18 @@ export function createCatalog(registry = defaultRegistry) {
     type: 'uyarlayici.bulgu', category: 'UYARLAYICILAR', title: 'Eşleşme → Bulgu', icon: '⇄',
     badge: 'CodeScan', help: 'Konumu satır ve sütuna çevirir (satır başları ikili aramayla bulunur).',
     inputs: [{ name: 'matches', type: 'Sequence.Match', label: 'eşleşmeler' }], outputs: [{ name: 'findings', type: 'Finding', label: 'bulgular' }],
-    params: [],
-    describe: () => 'her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir.',
-    run(inputs, _p, ctx) {
-      const value = matchesToFindings(inputs.matches);
+    params: [
+      { key: 'inlineIgnore', label: '"ios:ignore" yorumlu satırları atla', kind: 'bool', default: true },
+      { key: 'word', label: 'Yalnızca tam sözcük eşleşmeleri', kind: 'bool', default: false },
+    ],
+    describe: (p) => `her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir${p.inlineIgnore === false ? '' : '; "ios:ignore" yorumlu satırları atlar'}${p.word ? '; yalnızca tam sözcükleri tutar' : ''}.`,
+    run(inputs, p, ctx) {
+      const value = matchesToFindings(inputs.matches, { inlineIgnore: p.inlineIgnore !== false, word: Boolean(p.word), details: true });
       ctx.info.count = value.findings.length;
-      ctx.info.summary = `${value.findings.length} bulgu.`;
+      ctx.info.suppressed = value.suppressed;
+      ctx.info.notWholeWord = value.notWholeWord;
+      const extra = [value.suppressed ? `${value.suppressed} bastırıldı` : '', value.notWholeWord ? `${value.notWholeWord} tam sözcük değil` : ''].filter(Boolean).join(', ');
+      ctx.info.summary = `${value.findings.length} bulgu${extra ? ` (${extra})` : ''}.`;
       return { findings: value };
     },
   });
@@ -347,10 +389,26 @@ export function createCatalog(registry = defaultRegistry) {
     inputs: findingIn, outputs: [], params: [{ key: 'filename', label: 'Dosya adı', kind: 'text', default: 'bulgular.jsonl' }],
     describe: (p) => `bulguları "${p.filename}" adlı JSONL dosyası olarak indirmeye hazırlar (ios scan --json biçimi).`,
     run(inputs, p, ctx) {
-      const lines = inputs.findings.findings.map((f) => JSON.stringify({ file: f.file, line: f.line, column: f.column, pattern: f.pattern, position: f.position }));
+      const lines = inputs.findings.findings.map(findingJson);
       ctx.info.jsonl = lines.length ? lines.join('\n') + '\n' : '';
       ctx.info.filename = p.filename || 'bulgular.jsonl';
       ctx.info.summary = `${lines.length} satır hazır.`;
+      return {};
+    },
+  });
+  add({
+    type: 'cikti.sarif', category: 'ÇIKTILAR', title: 'SARIF indir', icon: '⛨',
+    badge: 'GitHub kod tarama',
+    help: 'Bulguları SARIF 2.1.0 standardında indirir (ios scan --format sarif ile aynı). GitHub kod tarama ekranı, VS Code ve CI araçları okur; her bulgunun kural kimliği, önemi, CWE numarası ve parmak izi vardır, gizli bilgi değerleri maskelenir.',
+    inputs: findingIn, outputs: [], params: [{ key: 'filename', label: 'Dosya adı', kind: 'text', default: 'bulgular.sarif' }],
+    describe: (p) => `bulguları "${p.filename}" adlı SARIF 2.1.0 dosyası olarak indirmeye hazırlar (ios scan --format sarif biçimi; GitHub kod taramasına yüklenebilir).`,
+    run(inputs, p, ctx) {
+      const list = inputs.findings.findings;
+      const doc = toSarif(list.map((f) => ({ ...f, ruleId: f.ruleId ?? ruleForPattern(f.pattern).id })), { rules: rulesOfFindings(list), tool: TOOL });
+      ctx.info.sarif = JSON.stringify(doc, null, 2) + '\n';
+      ctx.info.filename = p.filename || 'bulgular.sarif';
+      ctx.info.rules = doc.runs[0].tool.driver.rules.length;
+      ctx.info.summary = `${list.length} sonuç, ${ctx.info.rules} kural.`;
       return {};
     },
   });

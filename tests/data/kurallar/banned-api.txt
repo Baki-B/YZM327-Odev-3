@@ -1,0 +1,23 @@
+# Kural örnekleri: "banned-api" hazır kümesi.
+#> banned-api/eval
+result = eval(user_input)
+#> banned-api/exec
+exec(code)
+#> banned-api/pickle-loads
+obj = pickle.loads(data)
+#> banned-api/os-system
+os.system(cmd)
+#> banned-api/subprocess-call
+subprocess.call(args)
+#> banned-api/innerhtml
+el.innerHTML = html;
+#> banned-api/document-write
+document.write(s);
+#> banned-api/new-function
+const f = new Function('a', 'return a');
+#> -
+evaluate(x)
+#> banned-api/eval
+medieval(x)  # bilinen yanlış pozitif: --word ile elenir
+#> -
+el.textContent = html;  // güvenli karşılık
