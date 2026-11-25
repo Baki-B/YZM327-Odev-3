@@ -15,10 +15,10 @@ function median(xs) {
 }
 
 /**
- * @param entries   FASTA.Entry dizisi
- * @param set       { patterns, ignoreCase }
- * @param options   { now, reps = 5, warmup = 1, registry, minBlockMs = 5 }
- * @returns {{ rows: [{ name, ms, estimatedMs, applicable, hits, samples }], selected, fastest, record }}
+ * @param {Array<{ header: string, seq: string }>} entries   FASTA.Entry dizisi
+ * @param {{ patterns: string[], ignoreCase: boolean }} set
+ * @param {{ now?: () => number, reps?: number, warmup?: number, registry?: any, minBlockMs?: number }} [options]
+ * @returns {{ rows: Array<{ name: string, ms: number, estimatedMs: number | null, applicable: boolean, hits: number, samples: number[] }>, selected: string, fastest: string, record: any }}
  */
 export function raceAtoms(entries, set, { now, reps = 5, warmup = 1, registry = defaultRegistry, minBlockMs = 5 } = {}) {
   if (typeof now !== 'function') throw new Error('raceAtoms: now() saati verilmeli');
@@ -28,6 +28,7 @@ export function raceAtoms(entries, set, { now, reps = 5, warmup = 1, registry = 
   const record = em.record;
   const atoms = registry.candidates();
   const jobs = atoms.map((Atom) => {
+    /** @type {(() => void) & { hits?: number }} */
     const job = () => {
       const a = new Atom(params);
       let c = 0;

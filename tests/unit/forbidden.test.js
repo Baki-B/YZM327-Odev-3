@@ -21,6 +21,7 @@ function codeOnly(src) {
     .replace(/"(?:\\.|[^"\\])*"/g, '""');
 }
 
+/** @type {Array<[RegExp, string]>} */
 const RULES = [
   [/\.(indexOf|lastIndexOf|includes|startsWith|endsWith|search|match|matchAll|replace|replaceAll|split)\s*\(/, 'hazır arama işlevi'],
   [/\bRegExp\b/, 'RegExp'],
@@ -33,6 +34,7 @@ const RULES = [
 ];
 
 // Bu kurallar dizgiler silinmeden (yalnızca yorumlar silinerek) uygulanır.
+/** @type {Array<[RegExp, string]>} */
 const IMPORT_RULES = [[/\bfrom\s+['"](node:[^'"]*|fs|path|os|http|https|net|child_process)['"]/, 'Node modülü içe aktarma']];
 
 const files = [];

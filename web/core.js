@@ -28,7 +28,11 @@ async function inputDigests(wf, res) {
   return out;
 }
 
-/** İş akışını çalıştırır; düğüm çıktılarını (büyük metinler) değil, yalnızca bilgileri döndürür. */
+/**
+ * İş akışını çalıştırır; düğüm çıktılarını (büyük metinler) değil, yalnızca bilgileri döndürür.
+ * @param {any} data  serializeWorkflow çıktısı
+ * @param {(id: string, state: object) => void} [onNode]
+ */
 export async function runSerialized(data, onNode = () => {}) {
   const wf = deserializeWorkflow(data, catalog);
   const t0 = performance.now();

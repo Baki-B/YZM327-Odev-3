@@ -55,7 +55,7 @@ describe('iş akışı motoru: yapı', () => {
     assert.match(r.reason, /Tür uyuşmuyor: "Kod yapıştır" Source\.File üretiyor/);
     assert.match(r.reason, /FASTA\.Entry bekliyor/);
     assert.match(r.reason, /uyarlayıcı/); // ipucu
-    assert.throws(() => connect(wf, catalog, { node: 's', port: 'files' }, { node: 'm', port: 'entries' }), (e) => e.code === 'BAGLANTI_REDDEDILDI');
+    assert.throws(() => connect(wf, catalog, { node: 's', port: 'files' }, { node: 'm', port: 'entries' }), (/** @type {any} */ e) => e.code === 'BAGLANTI_REDDEDILDI');
     assert.equal(wf.edges.length, 0);
   });
 
@@ -80,9 +80,9 @@ describe('iş akışı motoru: yapı', () => {
     addNode(wf, catalog, 'uyarlayici.kaynak', { id: 'a' });
     assert.match(canConnect(wf, catalog, { node: 'a', port: 'entries' }, { node: 'a', port: 'files' }).reason, /kendine/);
     // Gerçek bir döngüyü yapay bir katalogla dene: X → Y → X
-    const cat = new Map([
+    const cat = /** @type {any} */ (new Map([
       ['x', { type: 'x', title: 'X', inputs: [{ name: 'i', type: 'T', optional: true }], outputs: [{ name: 'o', type: 'T' }], run: () => ({ o: 1 }) }],
-    ]);
+    ]));
     const w2 = createWorkflow();
     addNode(w2, cat, 'x', { id: 'X' });
     addNode(w2, cat, 'x', { id: 'Y' });

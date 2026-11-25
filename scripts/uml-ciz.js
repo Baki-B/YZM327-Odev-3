@@ -126,6 +126,7 @@ function sequence(name, title, width, parts, steps) {
   const X = Object.fromEntries(parts.map((p) => [p.id, p.x]));
   let y = parts.some((p) => p.kind === 'actor') ? 140 : 118;
   let body = '';
+  /** @type {any[]} */
   const frames = [];
   let n = 0;
   const msgs = [];

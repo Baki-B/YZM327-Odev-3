@@ -110,7 +110,7 @@ describe('raporlama: parmak izi, maskeleme, SARIF', () => {
     assert.equal(snippetOf('  API_KEY = "abc"', 3, 7, false), 'API_KEY = "abc"');
     const long = 'x'.repeat(300) + 'TODO' + 'y'.repeat(300);
     const s = snippetOf(long, 301, 4, false);
-    assert.ok(s.length <= 201 && s.includes('TODO') && s.startsWith('…') && s.endsWith('…'), s.length);
+    assert.ok(s.length <= 201 && s.includes('TODO') && s.startsWith('…') && s.endsWith('…'), String(s.length));
   });
   test('parmak izi satır numarasından bağımsız: dosyanın başına satır eklenince değişmez', () => {
     const fp = (text) => [...new CodeScan({ patterns: ['TODO'], details: true }).run([{ path: 'a.py', text }])].map((f) => f.fingerprint);

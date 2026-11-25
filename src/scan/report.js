@@ -136,7 +136,7 @@ export function toUri(path) {
 
 /**
  * SARIF 2.1.0 belgesi.
- * @param {Array<Finding & { ruleId: string }>} findings
+ * @param {Finding[]} findings  ruleId alanı olmalı (CodeScan details ya da atölye bulgusu)
  * @param {{ rules: Rule[], tool: { name: string, version: string, informationUri?: string }, automationId?: string }} options
  */
 export function toSarif(findings, { rules, tool, automationId = 'ios-scan' }) {

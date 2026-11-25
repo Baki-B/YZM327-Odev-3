@@ -160,6 +160,7 @@ function figure3() {
     [`her zaman ${bestSingleName.replace('Search', '')}`, '#1baf7a', () => bestSingleName],
   ];
   const W = 760, H = 380, left = 64, right = 190, top = 24, bottom = 54;
+  /** @param {any[]} s */
   const ratio = ([, , pick, direct]) => (c) => (direct ? direct(c) : c.times[pick(c)].ms / c.bestMs);
   const xmaxRaw = Math.max(...series.flatMap((s) => val.cases.map(ratio(s))));
   const xMin = Math.min(1, ...series.flatMap((s) => val.cases.map(ratio(s))));
@@ -181,7 +182,7 @@ function figure3() {
   b += `<text x="${(left + W - right) / 2}" y="${H - 14}" text-anchor="middle" ${FONT} font-size="11" fill="${INK2}">yavaşlama (seçilen / en hızlı), log ölçek</text>`;
   b += `<text x="16" y="${(top + H - bottom) / 2}" ${FONT} font-size="11" fill="${INK2}" transform="rotate(-90 16 ${(top + H - bottom) / 2})" text-anchor="middle">vakaların payı (≤ x)</text>`;
   series.forEach((ser, si) => {
-    const [label, color] = ser;
+    const [label, color] = /** @type {[string, string]} */ (ser);
     const xs = val.cases.map(ratio(ser)).sort((a, b) => a - b);
     let d = `M ${sx(xs[0])} ${sy(0)}`;
     xs.forEach((x, i) => {

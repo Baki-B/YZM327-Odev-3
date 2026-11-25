@@ -19,9 +19,11 @@ import { isSuppressed, isWholeWord, lineAt } from '../scan/filters.js';
 import { ruleForPattern, rulesOfFindings } from '../scan/rules.js';
 import { addFingerprints, maskAfter, snippetOf, toSarif, TOOL } from '../scan/report.js';
 
+import { assertRoles } from '../contracts.js';
+
 /**
- * @typedef {import('./engine.js').Component} Component
- * @typedef {import('./engine.js').Catalog} Catalog
+ * @typedef {import('../contracts.js').WorkflowComponent} Component
+ * @typedef {import('../contracts.js').Catalog} Catalog
  */
 
 export const TYPES = {
@@ -427,7 +429,10 @@ export function createCatalog(registry = defaultRegistry) {
     },
   });
 
-  const map = new Map(list.map((c) => [c.type, c]));
+  // Her kutu WorkflowComponent rolünü eksiksiz üstlenmeli (src/contracts.js); eksik varsa
+  // katalog kurulurken adıyla söylenir, iş akışı çalışırken değil (hızlı hata).
+  for (const c of list) assertRoles(c, ['WorkflowComponent'], c?.type ?? 'bileşen');
+  const map = /** @type {Catalog} */ (new Map(list.map((c) => [c.type, c])));
   map.categories = ['KAYNAKLAR', 'UYARLAYICILAR', 'DESEN KÜMELERİ', 'ATOMLAR', 'MOLEKÜL', 'ÇIKTILAR'];
   return map;
 }

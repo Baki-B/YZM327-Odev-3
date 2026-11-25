@@ -12,6 +12,10 @@ import { readFileSync } from 'node:fs';
 const lambda = loadFasta('lambda_NC_001416.fa');
 
 /** Test için sahte atom: doğru sonuç verir (NaiveSearch'ten türer), maliyetini istediğimiz gibi bildirir. */
+/**
+ * @param {string} name
+ * @param {{ cost?: number, applicable?: any }} [options]
+ */
 function fakeAtom(name, { cost = 1e-12, applicable } = {}) {
   return class extends NaiveSearch {
     static manifest = { name, version: '0.0.1', kind: 'atom', task: TASK, title: `Sahte ${name}`, references: [] };
@@ -61,7 +65,7 @@ describe('ExactMatch molekülü', () => {
   });
 
   test('bilinmeyen strateji geçerli seçenekleri listeleyerek hata verir', () => {
-    assert.throws(() => new ExactMatch({ patterns: ['A'], strategy: 'Hizli' }), (err) => {
+    assert.throws(() => new ExactMatch({ patterns: ['A'], strategy: 'Hizli' }), (/** @type {any} */ err) => {
       assert.match(err.message, /Hizli/);
       for (const n of ['auto', ...registry.names()]) assert.ok(err.message.includes(n), n);
       return true;

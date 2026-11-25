@@ -192,7 +192,7 @@ try {
   exported.name = 'İçe aktarılan deneme';
   await ed.click('#temizle');
   await ed.setInputFiles('#ice-dosya', { name: 'deneme.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(exported)) });
-  await ed.waitForFunction(() => document.getElementById('wf-ad').value === 'İçe aktarılan deneme');
+  await ed.waitForFunction(() => /** @type {HTMLInputElement} */ (document.getElementById('wf-ad')).value === 'İçe aktarılan deneme');
   check('içe aktarma', (await nodeCount(ed)) === 6 && (await edgeCount(ed)) === 5);
   const bozuk = { ...exported, format: 'baska-bir-sey' };
   await ed.setInputFiles('#ice-dosya', { name: 'bozuk.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(bozuk)) });
@@ -263,11 +263,11 @@ try {
   await ed.keyboard.press('Control+z');
   await ed.evaluate(() => document.getElementById('tuval').focus());
   await ed.keyboard.press('?');
-  const dlgOpen = await ed.evaluate(() => document.getElementById('kisayollar').open);
+  const dlgOpen = await ed.evaluate(() => /** @type {HTMLDialogElement} */ (document.getElementById('kisayollar')).open);
   const rows = await ed.locator('#kisayol-listesi tr').count();
   await ed.screenshot({ path: SHOTS + 'atolye-kisayollar.png' });
   await ed.keyboard.press('Escape');
-  const dlgClosed = await ed.evaluate(() => !document.getElementById('kisayollar').open);
+  const dlgClosed = await ed.evaluate(() => !/** @type {HTMLDialogElement} */ (document.getElementById('kisayollar')).open);
   check('"?" kısayol penceresini açar, Esc kapatır', dlgOpen && dlgClosed && rows >= 10, `${rows} kısayol`);
   await ed.click('#sekme-aciklama');
   const [mm] = await Promise.all([ed.waitForEvent('download'), ed.click('#mermaid-indir')]);
@@ -330,7 +330,7 @@ try {
   await xss.goto(evilLink, { waitUntil: 'networkidle' });
   await runAndWait(xss);
   await xss.click('#acikla');
-  const xssState = await xss.evaluate(() => ({ flag: window.__xss ?? null, imgs: document.querySelectorAll('.titles img, #panel-aciklama img, #props img').length, name: document.getElementById('wf-ad').value }));
+  const xssState = await xss.evaluate(() => ({ flag: window.__xss ?? null, imgs: document.querySelectorAll('.titles img, #panel-aciklama img, #props img').length, name: /** @type {HTMLInputElement} */ (document.getElementById('wf-ad')).value }));
   check('XSS: bağlantıdaki HTML metin olarak kalır, betik çalışmaz', xssState.flag === null && xssState.imgs === 0 && xssState.name.startsWith('<img'), JSON.stringify(xssState));
   const cspPage = await browser.newPage();
   await cspPage.goto(`${BASE}/web/`, { waitUntil: 'networkidle' });

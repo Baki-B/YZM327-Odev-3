@@ -1,0 +1,24 @@
+{
+  // Statik tür denetimi (tsc --checkJs): JavaScript dosyaları JSDoc türleriyle TypeScript
+  // denetleyicisinden geçer; hiçbir şey derlenmez (noEmit). TypeScript projenin bağımlılığı
+  // değildir: CI'da "npm install --no-save typescript@6.0.3 @types/node@22" ile geçici kurulur.
+  // Yerelde: npx -p typescript@6.0.3 -p @types/node@22 tsc -p tsconfig.json
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "es2023",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "types": ["node"],
+    "strict": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["types/**/*.d.ts", "src/**/*.js", "bin/**/*.js", "web/**/*.js", "scripts/**/*.js", "tests/**/*.js", "bench/**/*.js"]
+}

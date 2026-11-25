@@ -77,7 +77,7 @@ const run = () => {
   const fail = Number((r.stdout.match(/^# fail (\d+)/m) ?? [])[1] ?? NaN);
   const pass = Number((r.stdout.match(/^# pass (\d+)/m) ?? [])[1] ?? NaN);
   const killed = r.status === null;
-  const timedOut = r.error?.code === 'ETIMEDOUT';
+  const timedOut = /** @type {NodeJS.ErrnoException | undefined} */ (r.error)?.code === 'ETIMEDOUT';
   return { code: killed ? -1 : r.status, fail, pass, killed, timedOut, signal: r.signal };
 };
 

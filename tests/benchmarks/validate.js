@@ -115,6 +115,7 @@ if (RETABLE) {
     em.decide(entries[0]);
     const record = em.record;
     // Molekülün kendisi de aynı turlarda ölçülür (karar verme süresi dahil)
+    /** @type {(() => void) & { hits?: number }} */
     const moleculeJob = () => {
       const m = new ExactMatch({ ...params, strategy: 'auto' });
       let x = 0;

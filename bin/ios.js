@@ -186,6 +186,7 @@ function cmdScan(targets, opts) {
   if (targets.length === 0) throw new UsageError('scan: en az bir dosya ya da klasör verin');
   if (groups.size === 0) throw new UsageError('scan: --patterns ya da --preset verin');
 
+  /** @type {{ ignores: (p: string) => boolean, patterns: string[] }} */
   let ignore = { ignores: () => false, patterns: [] };
   const ignorePath = opts.ignoreFile ?? (opts.useIgnoreFile && existsSync('.iosignore') ? '.iosignore' : null);
   if (ignorePath && opts.useIgnoreFile) {
@@ -249,7 +250,9 @@ function readWorkflow(file, catalog) {
   return deserializeWorkflow(data, catalog);
 }
 
-async function cmdWorkflow([sub, file], opts) {
+/** @param {string[]} args  [alt komut, dosya] */
+async function cmdWorkflow(args, opts) {
+  const [sub, file] = args;
   const catalog = createCatalog();
   if (!['run', 'lint', 'explain', 'diagram'].includes(sub)) throw new UsageError(`workflow: alt komut run, lint, explain ya da diagram olmalı (verilen: ${sub ?? 'yok'})`);
   const wf = readWorkflow(file, catalog);

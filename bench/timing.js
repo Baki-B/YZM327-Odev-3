@@ -68,6 +68,7 @@ export function measureInterleaved(jobs, { reps = 5, warmup = 1, minBlockMs = 10
       samples[name].push((now() - t0) / inner[name]);
     }
   }
+  /** @type {Record<string, { ms: number, samples: number[], inner: number, reps: number }>} */
   const out = {};
   for (const name of names) out[name] = { ms: median(samples[name]), samples: samples[name], inner: inner[name], reps };
   return out;

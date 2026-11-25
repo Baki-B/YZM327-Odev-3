@@ -11,6 +11,7 @@ import { chooseBlock } from '../../src/functions/wuManber.js';
 import { horspoolShift, qgramShift } from '../../src/functions/expect.js';
 import { buildAlphabet, encode, foldAscii } from '../../src/functions/alphabet.js';
 
+/** @type {Array<[string, string[], string]>} */
 const CASES = [
   ['periyodik desen ABAB', ['ABAB'], 'ABABABABAB'],
   ['periyodik desen, uzun', ['ABABABABABAB'], 'ABABABABABABABABABABAB'],

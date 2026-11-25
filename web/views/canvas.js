@@ -108,7 +108,9 @@ function nodeEl(node) {
       comp.outputs[i] ? h('span', { class: 'out', text: comp.outputs[i].label ?? comp.outputs[i].name }) : null));
   }
   el.append(rows);
-  for (const [side, list] of [['in', comp.inputs], ['out', comp.outputs]]) {
+  /** @type {Array<['in' | 'out', import('../../src/contracts.js').Port[]]>} */
+  const sides = [['in', comp.inputs], ['out', comp.outputs]];
+  for (const [side, list] of sides) {
     list.forEach((p, i) => {
       const armed = state.armed && state.armed.node === node.id && state.armed.port === p.name && state.armed.side === side;
       let okTarget = false;

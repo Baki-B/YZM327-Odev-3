@@ -32,6 +32,7 @@ export function timeAtom(Atom, params, entries, opts) {
 
 /** Bir atomu ölçülebilir bir işe çevirir: kur + bütün kayıtları işle + çıktıyı tüket. */
 export function atomJob(Atom, params, entries) {
+  /** @type {(() => void) & { hits?: number }} */
   const job = () => {
     const atom = new Atom(params);
     let c = 0;
@@ -53,6 +54,7 @@ export function measureCase(params, entries, opts = {}, extraJobs = {}) {
     const ref = new NaiveSearch(params);
     for (const e of entries) for (const _ of ref.process(e)) expected++;
   }
+  /** @type {Record<string, (() => void) & { hits?: number }>} */
   const jobs = {};
   for (const Atom of registry.candidates()) jobs[Atom.manifest.name] = atomJob(Atom, params, entries);
   Object.assign(jobs, extraJobs);

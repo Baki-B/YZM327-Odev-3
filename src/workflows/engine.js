@@ -11,10 +11,26 @@
 // Uç türleri IoS veri türlerine benzetildi: Source.File, FASTA.Entry, Pattern.Set,
 // Sequence.Match, Finding. Bağlantı yalnızca aynı türdeki uçlar arasında kurulabilir.
 
+/**
+ * Türler src/contracts.js'te tanımlıdır; burada kısa adlarla yeniden dışa verilir.
+ * @typedef {import('../contracts.js').Workflow} Workflow
+ * @typedef {import('../contracts.js').WorkflowNode} WorkflowNode
+ * @typedef {import('../contracts.js').Edge} Edge
+ * @typedef {import('../contracts.js').Catalog} Catalog
+ * @typedef {import('../contracts.js').WorkflowComponent} Component
+ * @typedef {import('../contracts.js').RunContext} RunContext
+ * @typedef {{ status: string, ms: number, outputs: Record<string, any>, info: Record<string, any> | null, error: string | null }} NodeResult
+ * @typedef {{ node?: string, message: string }} Problem
+ */
+
 export const FORMAT = 'kod-bilimi-atolyesi/workflow';
 export const FORMAT_VERSION = 1;
 
-/** Boş bir iş akışı. */
+/**
+ * Boş (ya da verilen kutu ve bağlantılarla) bir iş akışı; dizilerin kopyası alınır.
+ * @param {{ name?: string, target?: string, nodes?: WorkflowNode[], edges?: Edge[] }} [init]
+ * @returns {Workflow}
+ */
 export function createWorkflow({ name = 'Adsız iş akışı', target = '', nodes = [], edges = [] } = {}) {
   return { name, target, nodes: nodes.map((n) => ({ ...n, params: { ...(n.params ?? {}) } })), edges: edges.map(cloneEdge) };
 }
@@ -23,14 +39,26 @@ function cloneEdge(e) {
   return { from: { node: e.from.node, port: e.from.port }, to: { node: e.to.node, port: e.to.port } };
 }
 
-/** Kataloğu (bileşen listesi) tür adına göre arar. */
+/**
+ * Kataloğu (bileşen listesi) tür adına göre arar.
+ * @param {Catalog} catalog
+ * @param {string} type
+ * @returns {Component}
+ */
 export function componentOf(catalog, type) {
   const c = catalog.get(type);
   if (!c) throw new Error(`Bilinmeyen bileşen türü: ${type}`);
   return c;
 }
 
-/** Varsayılan ayarlarla yeni bir düğüm ekler; düğümü döndürür. */
+/**
+ * Varsayılan ayarlarla yeni bir düğüm ekler; düğümü döndürür.
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @param {string} type
+ * @param {{ id?: string, x?: number, y?: number, params?: Record<string, any> }} [options]
+ * @returns {WorkflowNode}
+ */
 export function addNode(wf, catalog, type, { id, x = 0, y = 0, params = {} } = {}) {
   const comp = componentOf(catalog, type);
   const defaults = {};
@@ -52,12 +80,20 @@ function nextId(wf, prefix) {
   return `${prefix}${i}`;
 }
 
-/** Düğümü ve ona bağlı bütün bağlantıları siler. */
+/**
+ * Düğümü ve ona bağlı bütün bağlantıları siler.
+ * @param {Workflow} wf
+ * @param {string} id
+ */
 export function removeNode(wf, id) {
   wf.nodes = wf.nodes.filter((n) => n.id !== id);
   wf.edges = wf.edges.filter((e) => e.from.node !== id && e.to.node !== id);
 }
 
+/**
+ * @param {Workflow} wf
+ * @param {Edge} edge
+ */
 export function removeEdge(wf, edge) {
   wf.edges = wf.edges.filter((e) => !sameEdge(e, edge));
 }
@@ -77,6 +113,11 @@ function portOf(comp, side, name) {
 /**
  * Bir bağlantı kurulabilir mi? { ok: true } ya da { ok: false, reason } döner.
  * Nedenler kullanıcıya gösterilecek Türkçe cümlelerdir.
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @param {{ node: string, port: string }} from
+ * @param {{ node: string, port: string }} to
+ * @returns {{ ok: boolean, reason?: string }}
  */
 export function canConnect(wf, catalog, from, to) {
   const a = nodeOf(wf, from.node);
@@ -126,11 +167,18 @@ function reaches(wf, from, to) {
   return false;
 }
 
-/** Bağlantı ekler; kurulamıyorsa nedeniyle birlikte hata fırlatır. */
+/**
+ * Bağlantı ekler; kurulamıyorsa nedeniyle birlikte hata fırlatır (err.code = "BAGLANTI_REDDEDILDI").
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @param {{ node: string, port: string }} from
+ * @param {{ node: string, port: string }} to
+ * @returns {Edge}
+ */
 export function connect(wf, catalog, from, to) {
   const r = canConnect(wf, catalog, from, to);
   if (!r.ok) {
-    const err = new Error(r.reason);
+    const err = /** @type {Error & { code?: string }} */ (new Error(r.reason));
     err.code = 'BAGLANTI_REDDEDILDI';
     throw err;
   }
@@ -142,6 +190,8 @@ export function connect(wf, catalog, from, to) {
 /**
  * Topolojik sıra (Kahn algoritması): her düğüm, girdilerini üreten bütün düğümlerden
  * sonra gelir. Eşit durumda düğümlerin listedeki sırası korunur (deterministik).
+ * @param {Workflow} wf
+ * @returns {WorkflowNode[]}
  */
 export function topologicalOrder(wf) {
   const indeg = new Map(wf.nodes.map((n) => [n.id, 0]));
@@ -161,6 +211,9 @@ export function topologicalOrder(wf) {
 /**
  * Çalıştırmadan önceki denetim: bilinmeyen tür, bozuk bağlantı, tür uyuşmazlığı,
  * eksik zorunlu giriş, döngü. Sorun listesi döner (boşsa iş akışı çalıştırılabilir).
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @returns {Problem[]}
  */
 export function validateWorkflow(wf, catalog) {
   const problems = [];
@@ -198,14 +251,17 @@ export function validateWorkflow(wf, catalog) {
  * run(inputs, params, ctx) işlevi çıkış adı → değer nesnesi döndürür (ya da Promise).
  * Bir düğüm hata verirse ona bağlı düğümler "atlandı" olur, diğerleri çalışmaya devam eder.
  *
- * @param ctx { now(): ms, loadSample(name), onNode(id, durum), yieldEvery } — hepsi isteğe bağlı
- * @returns {{ ok, problems, order, nodes: { [id]: { status, ms, outputs, info, error } } }}
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @param {RunContext} [ctx]  now(), loadSample(ad), onNode(kimlik, durum), yieldEvery — hepsi isteğe bağlı
+ * @returns {Promise<{ ok: boolean, problems: Problem[], order: string[], nodes: Record<string, NodeResult> }>}
  */
 export async function runWorkflow(wf, catalog, ctx = {}) {
   const problems = validateWorkflow(wf, catalog);
   if (problems.length) return { ok: false, problems, order: [], nodes: {} };
   const now = ctx.now ?? (() => Date.now());
   const order = topologicalOrder(wf);
+  /** @type {Record<string, NodeResult>} */
   const results = {};
   for (const node of order) {
     const comp = componentOf(catalog, node.type);
@@ -238,7 +294,10 @@ export async function runWorkflow(wf, catalog, ctx = {}) {
   return { ok, problems: [], order: order.map((n) => n.id), nodes: results };
 }
 
-/** JSON'a çevirme (dışa aktarma). Konumlar ve ayarlar dahil. */
+/**
+ * JSON'a çevirme (dışa aktarma). Konumlar ve ayarlar dahil.
+ * @param {Workflow} wf
+ */
 export function serializeWorkflow(wf) {
   return {
     format: FORMAT,
@@ -250,7 +309,12 @@ export function serializeWorkflow(wf) {
   };
 }
 
-/** JSON'dan geri kurma (içe aktarma). Bozuk ya da yabancı dosyayı nedeniyle reddeder. */
+/**
+ * JSON'dan geri kurma (içe aktarma). Bozuk ya da yabancı dosyayı nedeniyle reddeder.
+ * @param {any} data
+ * @param {Catalog} catalog
+ * @returns {Workflow}
+ */
 export function deserializeWorkflow(data, catalog) {
   if (!data || typeof data !== 'object') throw new Error('İş akışı dosyası bir JSON nesnesi olmalı.');
   if (data.format !== FORMAT) throw new Error(`Bu dosya bir atölye iş akışı değil (format: ${data.format ?? 'yok'}).`);
@@ -269,6 +333,10 @@ export function deserializeWorkflow(data, catalog) {
  * İş akışını düz Türkçe cümlelerle anlatır. Kurala dayalıdır: her bileşenin
  * describe(params) cümlesi topolojik sırayla, bağlantılarla birleştirilir.
  * (Yapay zekâ servisi kullanılmaz; aynı iş akışı her zaman aynı metni verir.)
+ * @param {Workflow} wf
+ * @param {Catalog} catalog
+ * @param {{ nodes?: Record<string, { status: string, info?: any, error?: string | null }> } | null} [run]
+ * @returns {string}
  */
 export function explainWorkflow(wf, catalog, run = null) {
   const lines = [];

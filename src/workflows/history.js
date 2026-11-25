@@ -30,6 +30,7 @@ import { addNode, connect, createWorkflow, removeEdge, serializeWorkflow } from 
  * @property {(doc: Doc) => void} undo
  * @property {string} [key]                    aynı anahtarlı ardışık komutlar birleşebilir
  * @property {(next: Command) => Command | null} [merge]  bu komutla sonrakini tek komutta birleştirir
+ * @property {any} [after]                     birleştirilebilen komutlarda "sonraki" değer
  */
 
 const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));

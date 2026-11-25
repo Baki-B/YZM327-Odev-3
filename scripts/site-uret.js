@@ -50,6 +50,11 @@ ${body}
 `;
 }
 
+/**
+ * @param {any[]} headers  başlık metni ya da { t: metin, n: 1 } (sayı sütunu)
+ * @param {Array<{ cells: string[], label?: string }>} rows
+ * @param {{ cls?: (row: any, i: number) => string }} [options]
+ */
 function table(headers, rows, { cls = () => '' } = {}) {
   const th = headers.map((h) => `<th${h.n ? ' class="n"' : ''}>${h.t ?? h}</th>`).join('');
   const tr = rows.map((r, i) => `<tr${cls(r, i) ? ` class="${cls(r, i)}"` : ''}>${r.cells.map((c, j) => `<td${headers[j].n ? ' class="n"' : ''}>${c}</td>`).join('')}</tr>`).join('\n');

@@ -6,6 +6,7 @@
 // yalnızca buradan tanır.
 
 import { TASK } from './atomic/ExactSearchAtom.js';
+import { assertRoles, implementsRole } from './contracts.js';
 import { NaiveSearch } from './atomic/NaiveSearch.js';
 import { BoyerMooreSearch } from './atomic/BoyerMooreSearch.js';
 import { HorspoolSearch } from './atomic/HorspoolSearch.js';
@@ -24,18 +25,19 @@ export const BUILTIN = [
 export class Registry {
   #atoms = new Map();
 
-  /** Bir atom sınıfını ekler. Sözleşmeye uymayan sınıf reddedilir. */
+  /**
+   * Bir atom sınıfını ekler. Atom en az iki rolü üstlenmeli: Describable (manifest) ve Searcher
+   * (process). Seçim bilgisi (SelectionProvider) isteğe bağlıdır; verildiyse eksiksiz olmalı.
+   * Sözleşmeye uymayan sınıf, eksik üyeleri adıyla sayılarak reddedilir (src/contracts.js).
+   * @param {any} Atom  bir atom sınıfı (rolleri çalışma anında denetlenir)
+   */
   register(Atom) {
-    const m = Atom?.manifest;
-    if (!m || typeof m.name !== 'string' || m.name === '') throw new TypeError('Atomun manifest.name alanı olmalı');
+    const label = typeof Atom?.manifest?.name === 'string' && Atom.manifest.name ? Atom.manifest.name : 'Atom';
+    assertRoles(Atom, ['Describable', 'Searcher'], label);
+    const m = Atom.manifest;
     if (m.kind !== 'atom') throw new TypeError(`${m.name}: manifest.kind "atom" olmalı`);
     if (m.task !== TASK) throw new TypeError(`${m.name}: manifest.task "${TASK}" olmalı`);
-    if (typeof Atom.prototype?.process !== 'function') throw new TypeError(`${m.name}: process() yöntemi yok`);
-    const s = Atom.selection;
-    if (s !== null && s !== undefined) {
-      if (typeof s.features !== 'function') throw new TypeError(`${m.name}: selection.features bir işlev olmalı`);
-      if (!s.defaults || typeof s.defaults !== 'object') throw new TypeError(`${m.name}: selection.defaults bir nesne olmalı`);
-    }
+    if (Atom.selection !== null && Atom.selection !== undefined) assertRoles(Atom, ['SelectionProvider'], m.name);
     if (this.#atoms.has(m.name)) throw new Error(`${m.name} zaten kayıtlı`);
     this.#atoms.set(m.name, Atom);
     return this;
@@ -58,9 +60,9 @@ export class Registry {
     return [...this.#atoms.keys()];
   }
 
-  /** "auto" kipinde aday olan atomlar: selection alanı olanlar. */
+  /** "auto" kipinde aday olan atomlar: SelectionProvider rolünü üstlenenler. */
   candidates() {
-    return [...this.#atoms.values()].filter((A) => A.selection);
+    return [...this.#atoms.values()].filter((A) => implementsRole(A, 'SelectionProvider'));
   }
 
   /** Aynı atomlarla yeni bir kayıt defteri (testlerde güvenle değiştirmek için). */

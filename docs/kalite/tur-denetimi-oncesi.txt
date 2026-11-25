@@ -1,0 +1,160 @@
+bench/timing.js(73,3): error TS2322: Type '{}' is not assignable to type 'Record<string, { ms: any; samples: any; inner: any; reps: any; }>'.
+  Index signature for type 'string' is missing in type '{}'.
+scripts/arayuz-denetimi.js(58,56): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(59,56): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(79,32): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(131,46): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(146,47): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(158,51): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(161,50): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(166,47): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(171,47): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(177,46): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(179,46): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(187,50): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(192,67): error TS2339: Property 'value' does not exist on type 'HTMLElement'.
+scripts/arayuz-denetimi.js(204,44): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/arayuz-denetimi.js(205,47): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+scripts/mutasyon.js(80,29): error TS2339: Property 'code' does not exist on type 'Error'.
+scripts/site-uret.js(55,43): error TS2554: Expected 0 arguments, but got 2.
+scripts/site-uret.js(55,66): error TS2554: Expected 0 arguments, but got 2.
+scripts/site-uret.js(95,19): error TS2322: Type '"" | "hl" | "e2e"' is not assignable to type '""'.
+  Type '"hl"' is not assignable to type '""'.
+scripts/site-uret.js(253,251): error TS2322: Type '"" | "hl"' is not assignable to type '""'.
+  Type '"hl"' is not assignable to type '""'.
+scripts/site-uret.js(300,19): error TS2322: Type '"" | "hl" | "e2e"' is not assignable to type '""'.
+  Type '"hl"' is not assignable to type '""'.
+scripts/uml-ciz.js(135,45): error TS2339: Property 'y1' does not exist on type '{ kind: any; guard: any; y0: number; elses: any[]; x0: any; x1: any; }'.
+scripts/uml-ciz.js(402,32): error TS2307: Cannot find module 'playwright' or its corresponding type declarations.
+src/workflows/catalog.js(373,7): error TS2339: Property 'categories' does not exist on type 'Map<any, any>'.
+src/workflows/engine.js(34,46): error TS2339: Property 'id' does not exist on type '{ x?: number; y?: number; params?: {}; }'.
+src/workflows/engine.js(134,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/workflows/engine.js(201,20): error TS1005: '}' expected.
+src/workflows/engine.js(202,14): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{ ok: any; problems: any; order: any; nodes: { [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }; }>'?
+src/workflows/engine.js(202,47): error TS2304: Cannot find name 'id'.
+src/workflows/engine.js(204,48): error TS2502: 'ctx' is referenced directly or indirectly in its own type annotation.
+src/workflows/engine.js(238,61): error TS2322: Type '{}' is not assignable to type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+  Index signature for type 'number' is missing in type '{}'.
+src/workflows/engine.js(262,36): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+src/workflows/race.js(19,23): error TS2304: Cannot find name 'patterns'.
+src/workflows/race.js(19,31): error TS1005: '}' expected.
+src/workflows/race.js(20,26): error TS1005: '}' expected.
+src/workflows/race.js(35,11): error TS2339: Property 'hits' does not exist on type '() => void'.
+tests/benchmarks/common.js(39,9): error TS2339: Property 'hits' does not exist on type '() => void'.
+tests/benchmarks/common.js(59,39): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, Function>'.
+  Index signature for type 'string' is missing in type '{}'.
+tests/benchmarks/figures.js(164,73): error TS2345: Argument of type '(string | ((c: any) => any))[]' is not assignable to parameter of type '[any, any, any, any]'.
+  Target requires 4 element(s) but source may have fewer.
+tests/benchmarks/figures.js(165,73): error TS2345: Argument of type '(string | ((c: any) => any))[]' is not assignable to parameter of type '[any, any, any, any]'.
+  Target requires 4 element(s) but source may have fewer.
+tests/benchmarks/figures.js(185,36): error TS2345: Argument of type '(string | ((c: any) => any))[]' is not assignable to parameter of type '[any, any, any, any]'.
+  Target requires 4 element(s) but source may have fewer.
+tests/benchmarks/figures.js(191,104): error TS2339: Property 'includes' does not exist on type 'string | ((c: any) => any)'.
+  Property 'includes' does not exist on type '(c: any) => any'.
+tests/benchmarks/validate.js(122,19): error TS2339: Property 'hits' does not exist on type '() => void'.
+tests/benchmarks/validate.js(125,21): error TS2339: Property 'hits' does not exist on type '() => void'.
+tests/benchmarks/validate.js(125,81): error TS2339: Property 'hits' does not exist on type '() => void'.
+tests/unit/atoms.test.js(36,12): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(name?: string, fn?: TestFn): Promise<void>', gave the following error.
+    Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+      Type 'string[]' is not assignable to type 'string'.
+  Overload 2 of 4, '(name?: string, options?: TestOptions, fn?: TestFn): Promise<void>', gave the following error.
+    Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+      Type 'string[]' is not assignable to type 'string'.
+  Overload 3 of 4, '(options?: TestOptions, fn?: TestFn): Promise<void>', gave the following error.
+    Argument of type 'string | string[]' is not assignable to parameter of type 'TestOptions'.
+      Type 'string' has no properties in common with type 'TestOptions'.
+tests/unit/engine.test.js(20,40): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(21,47): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(22,40): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(23,48): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(24,46): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(25,41): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(26,40): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(27,41): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(28,40): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(43,27): error TS2339: Property 'patterns' does not exist on type '{}'.
+tests/unit/engine.test.js(44,27): error TS2339: Property 'ignoreCase' does not exist on type '{}'.
+tests/unit/engine.test.js(45,62): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(51,42): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(52,50): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(58,118): error TS2339: Property 'code' does not exist on type 'unknown'.
+tests/unit/engine.test.js(64,42): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(65,42): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(66,49): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(67,49): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(68,50): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(80,49): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(87,29): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(88,29): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(124,27): error TS2339: Property 'tab' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(128,28): error TS2339: Property 'oz' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(129,32): error TS2339: Property 'oz' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(130,28): error TS2339: Property 'gate' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(131,28): error TS2339: Property 'em' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(132,38): error TS2339: Property 'em' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(134,28): error TS2339: Property 'js' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(136,25): error TS2339: Property 'tab' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(143,28): error TS2339: Property 'gate' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(144,28): error TS2339: Property 'js' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(152,28): error TS2339: Property 'pat' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(153,28): error TS2339: Property 'pat' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(154,28): error TS2339: Property 'em' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(155,28): error TS2339: Property 'gate' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(156,28): error TS2339: Property 'ad' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(169,42): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(173,28): error TS2339: Property 'oz' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(179,44): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(180,48): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(181,42): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(182,51): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(183,48): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(191,32): error TS2339: Property 'h' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(191,69): error TS2339: Property 'n' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(192,28): error TS2339: Property 'h' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(197,44): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '{ x?: number; y?: number; params?: {}; }'.
+tests/unit/engine.test.js(199,27): error TS2339: Property 'o' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(200,31): error TS2339: Property 'o' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(202,28): error TS2339: Property 'o' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(217,30): error TS2339: Property 'tab' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(217,57): error TS2339: Property 'tab' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(251,57): error TS2339: Property 'categories' does not exist on type 'Map<any, any>'.
+tests/unit/engine.test.js(268,28): error TS2339: Property 'em' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/engine.test.js(269,28): error TS2339: Property 'oz' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/forbidden.test.js(64,41): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+tests/unit/forbidden.test.js(64,96): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+tests/unit/forbidden.test.js(67,38): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+tests/unit/molecule.test.js(15,41): error TS2339: Property 'applicable' does not exist on type '{ cost?: number; }'.
+tests/unit/molecule.test.js(65,24): error TS2339: Property 'message' does not exist on type 'unknown'.
+tests/unit/molecule.test.js(66,68): error TS2339: Property 'message' does not exist on type 'unknown'.
+tests/unit/molecule.test.js(100,56): error TS2353: Object literal may only specify known properties, and 'applicable' does not exist in type '{ cost?: number; }'.
+tests/unit/molecule.test.js(121,42): error TS2353: Object literal may only specify known properties, and 'applicable' does not exist in type '{ cost?: number; }'.
+tests/unit/molecule.test.js(122,49): error TS2353: Object literal may only specify known properties, and 'applicable' does not exist in type '{ cost?: number; }'.
+tests/unit/molecule.test.js(133,38): error TS2353: Object literal may only specify known properties, and 'applicable' does not exist in type '{ cost?: number; }'.
+tests/unit/packages.test.js(66,31): error TS2339: Property 'tek_molekul' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+tests/unit/packages.test.js(66,75): error TS2339: Property 'cok_molekul' does not exist on type '{ [x: number]: { status: any; ms: any; outputs: any; info: any; error: any; }; }'.
+web/app.js(99,22): error TS2339: Property 'value' does not exist on type 'HTMLElement'.
+web/app.js(103,29): error TS2339: Property 'categories' does not exist on type 'Map<any, any>'.
+web/app.js(162,93): error TS2339: Property 'focus' does not exist on type 'Element'.
+web/app.js(184,39): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+web/app.js(185,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+web/app.js(312,82): error TS2339: Property 'dataset' does not exist on type 'Element'.
+web/app.js(414,39): error TS2339: Property 'dataset' does not exist on type 'Element'.
+web/app.js(414,66): error TS2339: Property 'dataset' does not exist on type 'Element'.
+web/app.js(414,93): error TS2339: Property 'dataset' does not exist on type 'Element'.
+web/app.js(441,129): error TS2339: Property 'focus' does not exist on type 'Element'.
+web/app.js(725,12): error TS2339: Property 'dataset' does not exist on type 'Element'.
+web/app.js(746,18): error TS2339: Property 'disabled' does not exist on type 'HTMLElement'.
+web/app.js(859,14): error TS2339: Property 'value' does not exist on type 'HTMLElement'.
+web/app.js(860,17): error TS2339: Property 'value' does not exist on type 'HTMLElement'.
+web/app.js(969,24): error TS2339: Property 'files' does not exist on type 'EventTarget'.
+web/app.js(970,14): error TS2339: Property 'value' does not exist on type 'EventTarget'.
+web/app.js(986,74): error TS2339: Property 'value' does not exist on type 'EventTarget'.
+web/app.js(987,79): error TS2339: Property 'value' does not exist on type 'EventTarget'.
+web/app.js(1029,59): error TS2339: Property 'id' does not exist on type 'EventTarget'.
+web/app.js(1029,89): error TS2339: Property 'id' does not exist on type 'EventTarget'.
+web/app.js(1060,8): error TS2339: Property '__atolye' does not exist on type 'Window & typeof globalThis'.
+web/core.js(19,31): error TS2554: Expected 0 arguments, but got 2.

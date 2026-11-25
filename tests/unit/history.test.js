@@ -177,7 +177,7 @@ describe('kopyala / yapıştır', () => {
   test('bozuk ya da yabancı parça reddedilir', () => {
     const { doc } = small();
     assert.throws(() => pasteCommand(catalog, doc.wf, null), /parçası değil/);
-    assert.throws(() => pasteCommand(catalog, doc.wf, { nodes: [{ id: 'x', type: 'yok.boyle' }], edges: [] }), /bilinmeyen/);
+    assert.throws(() => pasteCommand(catalog, doc.wf, /** @type {any} */ ({ nodes: [{ id: 'x', type: 'yok.boyle' }], edges: [] })), /bilinmeyen/);
   });
 });
 
