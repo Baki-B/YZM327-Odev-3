@@ -248,8 +248,9 @@ Benzer projelerden alınmayıp sonraya bırakılanlar ([docs/benzer-projeler.md]
 | Üye | Numara | Katkı |
 |---|---|---|
 | Baki [soyad] | [numara] | [...] |
-| [Üye 2 ad soyad] | [numara] | [...] |
+| Seyyid Abdulbaki Bozkurt | [numara] | [...] |
+| Alparslan Tuğra Şahin | [numara] | [...] |
 
-Ders: [ders kodu ve adı] · Öğretim elemanı: [ad soyad]
+Ders: YZM327 · Öğretim elemanı: Savaş TAKAN
 
 **Yapay zekâ kullanımı:** Ders politikası yapay zekâ kullanımını serbest bırakıyor. Kod, testler, ölçüm betikleri, iş akışı motoru ve atölye, site, slaytlar, UML diyagramları, rapor ve belgeler bir yapay zekâ kodlama aracıyla (Claude Code) üretildi. Bütün sayılar bu çalışmada çalıştırılan komutların çıktısından alındı ve `scripts/sayi-denetimi.js` ile denetlendi. Sunumda her bölümün anlatılabilmesi için [docs/anlatim.md](docs/anlatim.md) hazırlandı.
