@@ -231,7 +231,8 @@ Kural: görünümler birbirini çağırmaz, yalnızca zile (olay yolu) kulak ver
 ## 12. Tarama katmanı (`src/scan/`)
 
 - **Kurallar (`rules.js`):** Her desen bir kural: kalıcı kimlik (`secrets/akia`), önem (hata / uyarı / not), açıklama ve güvenlik kurallarında CWE numarası (yazılım zayıflıklarının uluslararası kataloğu).
-- **Süzgeçler (`filters.js`):** `ios:ignore` yorumu bilerek bırakılan satırı bastırır; `--word` yalnızca tam sözcükleri tutar; `.iosignore` taranmayacak yolları söyler.
+- **Süzgeçler (`filters.js`):** `ios:ignore` yorumu bilerek bırakılan satırı bastırır; `--word` yalnızca tam sözcükleri tutar; `.iosignore` taranmayacak yolları söyler; `.gitignore` dosyaları da okunur (alt klasördeki kendi klasörüne göre, `!kalıp` geri alır).
+- **Entropi süzgeci (`entropy.js`):** `--min-entropy 3` gizli bilgi bulgusunun değerine bakar. Değerin karakterleri ne kadar dağınıksa entropisi o kadar yüksek: rastgele üretilmiş bir anahtarınki yüksek, `changeme` ya da `XXXX-XXXX-XXXX` gibi yer tutucularınki düşük (testte ölçülüyor). Eşiğin altındaki bulgu atılır; değer yoksa (düz yazıda "password") bulgu kalır.
 - **Rapor (`report.js`):** SARIF (statik analiz sonuçları için standart biçim; GitHub kod tarama ekranı okur), parmak izi (bulguyu satır numarasından bağımsız tanır, böylece "yalnızca yeni bulgular" denebilir) ve gizli bilgi maskeleme (`password=****`).
 - **Kendi depomuzu tarıyoruz:** CI'da projenin tarayıcısı bu depoyu tarar; ilk taramada atölyenin kendi `exec(...)` adlı işlevini "riskli API" olarak yakaladı (yanlış alarm ama kural doğru çalışıyor); işlevin adı değiştirildi.
 
@@ -249,4 +250,4 @@ Her gönderimde GitHub Actions şunları çalıştırır; biri kalırsa gönderi
 | Bağlantı ve sayı denetimi | Kırık bağlantı ya da kaynağı olmayan sayı var mı? |
 | CodeQL ve kendi taramamız | Güvenlik açığı ya da depoya girmiş parola var mı? |
 
-**Mutasyon denetimi bir şey öğretti:** Koda bilerek 25 hata koyduk (sonra arayüz için 4; önbellek, otomatik yerleşim, akış kipi ve en uzun eşleşme için birer tane daha; toplam 33); ilk turda biri yakalanmadı. Sebep testteydi: iki satırın parmak izinin farklı olduğunu denetliyordu ama satırların metni zaten farklıydı. Testi metni birebir aynı satırlarla güçlendirdik.
+**Mutasyon denetimi bir şey öğretti:** Koda bilerek 25 hata koyduk (sonra arayüz için 4; önbellek, otomatik yerleşim, akış kipi, en uzun eşleşme, .gitignore ve entropi için birer tane daha; toplam 35); ilk turda biri yakalanmadı. Sebep testteydi: iki satırın parmak izinin farklı olduğunu denetliyordu ama satırların metni zaten farklıydı. Testi metni birebir aynı satırlarla güçlendirdik.

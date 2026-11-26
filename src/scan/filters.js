@@ -1,4 +1,4 @@
-// Bulgu süzgeçleri: satır içi bastırma, tam sözcük ve yok sayma dosyası (.iosignore).
+// Bulgu süzgeçleri: satır içi bastırma, tam sözcük ve yok sayma dosyaları (.iosignore, .gitignore).
 //
 //   Satır içi bastırma  Bilerek bırakılmış bir satır "ios:ignore" yorumuyla işaretlenir; bir
 //                       önceki satıra "ios:ignore-next-line" yazmak da olur. (gitleaks'te
@@ -6,6 +6,8 @@
 //                       "eslint-disable-next-line" aynı işi yapar.)
 //   Tam sözcük          "return" deseni "returned" içinde bulunmasın (flashtext ve ripgrep -w).
 //   .iosignore          Taranmayacak yollar, .gitignore'a benzer kalıplarla.
+//   .gitignore          Git'in yok saydığı yollar da taranmaz (ripgrep gibi; --no-gitignore kapatır);
+//                       iç içe .gitignore dosyaları kendi klasörlerine göre yorumlanır.
 //
 // Atomlar tam eşleşmenin hepsini bulur (sözleşme); süzgeçler bulgu katmanında, aramadan
 // sonra uygulanır. Komut satırı (CodeScan) ve atölye (Eşleşme → Bulgu) aynı işlevleri kullanır.
@@ -39,7 +41,8 @@ export function isSuppressed(text, starts, line) {
 }
 
 const WORD = /[\p{L}\p{N}_]/u;
-const isWordChar = (c) => c !== undefined && c !== '' && WORD.test(c);
+/** Harf, rakam ya da alt çizgi mi? (tam sözcük ve entropi süzgeçleri) @param {string | undefined} c */
+export const isWordChar = (c) => c !== undefined && c !== '' && WORD.test(c);
 
 /**
  * Eşleşme tam sözcük mü? Desenin harf ya da rakamla başlayan (biten) ucunda, metinde önce
@@ -72,38 +75,77 @@ function globToRegExp(glob) {
 }
 
 /**
- * .iosignore içeriğini derler. Kurallar (.gitignore'un sık kullanılan alt kümesi):
+ * .iosignore ve .gitignore içeriğini derler. Kurallar (.gitignore'un sık kullanılan alt kümesi):
  *   # yorum, boş satır atlanır
  *   kalıp      "/" içermiyorsa her derinlikte dosya ya da klasör adıyla eşleşir
  *   /kalıp     yalnızca kökten
  *   kalıp/     yalnızca klasör (altındaki her şey)
  *   * ? **     joker karakterler
+ *   !kalıp     olumsuzlama: önceki bir kuralla dışlanan yolu geri alır (son eşleşen kural kazanır)
+ *   \# \!      satır başındaki # ya da ! harfiyen
+ * Git'teki gibi, dışlanmış bir klasörün içindeki dosya olumsuzlamayla geri alınamaz: tarayıcı o
+ * klasöre hiç girmez.
  * @param {string} text
- * @returns {{ patterns: string[], ignores: (path: string) => boolean }}
+ * @returns {{ patterns: string[], ignores: (path: string) => boolean, match: (path: string) => boolean | undefined, matchSelf: (path: string) => boolean | undefined }}
  */
 export function compileIgnore(text) {
   const patterns = [];
-  const tests = [];
+  /** @type {Array<{ re: RegExp, self: RegExp, negate: boolean }>} */
+  const rules = [];
   for (const raw of String(text ?? '').split('\n')) {
     const line = raw.replace(/\r$/, '').trim();
     if (!line || line.startsWith('#')) continue;
-    patterns.push(line);
     let p = line;
+    const negate = p.startsWith('!');
+    if (negate || p.startsWith('\\!') || p.startsWith('\\#')) p = p.slice(1);
+    if (!p) continue;
+    patterns.push(line);
     const dirOnly = p.endsWith('/');
     if (dirOnly) p = p.slice(0, -1);
     const anchored = p.startsWith('/') || p.includes('/');
     if (p.startsWith('/')) p = p.slice(1);
     const body = globToRegExp(p);
-    const re = new RegExp(`^${anchored ? '' : '(?:.*/)?'}${body}${dirOnly ? '/.*' : '(?:/.*)?'}$`);
-    tests.push(re);
+    const head = `^${anchored ? '' : '(?:.*/)?'}${body}`;
+    // re: yolun kendisi ya da altındaki her şey; self: yalnızca yolun kendisi (klasörse "/" ile biter)
+    rules.push({ re: new RegExp(`${head}${dirOnly ? '/.*' : '(?:/.*)?'}$`), self: new RegExp(`${head}${dirOnly ? '/' : '/?'}$`), negate });
   }
-  return {
-    patterns,
-    ignores(path) {
-      const p = String(path).replace(/\\/g, '/').replace(/^\.\//, '');
-      return tests.some((re) => re.test(p));
-    },
+  /** Son eşleşen kuralın kararı: true dışla, false geri al, undefined hiçbir kural eşleşmedi. */
+  const decide = (path, key) => {
+    const p = String(path).replace(/\\/g, '/').replace(/^\.\//, '');
+    let verdict;
+    for (const r of rules) if (r[key].test(p)) verdict = !r.negate;
+    return verdict;
   };
+  /** @param {string} path */
+  const match = (path) => decide(path, 're');
+  /**
+   * Yalnızca yolun kendisine bakar (git'in ağaç gezerken yaptığı gibi): dışlanan klasörün içine
+   * zaten girilmediği için alt yolların ayrıca eşleşmesi gerekmez; açıkça verilen bir hedefin
+   * içindekiler de üst klasörün kuralına takılmaz.
+   * @param {string} path
+   */
+  const matchSelf = (path) => decide(path, 'self');
+  return { patterns, match, matchSelf, ignores: (path) => match(path) === true };
+}
+
+/**
+ * Klasörlere bağlı yok sayma katmanları (iç içe .gitignore dosyaları). Her katmanın kalıpları
+ * kendi klasörüne göre yorumlanır; yolun bulunduğu klasöre en yakın (en derin) katmanın kararı
+ * üsttekileri ezer. Katmanlar kökten derine sıralı verilir. Klasörler çocuklarından önce
+ * sorulur (ağaç gezme sırası); her yol yalnızca kendisiyle eşleştirilir (matchSelf).
+ * @param {Array<{ base: string, rules: { matchSelf: (path: string) => boolean | undefined } }>} layers
+ *   base: kökten klasör yolu, "/" ile biter ("" kök)
+ * @param {string} path  kökten yol (klasörse "/" ile biter)
+ */
+export function layeredIgnores(layers, path) {
+  const p = String(path).replace(/\\/g, '/').replace(/^\.\//, '');
+  let verdict;
+  for (const { base, rules } of layers) {
+    if (!p.startsWith(base)) continue;
+    const v = rules.matchSelf(p.slice(base.length));
+    if (v !== undefined) verdict = v;
+  }
+  return verdict === true;
 }
 
 /**

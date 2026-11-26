@@ -38,14 +38,14 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 
 | Depo | Yıldız | Öne çıkan özellik | Bizdeki karşılığı | Durum |
 |---|---:|---|---|---|
-| BurntSushi/ripgrep | 70 332 | `-w` tam sözcük, `--json`, `.gitignore` | `--word`, `--format json`, `.iosignore` | alındı (`.gitignore`'un tam anlamı: gelecek iş) |
+| BurntSushi/ripgrep | 70 332 | `-w` tam sözcük, `--json`, `.gitignore` | `--word`, `--format json`, `.iosignore`; sonradan `.gitignore` (iç içe dosyalar, `!` olumsuzlaması, `--no-gitignore`) | alındı |
 | gitleaks/gitleaks | 31 339 | kural anahtar sözcüklerinden **Aho-Corasick ön süzgeci** (doğrulandı), satır içi `gitleaks:allow`, yok sayma dosyası, taban çizgisi, `--redact`, SARIF | aynı fikirler: tam eşleşme (bizde Aho-Corasick dahil 8 atom) + `ios:ignore`, `.iosignore`, `--baseline`, maskeleme, SARIF | alındı (düzenli ifade kuralları: alınmadı, ödev tam eşleşme) |
 | trufflesecurity/trufflehog | 29 655 | bulunan anahtarı servise sorarak doğrulama | — | alınmadı: atomlarda ağ yasak; başkasının anahtarını denemek etik ve hukuki risk |
 | eslint/eslint | 27 652 | kural meta verisi, `eslint-disable-next-line` | kural kimliği ve önemi; `ios:ignore-next-line` | alındı |
 | semgrep/semgrep | 17 940 | kural kimliği / önem / CWE, `nosemgrep`, **işaretli örnek dosyalarla kural testi** (`ruleid:` / `ok:`, doğrulandı), SARIF, taban çizgisi | `src/scan/rules.js` (CWE dahil); `tests/data/kurallar/*.txt` (`#> kural` / `#> -`); SARIF; `--baseline` | alındı |
 | github/codeql | 10 412 | statik güvenlik analizi, GitHub kod tarama | `.github/workflows/codeql.yml`; kendi SARIF'imiz aynı ekrana yükleniyor | alındı |
 | kucherenko/jscpd | 6 618 | SARIF ve rozet raporlayıcıları | SARIF | alındı |
-| Yelp/detect-secrets | 4 682 | taban çizgisi dosyası, satır içi izin, eklentili dedektörler | `--baseline`, `ios:ignore`; eklenti mimarisinin karşılığı kayıt defteri | alındı (entropi dedektörü: gelecek iş) |
+| Yelp/detect-secrets | 4 682 | taban çizgisi dosyası, satır içi izin, eklentili dedektörler | `--baseline`, `ios:ignore`; eklenti mimarisinin karşılığı kayıt defteri; sonradan entropi süzgeci (`--min-entropy`) | alındı |
 | folke/todo-comments.nvim | 4 227 | TODO / FIX / HACK / WARN gibi iş notu etiketleri | `todo` hazır kümesi | zaten vardı |
 | pgilad/leasot, alstr/todo-to-issue-action | 815, 800 | iş notlarını rapor ya da iş kaydına (issue) çevirme | SARIF (iş notları "note" düzeyinde) | kısmen (iş kaydına çevirme: gelecek iş) |
 

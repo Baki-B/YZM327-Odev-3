@@ -130,6 +130,14 @@ const MUTATIONS = [
     file: "src/scan/filters.js", what: "En uzun eşleşme süzgeci aynı konumda ilk eşleşmeyi seçer (en uzunu değil)",
     from: "    for (const x of group) if (x.length > best.length) best = x;", to: "    for (const x of group) if (false) best = x;",
   },
+  {
+    file: "src/scan/filters.js", what: ".gitignore olumsuzlaması (!kalıp) yok sayılır, geri alınan yol da atlanır",
+    from: "    for (const r of rules) if (r[key].test(p)) verdict = !r.negate;", to: "    for (const r of rules) if (r[key].test(p)) verdict = true;",
+  },
+  {
+    file: "src/scan/entropy.js", what: "Entropi süzgeci açılış tırnağını atlamaz (tırnaklı her değer boş sayılır, gerçek anahtar da atılır)",
+    from: "  if (QUOTES.has(text[i])) i++;", to: "  if (false) i++;",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

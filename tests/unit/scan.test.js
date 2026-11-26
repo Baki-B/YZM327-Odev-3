@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PRESETS } from '../../src/workflows/presets.js';
 import { RULES, ruleForPattern, rulesFor, rulesOfFindings, isSecretPattern, slug } from '../../src/scan/rules.js';
-import { isSuppressed, isWholeWord, compileIgnore, lineAt } from '../../src/scan/filters.js';
+import { isSuppressed, isWholeWord, compileIgnore, layeredIgnores, lineAt } from '../../src/scan/filters.js';
 import { hash64, maskAfter, snippetOf, toSarif, toUri, TOOL, MASK } from '../../src/scan/report.js';
 import { lineStarts } from '../../src/adapters/sourceToEntry.js';
 import { CodeScan } from '../../src/workflows/CodeScan.js';
@@ -89,6 +89,43 @@ describe('süzgeçler', () => {
     assert.equal(ig.ignores('docs/a.md'), true);
     assert.equal(ig.ignores('docs/ab.md'), false);
     assert.equal(ig.ignores('.\\tests\\data\\x'), true, 'Windows ayıracı');
+  });
+  test('.gitignore olumsuzlaması ve kaçış: son eşleşen kural kazanır', () => {
+    const ig = compileIgnore('*.log\n!keep.log\nout/*\n!out/rapor.txt\n\\#not.md\n\\!uyari.txt\n!\n');
+    assert.deepEqual(ig.patterns, ['*.log', '!keep.log', 'out/*', '!out/rapor.txt', '\\#not.md', '\\!uyari.txt'], 'tek başına "!" kural değil');
+    assert.equal(ig.ignores('a.log'), true);
+    assert.equal(ig.ignores('src/keep.log'), false, 'olumsuzlama her derinlikte');
+    assert.equal(ig.match('src/keep.log'), false, 'geri alındı');
+    assert.equal(ig.match('src/a.js'), undefined, 'hiçbir kural eşleşmedi');
+    assert.equal(ig.ignores('out/x.txt'), true);
+    assert.equal(ig.ignores('out/rapor.txt'), false);
+    assert.equal(ig.ignores('#not.md'), true, '\\# harfiyen #');
+    assert.equal(ig.ignores('!uyari.txt'), true, '\\! harfiyen !');
+    assert.equal(compileIgnore('!keep.log\n*.log').ignores('keep.log'), true, 'sıra önemli: sonraki kural ezer');
+  });
+  test('iç içe .gitignore: kalıplar kendi klasörüne göre, derindeki katman kazanır', () => {
+    const layers = [
+      { base: '', rules: compileIgnore('*.tmp\n/kok.txt\n') },
+      { base: 'pkg/', rules: compileIgnore('!b.tmp\ngen/\n/kok.txt\n') },
+      { base: 'pkg/alt/', rules: compileIgnore('b.tmp\n') },
+    ];
+    assert.equal(layeredIgnores(layers, 'a.tmp'), true);
+    assert.equal(layeredIgnores(layers, 'pkg/b.tmp'), false, 'alt klasör üsttekini geri alır');
+    assert.equal(layeredIgnores(layers, 'pkg/c.tmp'), true);
+    assert.equal(layeredIgnores(layers, 'pkg/alt/b.tmp'), true, 'daha derindeki yeniden dışlar');
+    assert.equal(layeredIgnores(layers, 'pkg/gen/'), true);
+    assert.equal(layeredIgnores(layers, 'gen/'), false, 'pkg/.gitignore kökü etkilemez');
+    assert.equal(layeredIgnores(layers, 'kok.txt'), true);
+    assert.equal(layeredIgnores(layers, 'pkg/kok.txt'), true, '/kalıp katmanın kendi köküne bağlı');
+    assert.equal(layeredIgnores(layers, 'pkg/alt/kok.txt'), false);
+    assert.equal(layeredIgnores([], 'a.tmp'), false);
+    const ig = compileIgnore('vendor/\nbuild\n');
+    assert.equal(ig.match('vendor/a.js'), true, 'match: klasörün altı da');
+    assert.equal(ig.matchSelf('vendor/a.js'), undefined, 'matchSelf: yalnızca yolun kendisi');
+    assert.equal(ig.matchSelf('vendor/'), true);
+    assert.equal(ig.matchSelf('vendor'), undefined, 'klasör kalıbı dosya adıyla eşleşmez');
+    assert.equal(ig.matchSelf('src/build/'), true, 'kalıp klasöre de dosyaya da uyar');
+    assert.equal(ig.matchSelf('src/build'), true);
   });
 });
 

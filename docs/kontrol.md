@@ -50,7 +50,7 @@
 | Arayüz (Kod Bilimi Atölyesi) | yapıldı; 54/54 tarayıcı denetimi | `web/`, `scripts/arayuz-denetimi.js` |
 | UML diyagramları | 10 diyagram (kullanım durumu, 4 sınıf, 4 sıralı, paket) | `docs/uml/` |
 | Depo yapısı (src/functions, src/atomic, src/molecules/ExactMatch.js, src/registry.js, src/shape.js, bin/ios.js, bench/, tests/unit/, tests/benchmarks/) | yapıldı | README "Depo yapısı" |
-| `npm test` temiz kopyada, bağımlılıksız | 496/496 | temiz klonda ve CI'da (Node 22 ve 24) |
+| `npm test` temiz kopyada, bağımlılıksız | 504/504 | temiz klonda ve CI'da (Node 22 ve 24) |
 
 ## Yazılım mühendisliği uygulamaları (ek)
 
@@ -97,10 +97,10 @@ Güçlendirme turundan sonra bütün denetimler yeniden çalıştırıldı (say�
 
 | Denetim | Komut | Sonuç |
 |---|---|---|
-| Birim testleri | `npm test` | 496/496 geçti |
-| Test kapsaması | `npm run kapsama` | satır %99,5 (5 146 / 5 170), dal %91,2 (1 677 / 1 838), işlev %98,0 (585 / 597); eşikler %95 / %85 / %95 |
+| Birim testleri | `npm test` | 504/504 geçti |
+| Test kapsaması | `npm run kapsama` | satır %99,6 (5 330 / 5 354), dal %91,7 (1 762 / 1 921), işlev %98,0 (596 / 608); eşikler %95 / %85 / %95 |
 | Statik tür denetimi | `npm run tur-denetimi` | 0 hata (ilk ölçümde 138); rol arayüzleri için 11 olumsuz kontrol (`tests/types/roller.js`) |
-| Mutasyon denetimi | `npm run mutation` | 33/33 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi; arayüz katmanına 4; önbelleğe, otomatik yerleşime, akış kipine ve en uzun eşleşme süzgecine birer mutasyon eklendi); CI'da her gönderimde ayrı iş olarak çalışır |
+| Mutasyon denetimi | `npm run mutation` | 35/35 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi; arayüz katmanına 4; önbelleğe, otomatik yerleşime, akış kipine, en uzun eşleşme süzgecine, .gitignore olumsuzlamasına ve entropi süzgecine birer mutasyon eklendi); CI'da her gönderimde ayrı iş olarak çalışır |
 | Arayüz denetimi (gerçek Chromium) | `node scripts/arayuz-denetimi.js` | 54/54 |
 | Kırık bağlantı | `node scripts/baglanti-denetimi.js` | 18 sayfa, 206 bağlantı, 0 kırık |
 | Erişilebilirlik (WCAG 2.1 AA) | `node scripts/erisilebilirlik-denetimi.js` | 20 taramada 0 ihlal (ilk ölçümde 25 engelleyici) |

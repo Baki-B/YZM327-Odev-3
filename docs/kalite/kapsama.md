@@ -1,12 +1,12 @@
 # Test kapsaması
 
-`npm run kapsama` (Node v22.23.4, yerleşik ölçüm). Kapsam: `src/**`, `bin/**`, `web/lib/**`; 55 dosya.
+`npm run kapsama` (Node v22.23.4, yerleşik ölçüm). Kapsam: `src/**`, `bin/**`, `web/lib/**`; 56 dosya.
 
 | Ölçüt | Çalışan / toplam | Oran | Eşik |
 |---|---|---|---|
-| Satır | 5146 / 5170 | %99,5 | %95 |
-| Dal | 1677 / 1838 | %91,2 | %85 |
-| İşlev | 585 / 597 | %98 | %95 |
+| Satır | 5330 / 5354 | %99,6 | %95 |
+| Dal | 1762 / 1921 | %91,7 | %85 |
+| İşlev | 596 / 608 | %98 | %95 |
 
 En düşük satır kapsamalı on dosya:
 
@@ -16,8 +16,8 @@ En düşük satır kapsamalı on dosya:
 | `web/lib/storage.js` | %93,3 | %100 | %88,9 |
 | `src/atomic/ExactSearchAtom.js` | %94,7 | %94,1 | %87,5 |
 | `src/functions/alphabet.js` | %95,1 | %94,1 | %100 |
-| `bin/ios.js` | %99,4 | %83 | %96,7 |
-| `src/workflows/catalog.js` | %99,6 | %83,1 | %91,5 |
+| `bin/ios.js` | %99,5 | %88,4 | %97,1 |
+| `src/workflows/catalog.js` | %99,6 | %82,5 | %91,5 |
 | `src/adapters/sourceToEntry.js` | %100 | %100 | %100 |
 | `src/atomic/AhoCorasickSearch.js` | %100 | %85,7 | %100 |
 | `src/atomic/Bm4DnaDsSearch.js` | %100 | %100 | %100 |

@@ -9,13 +9,13 @@
 // Çıkış kodları: 0 başarılı · 1 bulgu var (--fail) ya da iş akışı kapısı kaldı / hata · 2 kullanım hatası.
 
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { isAbsolute, join, relative, resolve } from 'node:path';
 import { parseFasta } from '../src/fasta.js';
 import { ExactMatch } from '../src/molecules/ExactMatch.js';
 import { registry } from '../src/registry.js';
 import { CodeScan } from '../src/workflows/CodeScan.js';
 import { PRESETS } from '../src/workflows/presets.js';
-import { compileIgnore } from '../src/scan/filters.js';
+import { compileIgnore, layeredIgnores } from '../src/scan/filters.js';
 import { rulesOfFindings } from '../src/scan/rules.js';
 import { toSarif, TOOL } from '../src/scan/report.js';
 import { createCatalog } from '../src/workflows/catalog.js';
@@ -33,9 +33,11 @@ const USAGE = `Kullanım:
       --fail                     bulgu varsa çıkış kodu 1 (sürekli entegrasyon kapısı)
       --word                     yalnızca tam sözcük eşleşmeleri
       --longest                  iç içe desenlerde yalnızca soldaki en uzun eşleşme (pass / password)
+      --min-entropy <bit>        gizli bilgi değerinin entropisi bu eşiğin altındaysa bulguyu at (ör. 3)
       --no-inline-ignore         "ios:ignore" yorumlarını yok say (bastırılmış satırları da raporla)
       --ignore-file <yol>        yok sayılacak yollar (varsayılan: ./.iosignore varsa o)
       --no-ignore-file           .iosignore dosyasını okuma
+      --no-gitignore             .gitignore dosyalarını okuma (varsayılan: kökteki ve alt klasörlerdekiler okunur)
       --baseline <dosya.sarif>   yalnızca bu eski taramada olmayan (yeni) bulguları raporla
       --no-redact                SARIF'te gizli bilgi değerlerini maskeleme
       --ignoreCase, --strategy <atom>, --quiet
@@ -51,7 +53,7 @@ class UsageError extends Error {}
 function parseArgs(argv) {
   const opts = {
     patterns: [], ignoreCase: false, strategy: 'auto', format: null, fail: false, presets: [], quiet: false,
-    word: false, longest: false, inlineIgnore: true, ignoreFile: null, useIgnoreFile: true, baseline: null, redact: true, help: false,
+    word: false, longest: false, minEntropy: 0, inlineIgnore: true, ignoreFile: null, useIgnoreFile: true, gitignore: true, baseline: null, redact: true, help: false,
   };
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
@@ -74,6 +76,12 @@ function parseArgs(argv) {
     else if (a === '--no-inline-ignore') opts.inlineIgnore = false;
     else if (a === '--ignore-file') opts.ignoreFile = value();
     else if (a === '--no-ignore-file') opts.useIgnoreFile = false;
+    else if (a === '--no-gitignore') opts.gitignore = false;
+    else if (a === '--min-entropy') {
+      const v = value();
+      opts.minEntropy = Number(v.replace(',', '.'));
+      if (!Number.isFinite(opts.minEntropy) || opts.minEntropy < 0) throw new UsageError(`--min-entropy bir sayı bekliyor (bit/karakter, ör. 3); verilen: ${v}`);
+    }
     else if (a === '--baseline') opts.baseline = value();
     else if (a === '--no-redact') opts.redact = false;
     else if (a === '--quiet' || a === '-q') opts.quiet = true;
@@ -127,25 +135,55 @@ function cmdExplain(opts) {
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '__pycache__', '_site', '.venv', 'venv', 'dist', 'build']);
 
+/** Klasördeki .gitignore'u bir katman olarak ekler (yoksa katmanlar aynı kalır). */
+function withGitignore(layers, dir, rel) {
+  const file = join(dir, '.gitignore');
+  if (!existsSync(file)) return layers;
+  return [...layers, { base: rel ? rel + '/' : '', rules: compileIgnore(readFileSync(file, 'utf8')) }];
+}
+
+/**
+ * Tarama kökü çalışma klasörünün altındaysa, aradaki klasörlerin .gitignore katmanları
+ * (ios scan src → ./.gitignore da geçerli).
+ * @param {string} target
+ * @param {string} root
+ */
+function ancestorGitignores(target, root) {
+  const rel = relative(root, resolve(target)).replace(/\\/g, '/');
+  if (!rel || rel.startsWith('..') || isAbsolute(rel)) return [];
+  let layers = withGitignore([], root, '');
+  const parts = rel.split('/');
+  for (let i = 1; i < parts.length; i++) layers = withGitignore(layers, join(root, ...parts.slice(0, i)), parts.slice(0, i).join('/'));
+  return layers;
+}
+
 /**
  * Dosya ağacını gezer. Gizli (nokta ile başlayan) ve derleme klasörleri, ikili dosyalar,
- * 5 MB'tan büyükler ve yok sayma kalıplarına uyanlar atlanır.
+ * 5 MB'tan büyükler, yok sayma kalıplarına ve (açıksa) .gitignore kurallarına uyanlar atlanır.
  * @param {string} path
  * @param {string} root
  * @param {{ ignores: (p: string) => boolean }} ignore
- * @param {{ ignored: number }} stats
+ * @param {{ ignored: number, gitignored: number }} stats
+ * @param {Array<{ base: string, rules: { matchSelf: (p: string) => boolean | undefined } }> | null} git  null: .gitignore okunmaz
+ * @param {boolean} [top]  açıkça verilen hedef mi (ripgrep gibi: .gitignore'da olsa da taranır)
  */
-function* walk(path, root, ignore, stats) {
+function* walk(path, root, ignore, stats, git, top = true) {
   const st = statSync(path);
   const rel = relative(root, path).replace(/\\/g, '/');
+  const skipped = (p) => {
+    if (ignore.ignores(p)) return (stats.ignored++, true);
+    if (git && !top && layeredIgnores(git, p)) return (stats.gitignored++, true);
+    return false;
+  };
   if (st.isDirectory()) {
-    if (rel && ignore.ignores(rel + '/')) { stats.ignored++; return; }
+    if (rel && skipped(rel + '/')) return;
+    const inner = git ? withGitignore(git, path, rel) : null;
     for (const name of readdirSync(path).sort()) {
       if (SKIP_DIRS.has(name) || name.startsWith('.')) continue;
-      yield* walk(join(path, name), root, ignore, stats);
+      yield* walk(join(path, name), root, ignore, stats, inner, false);
     }
   } else if (st.isFile() && st.size <= 5 * 1024 * 1024) {
-    if (rel && ignore.ignores(rel)) { stats.ignored++; return; }
+    if (rel && skipped(rel)) return;
     const buf = readFileSync(path);
     if (buf.subarray(0, 8192).includes(0)) return; // ikili dosya
     yield { path: relative(root, path) || path, text: buf.toString('utf8') };
@@ -195,16 +233,17 @@ function cmdScan(targets, opts) {
     if (!existsSync(ignorePath)) throw new UsageError(`Yok sayma dosyası bulunamadı: ${ignorePath}`);
     ignore = compileIgnore(readFileSync(ignorePath, 'utf8'));
   }
-  const walkStats = { ignored: 0 };
+  const walkStats = { ignored: 0, gitignored: 0 };
   const sources = [];
-  for (const t of targets) for (const s of walk(t, process.cwd(), ignore, walkStats)) sources.push(s);
+  const root = process.cwd();
+  for (const t of targets) for (const s of walk(t, root, ignore, walkStats, opts.gitignore ? ancestorGitignores(t, root) : null)) sources.push(s);
   const order = new Map(sources.map((s, i) => [s.path, i]));
 
   const details = format === 'sarif' || Boolean(opts.baseline);
   const scans = [];
   let findings = [];
   for (const [ignoreCase, patterns] of groups) {
-    const scan = new CodeScan({ patterns, ignoreCase, strategy: opts.strategy, inlineIgnore: opts.inlineIgnore, word: opts.word, longest: opts.longest, details, redact: opts.redact });
+    const scan = new CodeScan({ patterns, ignoreCase, strategy: opts.strategy, inlineIgnore: opts.inlineIgnore, word: opts.word, longest: opts.longest, minEntropy: opts.minEntropy, details, redact: opts.redact });
     for (const f of scan.run(sources)) findings.push(f);
     scans.push(scan);
   }
@@ -229,10 +268,13 @@ function cmdScan(targets, opts) {
   if (!opts.quiet) {
     const suppressed = scans.reduce((s, x) => s + x.stats.suppressed, 0);
     const notWord = scans.reduce((s, x) => s + x.stats.notWholeWord, 0);
+    const lowEntropy = scans.reduce((s, x) => s + x.stats.lowEntropy, 0);
     const extra = [
       suppressed ? `${suppressed} bulgu "ios:ignore" yorumuyla bastırıldı` : '',
       notWord ? `${notWord} bulgu tam sözcük olmadığı için elendi` : '',
+      lowEntropy ? `${lowEntropy} gizli bilgi bulgusu değeri düşük entropili olduğu için elendi` : '',
       walkStats.ignored ? `${walkStats.ignored} yol yok sayma dosyasıyla atlandı` : '',
+      walkStats.gitignored ? `${walkStats.gitignored} yol .gitignore ile atlandı` : '',
       opts.baseline ? `${known} bulgu taban çizgisinde zaten vardı` : '',
     ].filter(Boolean).join('; ');
     const selected = scans.map((s) => s.record.selected).join(' + ');

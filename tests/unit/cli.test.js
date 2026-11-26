@@ -64,6 +64,26 @@ describe('bin/ios.js', () => {
     assert.equal(s.status, 1);
     assert.match(s.stdout, /a\.py:3:1: api_key/);
   });
+  test('scan: .gitignore (kök, alt klasör, olumsuzlama), alt klasör hedefi, --no-gitignore', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'ios-gitignore-'));
+    for (const d of ['pkg/gen', 'pkg/src']) mkdirSync(join(dir, d), { recursive: true });
+    writeFileSync(join(dir, '.gitignore'), '*.log\n!keep.log\nvendor/\n');
+    mkdirSync(join(dir, 'vendor'));
+    writeFileSync(join(dir, 'vendor', 'v.js'), '// TODO vendor\n');
+    writeFileSync(join(dir, 'pkg', '.gitignore'), 'gen/\n');
+    const files = ['a.js', 'x.log', 'keep.log', 'pkg/c.js', 'pkg/gen/d.js', 'pkg/src/e.log'];
+    for (const f of files) writeFileSync(join(dir, f), `// TODO ${f}\n`);
+    const scan = (...args) => spawnSync(process.execPath, [BIN, 'scan', '--preset', 'todo', '--json', ...args], { cwd: dir, encoding: 'utf8' });
+    const filesOf = (r) => r.stdout.trimEnd().split('\n').filter(Boolean).map((l) => JSON.parse(l).file.split('\\').join('/'));
+    const all = scan('.');
+    assert.equal(all.status, 0, all.stderr);
+    assert.deepEqual(filesOf(all), ['a.js', 'keep.log', 'pkg/c.js']);
+    assert.match(all.stderr, /4 yol \.gitignore ile atlandı/);
+    assert.deepEqual(filesOf(scan('pkg')), ['pkg/c.js'], 'kökteki *.log alt klasör hedefinde de geçerli');
+    assert.deepEqual(filesOf(scan('--no-gitignore', '.')), [...files, 'vendor/v.js'].sort());
+    assert.deepEqual(filesOf(scan('vendor')), ['vendor/v.js'], 'açıkça verilen hedef .gitignore\'da olsa da taranır (ripgrep gibi)');
+    assert.deepEqual(filesOf(scan('x.log')), ['x.log'], 'açıkça verilen dosya da');
+  });
   test('list ve help', () => {
     assert.match(ios(['list']).out, /HorspoolSearch/);
     assert.match(ios(['help']).out, /Kullanım/);

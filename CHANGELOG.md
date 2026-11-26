@@ -27,6 +27,12 @@ geçmişindedir.
   çalıştırma kaydı önbellekten gelen kutuyu işaretler. Komut satırı önbelleksiz çalışır.
 - **En uzun eşleşme süzgeci** (`ios scan --longest`, atölyede "Eşleşme → Bulgu" ayarı): iç içe
   desenlerde soldaki en uzun eşleşme kalır (aho-corasick'in leftmost-longest anlamı).
+- **`.gitignore` desteği** (`ios scan`, ripgrep gibi): kökteki ve alt klasörlerdeki `.gitignore` dosyaları
+  kendi klasörlerine göre okunur, `!kalıp` olumsuzlaması ve `\#`, `\!` kaçışları; açıkça verilen hedef
+  `.gitignore`'da olsa da taranır; `--no-gitignore` kapatır.
+- **Entropi süzgeci** (`ios scan --min-entropy <bit>`, atölyede "Eşleşme → Bulgu" ayarı): gizli bilgi
+  bulgusunun değerinin Shannon entropisi eşiğin altındaysa bulgu atılır (`changeme`, `os.environ`,
+  `XXXX-XXXX`); detect-secrets ve gitleaks'teki entropi denetimi.
 - **Akış kipi** (`src/stream.js`): büyük metin parça parça aranır; (m − 1) karakterlik örtüşmeyle
   sınırdaki eşleşme kaçmaz, sıra bütün metni aramakla aynı (özellik tabanlı test).
 - **Otomatik yerleşim** (atölye, "Düzenle"): katmanlı çizim (en uzun yol, barycenter sıralaması,
@@ -48,7 +54,8 @@ geçmişindedir.
 - Site ve sunum sayfalarında İçerik Güvenliği Politikası (CSP); sunumun betiği ayrı dosyada.
 - Mutasyon denetimi 12 hatadan 25 hataya genişledi (geçmiş, tarama, denetim modülleri); ilk turda
   kaçan parmak izi mutasyonu için test güçlendirildi. Sonra arayüz katmanından 4; önbellekten, otomatik
-  yerleşimden, akış kipinden ve en uzun eşleşme süzgecinden birer hata eklendi (toplam 33; biri metni `innerHTML` ile yazarak XSS açığı açar).
+  yerleşimden, akış kipinden, en uzun eşleşme süzgecinden, `.gitignore` olumsuzlamasından ve entropi süzgecinden birer
+  hata eklendi (toplam 35; biri metni `innerHTML` ile yazarak XSS açığı açar).
 - Mutasyon denetimi CI'da her gönderimde çalışır; yakalanmayan hata varsa iş kalır. Testler ayrı
   bir süreç grubunda başlar ve tur bitince grubun tamamı durdurulur.
 

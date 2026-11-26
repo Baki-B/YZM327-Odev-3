@@ -2,11 +2,11 @@
 
 Koda bilerek küçük hatalar yerleştirildi; her biri projenin geçici bir kopyasında tek başına uygulanıp bütün birim testleri çalıştırıldı. Bir mutasyon, en az bir test başarısız olursa ya da testler sonsuz döngü yüzünden bitmezse "yakalandı" sayılır.
 
-Değiştirilmemiş kopyada: 496 test geçti, 0 başarısız. Sonuç: **33 mutasyonun 33 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
+Değiştirilmemiş kopyada: 504 test geçti, 0 başarısız. Sonuç: **35 mutasyonun 35 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
 
 | # | Dosya | Yerleştirilen hata | Değişiklik | Yakalandı mı | Nasıl |
 |---:|---|---|---|---|---|
-| 1 | `src/functions/horspool.js` | Horspool kayması bir fazla (m − i) | `shift[p[i]] = m - 1 - i;` → `shift[p[i]] = m - i;` | evet | 51 test başarısız |
+| 1 | `src/functions/horspool.js` | Horspool kayması bir fazla (m − i) | `shift[p[i]] = m - 1 - i;` → `shift[p[i]] = m - i;` | evet | 52 test başarısız |
 | 2 | `src/functions/kmp.js` | KMP uyuşmazlıkta sınırı unutur (q = 0) | `while (q > 0 && p[q] !== c) q = fail[q - 1];` → `while (q > 0 && p[q] !== c) q = 0;` | evet | 11 test başarısız |
 | 3 | `src/functions/bm4dnaDs.js` | bm4DNADS sentinel denetiminde < yerine <= (j > n) | `if (j >= n) return;` → `if (j > n) return;` | evet | testler 90 sn içinde bitmedi (sonsuz döngü), süreç durduruldu |
 | 4 | `src/functions/bm4dnaHmbs.js` | bm4DNAHMbs desende olmayan q-gram için m kadar kayar (ödevin ipucu hatası) | `const dflt = m - q + 1;` → `const dflt = m;` | evet | 35 test başarısız |
@@ -35,7 +35,9 @@ Değiştirilmemiş kopyada: 496 test geçti, 0 başarısız. Sonuç: **33 mutasy
 | 27 | `web/lib/layout.js` | Otomatik yerleşimde girdisi olmayan kutu kullanıcısının yanına çekilmez | `if (!parents.get(n.id).length && kids.length) layer.set(` → `if (false) layer.set(` | evet | 3 test başarısız |
 | 28 | `src/stream.js` | Akış kipinde örtüşme bir karakter eksik (sınırdaki eşleşme kaçar) | `const keep = Math.max(0, ...patterns.map((p) => p.length)) - 1;` → `const keep = Math.max(0, ...patterns.map((p) => p.length)) - 2;` | evet | 3 test başarısız |
 | 29 | `src/scan/filters.js` | En uzun eşleşme süzgeci aynı konumda ilk eşleşmeyi seçer (en uzunu değil) | `    for (const x of group) if (x.length > best.length) best = x;` → `    for (const x of group) if (false) best = x;` | evet | 4 test başarısız |
-| 30 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
-| 31 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
-| 32 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
-| 33 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |
+| 30 | `src/scan/filters.js` | .gitignore olumsuzlaması (!kalıp) yok sayılır, geri alınan yol da atlanır | `    for (const r of rules) if (r[key].test(p)) verdict = !r.negate;` → `    for (const r of rules) if (r[key].test(p)) verdict = true;` | evet | 3 test başarısız |
+| 31 | `src/scan/entropy.js` | Entropi süzgeci açılış tırnağını atlamaz (tırnaklı her değer boş sayılır, gerçek anahtar da atılır) | `  if (QUOTES.has(text[i])) i++;` → `  if (false) i++;` | evet | 3 test başarısız |
+| 32 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
+| 33 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
+| 34 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
+| 35 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |

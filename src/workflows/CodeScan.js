@@ -10,6 +10,7 @@
 import { ExactMatch } from '../molecules/ExactMatch.js';
 import { sourceToEntry, lineStarts, toLineColumn } from '../adapters/sourceToEntry.js';
 import { isSuppressed, isWholeWord, leftmostLongest, lineAt } from '../scan/filters.js';
+import { isLowEntropy } from '../scan/entropy.js';
 import { ruleForPattern } from '../scan/rules.js';
 import { fingerprinter, snippetOf } from '../scan/report.js';
 
@@ -18,6 +19,7 @@ import { fingerprinter, snippetOf } from '../scan/report.js';
  * @property {boolean} [inlineIgnore]  "ios:ignore" yorumlu satırları atla (varsayılan: evet)
  * @property {boolean} [word]          yalnızca tam sözcük eşleşmeleri (varsayılan: hayır)
  * @property {boolean} [longest]       iç içe desenlerde yalnızca soldaki en uzun eşleşme (varsayılan: hayır)
+ * @property {number}  [minEntropy]    gizli bilgi değerinin en az entropisi, bit/karakter (0: kapalı, varsayılan)
  * @property {boolean} [details]       bulguya kural, önem, maskeli satır özeti ve parmak izi ekle
  * @property {boolean} [redact]        details açıkken gizli bilgi değerini maskele (varsayılan: evet)
  */
@@ -27,10 +29,10 @@ export class CodeScan {
    * @param {{ patterns: string[], ignoreCase?: boolean, strategy?: string } & CodeScanOptions} params
    * @param {object} [options]  ExactMatch'e geçen seçenekler (registry, coefficients)
    */
-  constructor({ patterns, ignoreCase = false, strategy = 'auto', inlineIgnore = true, word = false, longest = false, details = false, redact = true }, options = {}) {
+  constructor({ patterns, ignoreCase = false, strategy = 'auto', inlineIgnore = true, word = false, longest = false, minEntropy = 0, details = false, redact = true }, options = {}) {
     this.molecule = new ExactMatch({ patterns, ignoreCase, strategy }, options);
-    this.filters = { inlineIgnore, word, longest, details, redact };
-    this.stats = { suppressed: 0, notWholeWord: 0, notLongest: 0 };
+    this.filters = { inlineIgnore, word, longest, minEntropy, details, redact };
+    this.stats = { suppressed: 0, notWholeWord: 0, lowEntropy: 0, notLongest: 0 };
   }
 
   get record() {
@@ -47,7 +49,7 @@ export class CodeScan {
         yield entry;
       }
     })();
-    const { inlineIgnore, word, longest, details, redact } = this.filters;
+    const { inlineIgnore, word, longest, minEntropy, details, redact } = this.filters;
     const fingerprint = fingerprinter();
     const stats = this.stats;
     const molecule = this.molecule;
@@ -57,6 +59,7 @@ export class CodeScan {
         const { line, column } = toLineColumn(file.starts, match.position);
         if (word && !isWholeWord(file.text, match.position, match.length)) { stats.notWholeWord++; continue; }
         if (inlineIgnore && isSuppressed(file.text, file.starts, line)) { stats.suppressed++; continue; }
+        if (minEntropy > 0 && ruleForPattern(match.pattern).secret && isLowEntropy(file.text, match.position, match.length, minEntropy)) { stats.lowEntropy++; continue; }
         stats.notLongest++; // en uzun süzgecinden geçen her bulgu aşağıda bir azaltır
         yield { ...match, file, line, column };
       }

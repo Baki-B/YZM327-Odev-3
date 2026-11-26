@@ -16,6 +16,7 @@ import { parseFasta } from '../fasta.js';
 import { sourceToEntry, lineStarts, toLineColumn } from '../adapters/sourceToEntry.js';
 import { PRESETS } from './presets.js';
 import { isSuppressed, isWholeWord, leftmostLongest, lineAt } from '../scan/filters.js';
+import { isLowEntropy } from '../scan/entropy.js';
 import { ruleForPattern, rulesOfFindings } from '../scan/rules.js';
 import { addFingerprints, maskAfter, snippetOf, toSarif, TOOL } from '../scan/report.js';
 
@@ -95,9 +96,9 @@ function previewOf(text, starts, line, position, length, secret = false) {
  * details: true iken CodeScan'in details seçeneğiyle aynı ek alanları (kural, önem, maskeli
  * satır özeti, parmak izi) da ekler.
  * @param {{ matches: Array<{ header: string, pattern: string, position: number, length: number }>, entries: Array<{ header: string, seq: string }> }} value
- * @param {{ inlineIgnore?: boolean, word?: boolean, longest?: boolean, details?: boolean }} [options]
+ * @param {{ inlineIgnore?: boolean, word?: boolean, longest?: boolean, minEntropy?: number, details?: boolean }} [options]
  */
-function matchesToFindings(value, { inlineIgnore = true, word = false, longest = false, details = false } = {}) {
+function matchesToFindings(value, { inlineIgnore = true, word = false, longest = false, minEntropy = 0, details = false } = {}) {
   const index = new Map();
   for (const e of value.entries) {
     if (!index.has(e.header)) index.set(e.header, { text: e.seq, starts: null, file: e.header.replace(/^>/, '') });
@@ -105,6 +106,7 @@ function matchesToFindings(value, { inlineIgnore = true, word = false, longest =
   const findings = [];
   let suppressed = 0;
   let notWholeWord = 0;
+  let lowEntropy = 0;
   for (const m of value.matches) {
     const f = index.get(m.header);
     if (f.starts === null) f.starts = lineStarts(f.text);
@@ -112,6 +114,7 @@ function matchesToFindings(value, { inlineIgnore = true, word = false, longest =
     if (word && !isWholeWord(f.text, m.position, m.length)) { notWholeWord++; continue; }
     if (inlineIgnore && isSuppressed(f.text, f.starts, line)) { suppressed++; continue; }
     const rule = ruleForPattern(m.pattern);
+    if (minEntropy > 0 && rule.secret && isLowEntropy(f.text, m.position, m.length, minEntropy)) { lowEntropy++; continue; }
     const finding = { file: f.file, line, column, pattern: m.pattern, position: m.position, length: m.length };
     if (details) {
       const lineText = lineAt(f.text, f.starts, line);
@@ -125,7 +128,7 @@ function matchesToFindings(value, { inlineIgnore = true, word = false, longest =
     addFingerprints(/** @type {any} */ (kept));
     for (const x of kept) delete x.lineText;
   }
-  return { findings: kept, files: index.size, suppressed, notWholeWord, notLongest: findings.length - kept.length };
+  return { findings: kept, files: index.size, suppressed, notWholeWord, lowEntropy, notLongest: findings.length - kept.length };
 }
 
 /** Bir bulgunun JSON satırı: `ios scan --json` ile aynı beş alan, aynı sıra. */
@@ -281,15 +284,26 @@ export function createCatalog(registry = defaultRegistry) {
       { key: 'inlineIgnore', label: '"ios:ignore" yorumlu satırları atla', kind: 'bool', default: true },
       { key: 'word', label: 'Yalnızca tam sözcük eşleşmeleri', kind: 'bool', default: false },
       { key: 'longest', label: 'İç içe desenlerde yalnızca en uzun eşleşme', kind: 'bool', default: false },
+      {
+        key: 'minEntropy', label: 'Gizli bilgide değerin en az entropisi', kind: 'select', default: '0',
+        options: [
+          { value: '0', label: 'kapalı' },
+          { value: '3', label: '3 bit/karakter (yer tutucuları atar)' },
+          { value: '3.5', label: '3,5 bit/karakter' },
+          { value: '4', label: '4 bit/karakter' },
+          { value: '4.5', label: '4,5 bit/karakter (detect-secrets base64 eşiği)' },
+        ],
+      },
     ],
-    describe: (p) => `her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir${p.inlineIgnore === false ? '' : '; "ios:ignore" yorumlu satırları atlar'}${p.word ? '; yalnızca tam sözcükleri tutar' : ''}${p.longest ? '; iç içe desenlerde yalnızca en uzun eşleşmeyi tutar' : ''}.`,
+    describe: (p) => `her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir${p.inlineIgnore === false ? '' : '; "ios:ignore" yorumlu satırları atlar'}${p.word ? '; yalnızca tam sözcükleri tutar' : ''}${p.longest ? '; iç içe desenlerde yalnızca en uzun eşleşmeyi tutar' : ''}${Number(p.minEntropy) > 0 ? `; gizli bilgi değerinin entropisi ${String(p.minEntropy).replace('.', ',')} bitin altındaysa bulguyu atar` : ''}.`,
     run(inputs, p, ctx) {
-      const value = matchesToFindings(inputs.matches, { inlineIgnore: p.inlineIgnore !== false, word: Boolean(p.word), longest: Boolean(p.longest), details: true });
+      const value = matchesToFindings(inputs.matches, { inlineIgnore: p.inlineIgnore !== false, word: Boolean(p.word), longest: Boolean(p.longest), minEntropy: Number(p.minEntropy) || 0, details: true });
       ctx.info.count = value.findings.length;
       ctx.info.suppressed = value.suppressed;
       ctx.info.notWholeWord = value.notWholeWord;
       ctx.info.notLongest = value.notLongest;
-      const extra = [value.suppressed ? `${value.suppressed} bastırıldı` : '', value.notWholeWord ? `${value.notWholeWord} tam sözcük değil` : '', value.notLongest ? `${value.notLongest} daha uzun eşleşmenin içinde` : ''].filter(Boolean).join(', ');
+      ctx.info.lowEntropy = value.lowEntropy;
+      const extra = [value.suppressed ? `${value.suppressed} bastırıldı` : '', value.notWholeWord ? `${value.notWholeWord} tam sözcük değil` : '', value.lowEntropy ? `${value.lowEntropy} düşük entropili` : '', value.notLongest ? `${value.notLongest} daha uzun eşleşmenin içinde` : ''].filter(Boolean).join(', ');
       ctx.info.summary = `${value.findings.length} bulgu${extra ? ` (${extra})` : ''}.`;
       return { findings: value };
     },

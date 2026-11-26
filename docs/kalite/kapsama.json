@@ -11,27 +11,27 @@
     "functions": 95
   },
   "tests": {
-    "pass": 496,
+    "pass": 504,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 5146,
-      "all": 5170,
-      "pct": 99.5
+      "hit": 5330,
+      "all": 5354,
+      "pct": 99.6
     },
     "branches": {
-      "hit": 1677,
-      "all": 1838,
-      "pct": 91.2
+      "hit": 1762,
+      "all": 1921,
+      "pct": 91.7
     },
     "functions": {
-      "hit": 585,
-      "all": 597,
+      "hit": 596,
+      "all": 608,
       "pct": 98
     }
   },
-  "files": 55,
+  "files": 56,
   "perFile": [
     {
       "file": "src/molecules/costModel.js",
@@ -63,15 +63,15 @@
     },
     {
       "file": "bin/ios.js",
-      "lines": 99.4,
-      "branches": 83,
-      "functions": 96.7,
+      "lines": 99.5,
+      "branches": 88.4,
+      "functions": 97.1,
       "uncoveredLines": 2
     },
     {
       "file": "src/workflows/catalog.js",
       "lines": 99.6,
-      "branches": 83.1,
+      "branches": 82.5,
       "functions": 91.5,
       "uncoveredLines": 2
     },
@@ -258,16 +258,23 @@
       "uncoveredLines": 0
     },
     {
+      "file": "src/scan/entropy.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
       "file": "src/scan/filters.js",
       "lines": 100,
-      "branches": 98.5,
+      "branches": 98.9,
       "functions": 100,
       "uncoveredLines": 0
     },
     {
       "file": "src/scan/report.js",
       "lines": 100,
-      "branches": 82.7,
+      "branches": 83.1,
       "functions": 100,
       "uncoveredLines": 0
     },
