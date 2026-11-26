@@ -17,8 +17,9 @@ Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log)
 
 - **Atölye** (tarayıcıda, kurulumsuz): türlü uçlarla iş akışı kurma; uyumsuz bağlantı nedeniyle reddedilir. **Geri al / yinele** (Command deseni; paket açma dahil), **önbellek** (değişmeyen kutu yeniden çalışmaz; bir ayar değişince yalnızca o kutu ve ondan sonrakiler), **otomatik yerleşim** ("Düzenle": katmanlı çizim, kesişen kabloları azaltır, tek adımda geri alınır), kopyala-yapıştır-çoğalt, **canlı denetim** (bağlanmamış ya da sonucu kullanılmayan kutu), otomatik kayıt, kısayol penceresi, Mermaid diyagramı ve **çalıştırma kaydı** (bileşen sürümleri, girdilerin SHA-256 özetleri, kararlar) indirme.
 - **`ios scan`**: birden çok hazır küme, **SARIF** çıktısı (GitHub kod tarama ekranı), kural kimliği / önem / CWE, satır içi bastırma (`ios:ignore`), `.iosignore`, **taban çizgisi** (yalnızca yeni bulgular), tam sözcük, gizli bilgi değerlerini maskeleme. Atölyedeki "SARIF indir" kutusu birebir aynı dosyayı üretir.
+- **Akış kipi** (`src/stream.js`): çok büyük bir metin parça parça aranır; önceki parçanın son (m − 1) karakteri sonrakinin başına eklendiği için sınırdaki eşleşme kaçmaz, her eşleşme tam bir kez ve bütün metni aramakla aynı sırada gelir (özellik tabanlı testle her atom ve molekülde gösterildi).
 - **`ios workflow run | lint | diagram`**: atölyede kurulan iş akışı CI'da tarayıcısız çalışır; kapı kalırsa çıkış kodu 1.
-- **Kalite kapıları** (her gönderimde GitHub Actions): 487 birim testi (Node 22 ve 24), kapsama satır %99,5 / dal %91,4 / işlev %98,0 statik tür denetimi 0 hata (ilk ölçümde 138; rol arayüzleri derleme anında da denetlenir, 11 olumsuz kontrol), gerçek tarayıcıda 54/54 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
+- **Kalite kapıları** (her gönderimde GitHub Actions): 491 birim testi (Node 22 ve 24), kapsama satır %99,5 / dal %91,5 / işlev %98,0 statik tür denetimi 0 hata (ilk ölçümde 138; rol arayüzleri derleme anında da denetlenir, 11 olumsuz kontrol), gerçek tarayıcıda 54/54 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
 - **Benzer projeler**: GitHub'da en çok yıldız alan iş akışı düzenleyicileri, bilimsel iş akışı yöneticileri ve kod tarayıcıları incelendi; alınan ve alınmayan fikirler gerekçesiyle: [docs/benzer-projeler.md](docs/benzer-projeler.md).
 
 Örnek: "gizli bilgi sızıntısı" paketi (`node bin/ios.js workflow diagram is-akisi.json` çıktısı; GitHub bu diyagramı çizer):
@@ -100,7 +101,7 @@ Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), y
 
 | Komut | Ne yapar |
 |---|---|
-| `npm test` | 487 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, geri al / yinele (özellik tabanlı), denetim, tarama kuralları ve SARIF, roller, görünüm modelleri ve sahte DOM'la öğe kurma, hazır paketler, komut satırı, yasaklı işlev taraması |
+| `npm test` | 491 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, geri al / yinele (özellik tabanlı), denetim, tarama kuralları ve SARIF, roller, görünüm modelleri ve sahte DOM'la öğe kurma, hazır paketler, komut satırı, yasaklı işlev taraması |
 | `npm run kapsama` | Test kapsaması (Node'un yerleşik ölçümü; eşik: satır %95, dal %85, işlev %95) → `docs/kalite/kapsama.md` |
 | `npm run tur-denetimi` | Statik tür denetimi (`tsc --checkJs`; TypeScript geçici kurulur: `npm install --no-save --no-package-lock typescript@6.0.3 @types/node@22`) |
 | `npm run calibrate` | Kalibrasyon ızgarasını ölçer (180 vaka × 8 atom), katsayıları `src/molecules/coefficients.json` ve `.js`'e yazar (bu makinede 233,9 s) |
@@ -236,7 +237,7 @@ Paket verilmedi; karşılığı ödevin 4. ve 5. bölümüne göre yazıldı (`E
 Benzer projelerden alınmayıp sonraya bırakılanlar ([docs/benzer-projeler.md](docs/benzer-projeler.md), "gelecek iş") ve bilinen sınırlar (rapor, Bölüm 7 ve Ek C.7):
 
 - **Atölye:** mini harita (xyflow).
-- **Tarama:** düzenli ifade ve entropi tabanlı gizli bilgi kuralları (boşluklu `password = "x"` atamasını da yakalar; detect-secrets); `.gitignore`'un tam anlamı; iş notlarını iş kaydına (issue) çevirme (todo-to-issue); büyük loglar için akış (streaming) kipi (Hyperscan); en uzun eşleşme süzgeci (aho-corasick).
+- **Tarama:** düzenli ifade ve entropi tabanlı gizli bilgi kuralları (boşluklu `password = "x"` atamasını da yakalar; detect-secrets); `.gitignore`'un tam anlamı; iş notlarını iş kaydına (issue) çevirme (todo-to-issue); en uzun eşleşme süzgeci (aho-corasick).
 - **Molekül:** her kayıt için yeniden karar seçeneği (sözleşme kararı ilk kayda göre ister); kelime yapılı metin ve ikili alfabe için yeni şekil özellikleri; öğrenen bir seçiciyle (karar ağacı) karşılaştırma; tarayıcıda kalibrasyon.
 - **Test:** tuval etkileşimleri (sürükleme, yakınlaştırma) için birim testleri; arayüzün mantığı görünüm modellerinde birim testli, bu etkileşimler şimdilik yalnızca gerçek tarayıcıdaki arayüz denetimiyle sınanıyor.
 - **IoS hub:** hub.ioscience.org erişilebildiğinde iş akışlarını onun biçimine aktarma.

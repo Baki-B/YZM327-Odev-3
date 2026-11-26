@@ -122,6 +122,10 @@ const MUTATIONS = [
     file: "web/lib/layout.js", what: "Otomatik yerleşimde girdisi olmayan kutu kullanıcısının yanına çekilmez",
     from: "if (!parents.get(n.id).length && kids.length) layer.set(", to: "if (false) layer.set(",
   },
+  {
+    file: "src/stream.js", what: "Akış kipinde örtüşme bir karakter eksik (sınırdaki eşleşme kaçar)",
+    from: "const keep = Math.max(0, ...patterns.map((p) => p.length)) - 1;", to: "const keep = Math.max(0, ...patterns.map((p) => p.length)) - 2;",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

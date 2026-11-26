@@ -54,7 +54,7 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 | Depo | Yıldız | Öne çıkan özellik | Bizdeki karşılığı | Durum |
 |---|---:|---|---|---|
 | vi3k6i5/flashtext | 5 713 | anahtar sözcükleri sözcük sınırıyla bulma | `--word` ve atölyedeki "tam sözcük" ayarı | alındı |
-| intel/hyperscan | 5 521 | çok desenli yüksek hızlı eşleştirme motoru, akış (streaming) kipi | 8 atom + molekül | akış kipi: gelecek iş |
+| intel/hyperscan | 5 521 | çok desenli yüksek hızlı eşleştirme motoru, akış (streaming) kipi | 8 atom + molekül; akış kipi (`src/stream.js`, örtüşmeli parçalar) | alındı |
 | BurntSushi/aho-corasick | 1 311 | Aho-Corasick; seçilebilir eşleşme anlamları (en solda ilk / en uzun) | Aho-Corasick atomu (sözleşme bütün örtüşen eşleşmeleri ister) | en uzun eşleşme süzgeci: gelecek iş |
 
 **Molekül fikrinin pratikte karşılığı.** Rust'ın düzenli ifade motoru (regex-automata), ön süzgeç

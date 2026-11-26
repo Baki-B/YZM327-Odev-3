@@ -88,7 +88,7 @@
 <table>
   <tr><th>Test dosyası</th><th>Ne sınıyor</th><th class="n">Test</th></tr>
   <tr><td>contract / atoms</td><td>Her atom için sözleşme (konum, örtüşme, sıra, ASCII ignoreCase, UTF-16, hatalar) ve 16 özel durum (ABAB, tek harf, 31/32/33 sınırı, vekil çift, boşluklu metin…)</td><td class="n">117 + 135</td></tr>
-  <tr><td>oracle.test.js</td><td>Her atom + molekül NaiveSearch ile eleman eleman: lambda genomu, 126 E. coli proteini, 6 sentetik alfabe, <b>360 tohumlu rastgele vaka</b></td><td class="n">19</td></tr>
+  <tr><td>oracle / stream</td><td>Her atom + molekül NaiveSearch ile eleman eleman: lambda genomu, 126 E. coli proteini, 6 sentetik alfabe, <b>360 tohumlu rastgele vaka</b>; akış kipi: rastgele parça sınırlarında parçalı sonuç = bütün sonuç</td><td class="n">19 + 4</td></tr>
   <tr><td>molecule.test.js</td><td>record, en ucuz seçim, zorla seçilen 9 strateji aynı sonuç, sahte atom molekül değişmeden seçilir, uygulanamaz atom seçilmez</td><td class="n">15</td></tr>
   <tr><td>engine / packages / cache</td><td>İş akışı motoru: tür denetimi, döngü, topolojik sıra, çalıştırma, JSON, açıklama; altı hazır paket bağımsız hesapla aynı; önbellek: yalnızca değişen kutu ve sonrakiler çalışır, sonuç önbelleksizle aynı</td><td class="n">21 + 8 + 9</td></tr>
   <tr><td>forbidden / cli / core</td><td>Atomlarda indexOf, RegExp, console, Node modülü, saat, rastgelelik yok; komut satırı; FASTA, şekil, örnekleme, NNLS</td><td class="n">45</td></tr>
@@ -96,7 +96,7 @@
   <tr><td>scan / contracts / web</td><td>Kurallar ve işaretli örnek dosyalar, süzgeçler, maskeleme, parmak izi, SARIF (komut satırı = atölye); rol arayüzleri; arayüz yardımcıları ve modül yapısı</td><td class="n">23 + 6 + 16</td></tr>
   <tr><td>view-models / dom / layout</td><td>Arayüzün ekrana yazdığı her şey (rozet, bulgu tablosu, yarış, denetim, palet) gerçek paket çıktısıyla; elle yazılmış sahte DOM'la öğe kurma: metin hiçbir zaman HTML olarak yorumlanmaz; otomatik yerleşim: her pakette kablolar soldan sağa, kutular çakışmaz</td><td class="n">25 + 9 + 9</td></tr>
 </table>
-<p><b>Negatif kontroller:</b> yasaklı işlev taraması kendisine verilen kötü örnekleri yakaladığını da sınar. <b>Mutasyon denetimi</b> (<code>npm run mutation</code>) koda 31 küçük hata yerleştirdi (4'ü arayüz katmanında, 1'i önbellekte, 1'i otomatik yerleşimde; biri metni <code>innerHTML</code> ile yazarak XSS açığı açar); ilk turda biri (parmak izinin sıra numarası) yakalanmadı, test güçlendirildi; şimdi <b>31'i de yakalandı</b> (<code>docs/mutasyon.md</code>). <b>Arayüz:</b> <code>scripts/arayuz-denetimi.js</code> gerçek Chromium'da 54 denetim yapar: altı paket = komut satırı, önbellek, sürükle-bırak, uyumsuz bağlantının reddi, klavye, geri al / yinele, tuş tuş yazma, XSS ve CSP, 390 px. <b>Kalite kapıları</b> (her gönderimde CI): kapsama satır %99,5 / dal %91,4 statik tür denetimi 0 hata (ilk ölçümde 138), WCAG 2.1 AA 0 ihlal (ilk ölçümde 25), CodeQL (Ek C.5). <code>npm test</code> temiz kopyada, bağımlılık kurmadan 487/487 geçiyor.</p>
+<p><b>Negatif kontroller:</b> yasaklı işlev taraması kendisine verilen kötü örnekleri yakaladığını da sınar. <b>Mutasyon denetimi</b> (<code>npm run mutation</code>) koda 32 küçük hata yerleştirdi (4'ü arayüz katmanında, birer tanesi önbellekte, otomatik yerleşimde ve akış kipinde; biri metni <code>innerHTML</code> ile yazarak XSS açığı açar); ilk turda biri (parmak izinin sıra numarası) yakalanmadı, test güçlendirildi; şimdi <b>32'si de yakalandı</b> (<code>docs/mutasyon.md</code>). <b>Arayüz:</b> <code>scripts/arayuz-denetimi.js</code> gerçek Chromium'da 54 denetim yapar: altı paket = komut satırı, önbellek, sürükle-bırak, uyumsuz bağlantının reddi, klavye, geri al / yinele, tuş tuş yazma, XSS ve CSP, 390 px. <b>Kalite kapıları</b> (her gönderimde CI): kapsama satır %99,5 / dal %91,5 statik tür denetimi 0 hata (ilk ölçümde 138), WCAG 2.1 AA 0 ihlal (ilk ölçümde 25), CodeQL (Ek C.5). <code>npm test</code> temiz kopyada, bağımlılık kurmadan 491/491 geçiyor.</p>
 
 <h2>6. Sonuçlar</h2>
 <figure class="wide">
@@ -156,7 +156,7 @@
   <img src="../ekran/atolye-masaustu.png" alt="Kod Bilimi Atölyesi: solda bileşenler ve hazır paketler, ortada bağlanmış kutular, sağda molekülün karar kaydı">
   <figcaption><b>Şekil 2.</b> Kod Bilimi Atölyesi (<code>web/</code>): "tek desen, büyük dosya" paketi. Aynı 880 KB kaynak kod dosyasında üst dal tek desen ("return"), alt dal 16 Python anahtar sözcüğü arar; molekül üstte bm4DNADS, altta Aho-Corasick seçer. Sağda seçili molekülün karar kaydı: veri şekli ve her atomun tahmini süresi.</figcaption>
 </figure>
-<pre>npm test                                   # 487 test, bağımlılık yok
+<pre>npm test                                   # 491 test, bağımlılık yok
 npm run web                                # atölye: http://localhost:8327/web/  (site: /site/, sunum: /docs/sunum/)
 npm run calibrate &amp;&amp; npm run bench          # katsayıları yenile, doğrula (bench/results/)
 node bin/ios.js explain --patterns GATC,GGATCC &lt; tests/data/lambda_NC_001416.fa
@@ -171,7 +171,7 @@ node bin/ios.js workflow run is-akisi.json                                     #
 <h2>Ek A. Makaleden ve klasik tariflerden sapmalar</h2>
 <table>
   <tr><th>#</th><th>Atom</th><th>Uygulama</th><th>Neden</th></tr>
-  <tr><td>H1</td><td>bm4DNAHMbs</td><td>Desende olmayan q-gram için kayma m − q + 1</td><td>m kadar kaymak, pencerenin son q−1 karakterinden başlayan eşleşmeyi atlar (Bölüm 2). Mutasyonla sınandı: 34 test başarısız oldu.</td></tr>
+  <tr><td>H1</td><td>bm4DNAHMbs</td><td>Desende olmayan q-gram için kayma m − q + 1</td><td>m kadar kaymak, pencerenin son q−1 karakterinden başlayan eşleşmeyi atlar (Bölüm 2). Mutasyonla sınandı: 35 test başarısız oldu.</td></tr>
   <tr><td>H2</td><td>bm4DNAHMbs</td><td>Son q-gram için tabloda 0; doğrulamadan sonra ayrı hesaplanan shift2</td><td>Tablodaki 0 doğrulamadan sonra da kullanılırsa döngü yerinde sayar.</td></tr>
   <tr><td>H3</td><td>bm4DNAHMbs</td><td>Karakter başına ⌈log₂ σ⌉ bit; DNA için 3 bit, q = 5; özet çakışmasız</td><td>0 kimliği "desende olmayan karakter" için ayrıldığından DNA 2 bite sığmaz.</td></tr>
   <tr><td>H5</td><td>bm4DNAHMbs</td><td>Bütün desenler tek tabloyu paylaşır; her desen yalnızca kendi girdilerini yazar ve siler</td><td>Desen başına 64 K tablo çok desende belleği ve kurulum süresini patlatır.</td></tr>
@@ -237,7 +237,7 @@ node bin/ios.js workflow run is-akisi.json                                     #
 </table>
 <p class="small">Arayüzler derleme anında da zorunlu: atomun nesne tarafı <code>@implements</code>, statik tarafı (manifest, seçim bilgisi) türlü yerleşik listeyle bağlı. <code>tests/types/roller.js</code>'teki 11 olumsuz kontrol, bozuk bir bileşenin derleme hatası verdiğini gösteriyor; rol türü gevşetilirse kullanılmayan kontrol yüzünden tür denetimi kalıyor. Arayüzün mantığı görünüm modellerine ayrıldı ve birim testli; öğe kurma yardımcıları elle yazılmış sahte bir DOM'la sınanıyor. Zayıf kalan: çalışma anında dışarıdan eklenen bileşen yalnızca çalışma anı denetimiyle sınanabilir; sürükleme, yakınlaştırma gibi tuval etkileşimleri yalnızca gerçek tarayıcıda 54 denetimle sınanıyor.</p>
 <h3>C.3 Test stratejisi</h3>
-<p class="small">Birim testleri (atom, şekil, NNLS, motor, geçmiş, tarama, görünüm modelleri, sahte DOM'la öğe kurma) → özellik tabanlı testler (360 rastgele oracle vakası; 4 × 400 rastgele düzenleme işlemi) → kural örnek dosyaları (işaretli satırlar) → bütünleşme testleri (komut satırı alt süreç olarak; paketler uçtan uca motorla; komut satırı = atölye SARIF'i) → kabul testleri (gerçek tarayıcıda 54 denetim) → erişilebilirlik (axe-core) → test kalitesinin denetimi (kapsama eşiği, mutasyon 31/31) → statik analiz (TypeScript denetleyicisi, CodeQL) → performans doğrulaması (kalibrasyondan ayrı, bir kez ölçülen taze kümeler). Referans uygulama (oracle) yöntemi: hızlı her atomun çıktısı yavaş ama kesin doğru NaiveSearch'ünkiyle eleman eleman karşılaştırılır.</p>
+<p class="small">Birim testleri (atom, şekil, NNLS, motor, geçmiş, tarama, görünüm modelleri, sahte DOM'la öğe kurma) → özellik tabanlı testler (360 rastgele oracle vakası; 4 × 400 rastgele düzenleme işlemi) → kural örnek dosyaları (işaretli satırlar) → bütünleşme testleri (komut satırı alt süreç olarak; paketler uçtan uca motorla; komut satırı = atölye SARIF'i) → kabul testleri (gerçek tarayıcıda 54 denetim) → erişilebilirlik (axe-core) → test kalitesinin denetimi (kapsama eşiği, mutasyon 32/32) → statik analiz (TypeScript denetleyicisi, CodeQL) → performans doğrulaması (kalibrasyondan ayrı, bir kez ölçülen taze kümeler). Referans uygulama (oracle) yöntemi: hızlı her atomun çıktısı yavaş ama kesin doğru NaiveSearch'ünkiyle eleman eleman karşılaştırılır.</p>
 <h3>C.4 UML diyagramları</h3>
 <p class="small">Kaynaklar <code>docs/uml/*.puml</code> (PlantUML); çizimler <code>docs/uml/svg/</code>, hepsi tek dosyada <code>docs/uml/UML_Diyagramlari.pdf</code>.</p>
 <figure><img src="../uml/svg/1_kullanim_durumu.svg" alt="Kullanım durumu diyagramı"><figcaption><b>Şekil 3.</b> Kullanım durumu: geliştirici, biyoinformatikçi ve CI (derlemeyi durdurma, SARIF yükleme, atölye iş akışını CI'da çalıştırma); tarama ve genom araması "en hızlı atomu seç"i içerir (include), derlemeyi durdurma taramayı genişletir (extend).</figcaption></figure>
@@ -254,10 +254,10 @@ node bin/ios.js workflow run is-akisi.json                                     #
 <h3>C.5 Kalite kapıları ve sürekli entegrasyon</h3>
 <table>
   <tr><th>Kapı</th><th>Araç</th><th>Sonuç</th><th>CI</th></tr>
-  <tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>487/487</td><td>her gönderim</td></tr>
-  <tr><td>Kapsama</td><td>Node yerleşik ölçümü</td><td>satır %99,5, dal %91,4, işlev %98,0 (eşik %95 / %85 / %95)</td><td>her gönderim</td></tr>
+  <tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>491/491</td><td>her gönderim</td></tr>
+  <tr><td>Kapsama</td><td>Node yerleşik ölçümü</td><td>satır %99,5, dal %91,5, işlev %98,0 (eşik %95 / %85 / %95)</td><td>her gönderim</td></tr>
   <tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3, <code>--checkJs</code></td><td>0 hata (ilk ölçümde 138; aralarında bozuk JSDoc tür yorumları); rol arayüzleri için 11 olumsuz kontrol</td><td>her gönderim</td></tr>
-  <tr><td>Mutasyon</td><td><code>npm run mutation</code></td><td>31/31 (ilk turda 24/25)</td><td>her gönderim</td></tr>
+  <tr><td>Mutasyon</td><td><code>npm run mutation</code></td><td>32/32 (ilk turda 24/25)</td><td>her gönderim</td></tr>
   <tr><td>Arayüz</td><td>Playwright + Chromium</td><td>54/54</td><td>her gönderim</td></tr>
   <tr><td>Erişilebilirlik</td><td>axe-core 4.14.1, WCAG 2.1 AA</td><td>20 taramada 0 ihlal (ilk ölçümde 25 engelleyici)</td><td>her gönderim</td></tr>
   <tr><td>Bağlantılar</td><td>yerel sunucu</td><td>18 sayfa, 206 bağlantı, 0 kırık</td><td>her gönderim</td></tr>
@@ -271,7 +271,7 @@ node bin/ios.js workflow run is-akisi.json                                     #
 <h3>C.7 Geliştirilebilecek noktalar</h3>
 <ul class="small">
   <li><b>Atölye:</b> mini harita.</li>
-  <li><b>Tarama:</b> düzenli ifade ve entropi tabanlı gizli bilgi kuralları (boşluklu atamayı da yakalar), <code>.gitignore</code>'un tam anlamı, iş notlarını iş kaydına (issue) çevirme, büyük loglar için akış (streaming) kipi.</li>
+  <li><b>Tarama:</b> düzenli ifade ve entropi tabanlı gizli bilgi kuralları (boşluklu atamayı da yakalar), <code>.gitignore</code>'un tam anlamı, iş notlarını iş kaydına (issue) çevirme.</li>
   <li><b>Molekül:</b> karar yalnızca ilk kayda göre (sözleşme); kayıt başına yeniden karar seçeneği, kelime yapılı metin ve ikili alfabe için yeni özellikler, öğrenen bir seçiciyle (karar ağacı) karşılaştırma, tarayıcıda kalibrasyon.</li>
   <li><b>IoS hub:</b> hub.ioscience.org erişilebildiğinde iş akışlarını onun biçimine aktarma.</li>
 </ul>

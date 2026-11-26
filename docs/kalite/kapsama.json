@@ -11,27 +11,27 @@
     "functions": 95
   },
   "tests": {
-    "pass": 487,
+    "pass": 491,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 5032,
-      "all": 5056,
+      "hit": 5098,
+      "all": 5122,
       "pct": 99.5
     },
     "branches": {
-      "hit": 1638,
-      "all": 1792,
-      "pct": 91.4
+      "hit": 1662,
+      "all": 1817,
+      "pct": 91.5
     },
     "functions": {
-      "hit": 575,
-      "all": 587,
+      "hit": 580,
+      "all": 592,
       "pct": 98
     }
   },
-  "files": 54,
+  "files": 55,
   "perFile": [
     {
       "file": "src/molecules/costModel.js",
@@ -282,6 +282,13 @@
       "file": "src/shape.js",
       "lines": 100,
       "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/stream.js",
+      "lines": 100,
+      "branches": 96,
       "functions": 100,
       "uncoveredLines": 0
     },
