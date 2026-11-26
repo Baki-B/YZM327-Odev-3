@@ -2,5 +2,6 @@
   "typescript": "6.0.3",
   "errors": 0,
   "before": 138,
+  "negatives": 11,
   "ok": true
 }

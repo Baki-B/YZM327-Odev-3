@@ -23,6 +23,8 @@ geçmişindedir.
 - **`ios workflow run|lint|explain|diagram`**: atölyede kurulan iş akışı tarayıcısız (CI'da).
 - Atölyede **SARIF indir** kutusu; "Eşleşme → Bulgu" kutusunda bastırma ve tam sözcük ayarları.
 - **Rol arayüzleri** (`src/contracts.js`): Describable, Searcher, SelectionProvider, WorkflowComponent.
+  Derleme anında da zorunlu: atomun nesne tarafı `@implements`, statik tarafı türlü yerleşik liste;
+  `tests/types/roller.js`'teki olumsuz kontroller bozuk bileşenin derleme hatası verdiğini gösterir.
 - Kalite kapıları: statik tür denetimi (`tsc --checkJs`), test kapsaması eşikleri, erişilebilirlik
   denetimi (axe-core, WCAG 2.1 AA), CodeQL, kendi taramamız (SARIF), Node 22 ve 24 matrisi.
 - Depo düzeni: LICENSE, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, CITATION.cff, konu ve pull request

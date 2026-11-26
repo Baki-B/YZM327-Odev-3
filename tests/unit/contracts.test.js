@@ -54,6 +54,7 @@ describe('rol arayüzleri', () => {
   });
   test('eksik üyeler rol adıyla birlikte söylenir', () => {
     assert.throws(() => new Registry().register(class {}), /Atom: Describable: manifest alanı yok; Searcher: process\(\) yöntemi yok/);
+    // @ts-expect-error: bilerek bozuk seçim bilgisi (features yok); tür denetleyicisi de reddeder
     class NoFeatures extends OnlySearch {
       static manifest = { ...OnlySearch.manifest, name: 'NoFeatures' };
       static selection = { defaults: {}, applicable: 3 };

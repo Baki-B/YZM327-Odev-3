@@ -18,7 +18,7 @@ Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log)
 - **Atölye** (tarayıcıda, kurulumsuz): türlü uçlarla iş akışı kurma; uyumsuz bağlantı nedeniyle reddedilir. **Geri al / yinele** (Command deseni; paket açma dahil), kopyala-yapıştır-çoğalt, **canlı denetim** (bağlanmamış ya da sonucu kullanılmayan kutu), otomatik kayıt, kısayol penceresi, Mermaid diyagramı ve **çalıştırma kaydı** (bileşen sürümleri, girdilerin SHA-256 özetleri, kararlar) indirme.
 - **`ios scan`**: birden çok hazır küme, **SARIF** çıktısı (GitHub kod tarama ekranı), kural kimliği / önem / CWE, satır içi bastırma (`ios:ignore`), `.iosignore`, **taban çizgisi** (yalnızca yeni bulgular), tam sözcük, gizli bilgi değerlerini maskeleme. Atölyedeki "SARIF indir" kutusu birebir aynı dosyayı üretir.
 - **`ios workflow run | lint | diagram`**: atölyede kurulan iş akışı CI'da tarayıcısız çalışır; kapı kalırsa çıkış kodu 1.
-- **Kalite kapıları** (her gönderimde GitHub Actions): 436 birim testi (Node 22 ve 24), kapsama satır %99,4 / dal %90,4 / işlev %97,4, statik tür denetimi 0 hata (ilk ölçümde 138), gerçek tarayıcıda 50/50 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
+- **Kalite kapıları** (her gönderimde GitHub Actions): 436 birim testi (Node 22 ve 24), kapsama satır %99,4 / dal %90,4 / işlev %97,4, statik tür denetimi 0 hata (ilk ölçümde 138; rol arayüzleri derleme anında da denetlenir, 11 olumsuz kontrol), gerçek tarayıcıda 50/50 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
 - **Benzer projeler**: GitHub'da en çok yıldız alan iş akışı düzenleyicileri, bilimsel iş akışı yöneticileri ve kod tarayıcıları incelendi; alınan ve alınmayan fikirler gerekçesiyle: [docs/benzer-projeler.md](docs/benzer-projeler.md).
 
 Örnek: "gizli bilgi sızıntısı" paketi (`node bin/ios.js workflow diagram is-akisi.json` çıktısı; GitHub bu diyagramı çizer):
@@ -173,7 +173,7 @@ src/functions/   algoritma çekirdekleri (saf; yalnızca sayı dizileri üzerind
 src/atomic/      atom sınıfları: manifest + selection + process (ExactSearchAtom ortak sınıf)
 src/molecules/   ExactMatch.js (molekül), costModel.js (tahmin + NNLS), coefficients.json/.js
 src/registry.js  kayıt defteri: yeni atom eklemek molekülü değiştirmez
-src/contracts.js rol arayüzleri: Describable, Searcher, SelectionProvider, WorkflowComponent
+src/contracts.js rol arayüzleri: Describable, Searcher, SelectionProvider, WorkflowComponent (tsc + çalışma anı)
 src/shape.js     veri şekli: n, σ, σe, k, mMin, mMax, mMean (64 × 256 karakterlik örneklem)
 src/adapters/    kaynak dosya → FASTA.Entry uyarlayıcısı
 src/workflows/   iş akışı motoru (engine), katalog, geçmiş (history), denetim (lint), diyagram,

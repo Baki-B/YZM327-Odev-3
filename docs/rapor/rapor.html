@@ -233,7 +233,7 @@ node bin/ios.js workflow run is-akisi.json                                     #
   <tr><td>Hızlı hata, DRY</td><td>Eksik üye kayıt / katalog kurulurken, uyumsuz bağlantı kurulmadan reddedilir; sayılar dosyalardan, kısayol tablosu tek kaynak, komut satırı ve atölye aynı süzgeç ve SARIF işlevi</td><td>contracts / engine testleri; sayı denetimi; "komut satırı = atölye" testleri</td></tr>
   <tr><td>Saf çekirdek / ince kabuk</td><td><code>src/</code> G/Ç'siz; G/Ç <code>bin/ios.js</code> ve <code>web/</code>'de (Şekil 12)</td><td>Aynı kod Node'da, tarayıcıda ve Worker'da çalışır</td></tr>
 </table>
-<p class="small">Zayıf kalan: JavaScript'te arayüzler derleme anında zorunlu değildir (JSDoc + çalışma anı denetimiyle sağlandı); arayüzün DOM'a bağlı kısmı birim testli değil, gerçek tarayıcıda 50 denetimle sınanıyor.</p>
+<p class="small">Arayüzler derleme anında da zorunlu: atomun nesne tarafı <code>@implements</code>, statik tarafı (manifest, seçim bilgisi) türlü yerleşik listeyle bağlı. <code>tests/types/roller.js</code>'teki 11 olumsuz kontrol, bozuk bir bileşenin derleme hatası verdiğini gösteriyor; rol türü gevşetilirse kullanılmayan kontrol yüzünden tür denetimi kalıyor. Zayıf kalan: çalışma anında dışarıdan eklenen bileşen yalnızca çalışma anı denetimiyle sınanabilir; arayüzün DOM'a bağlı kısmı birim testli değil, gerçek tarayıcıda 50 denetimle sınanıyor.</p>
 <h3>C.3 Test stratejisi</h3>
 <p class="small">Birim testleri (atom, şekil, NNLS, motor, geçmiş, tarama) → özellik tabanlı testler (360 rastgele oracle vakası; 4 × 400 rastgele düzenleme işlemi) → kural örnek dosyaları (işaretli satırlar) → bütünleşme testleri (komut satırı alt süreç olarak; paketler uçtan uca motorla; komut satırı = atölye SARIF'i) → kabul testleri (gerçek tarayıcıda 50 denetim) → erişilebilirlik (axe-core) → test kalitesinin denetimi (kapsama eşiği, mutasyon 25/25) → statik analiz (TypeScript denetleyicisi, CodeQL) → performans doğrulaması (kalibrasyondan ayrı, bir kez ölçülen taze kümeler). Referans uygulama (oracle) yöntemi: hızlı her atomun çıktısı yavaş ama kesin doğru NaiveSearch'ünkiyle eleman eleman karşılaştırılır.</p>
 <h3>C.4 UML diyagramları</h3>
@@ -254,7 +254,7 @@ node bin/ios.js workflow run is-akisi.json                                     #
   <tr><th>Kapı</th><th>Araç</th><th>Sonuç</th><th>CI</th></tr>
   <tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>436/436</td><td>her gönderim</td></tr>
   <tr><td>Kapsama</td><td>Node yerleşik ölçümü</td><td>satır %99,4, dal %90,4, işlev %97,4 (eşik %95 / %85 / %95)</td><td>her gönderim</td></tr>
-  <tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3, <code>--checkJs</code></td><td>0 hata (ilk ölçümde 138; aralarında bozuk JSDoc tür yorumları)</td><td>her gönderim</td></tr>
+  <tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3, <code>--checkJs</code></td><td>0 hata (ilk ölçümde 138; aralarında bozuk JSDoc tür yorumları); rol arayüzleri için 11 olumsuz kontrol</td><td>her gönderim</td></tr>
   <tr><td>Mutasyon</td><td><code>npm run mutation</code></td><td>25/25 (ilk turda 24/25)</td><td>her gönderim</td></tr>
   <tr><td>Arayüz</td><td>Playwright + Chromium</td><td>50/50</td><td>her gönderim</td></tr>
   <tr><td>Erişilebilirlik</td><td>axe-core 4.14.1, WCAG 2.1 AA</td><td>20 taramada 0 ihlal (ilk ölçümde 25 engelleyici)</td><td>her gönderim</td></tr>

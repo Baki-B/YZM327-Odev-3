@@ -15,6 +15,9 @@ import { TASK, validateParams, validateEntry } from '../atomic/ExactSearchAtom.j
 import { estimateCost } from './costModel.js';
 import calibrated from './coefficients.js';
 
+/** @typedef {import('../contracts.js').MoleculeInstance} MoleculeInstance */
+
+/** @implements {MoleculeInstance} */
 export class ExactMatch {
   static manifest = {
     name: 'ExactMatch', version: '0.1.0', kind: 'molecule', task: TASK,

@@ -16,8 +16,8 @@
   },
   "totals": {
     "lines": {
-      "hit": 4502,
-      "all": 4528,
+      "hit": 4536,
+      "all": 4562,
       "pct": 99.4
     },
     "branches": {
@@ -49,7 +49,7 @@
     },
     {
       "file": "src/atomic/ExactSearchAtom.js",
-      "lines": 94.4,
+      "lines": 94.7,
       "branches": 94.1,
       "functions": 87.5,
       "uncoveredLines": 6

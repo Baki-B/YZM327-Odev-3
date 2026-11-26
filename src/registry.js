@@ -17,6 +17,11 @@ import { WuManberSearch } from './atomic/WuManberSearch.js';
 import { Bm4DnaDsSearch } from './atomic/Bm4DnaDsSearch.js';
 import { Bm4DnaHmbsSearch } from './atomic/Bm4DnaHmbsSearch.js';
 
+/**
+ * Yerleşik atomlar. Dizinin türü rolleri derleme anında zorunlu kılar: manifest'i, process()
+ * yöntemi ya da seçim bilgisi sözleşmeye uymayan bir sınıf buraya eklenirse tsc hata verir.
+ * @type {import('./contracts.js').AtomClass[]}
+ */
 export const BUILTIN = [
   NaiveSearch, BoyerMooreSearch, HorspoolSearch, ShiftOrSearch, KmpSearch,
   AhoCorasickSearch, WuManberSearch, Bm4DnaDsSearch, Bm4DnaHmbsSearch,

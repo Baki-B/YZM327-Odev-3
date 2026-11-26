@@ -372,7 +372,7 @@ const kalite = `
 ${table(['Kapı', 'Araç', 'Sonuç', 'Ne yakalar'], [
     { cells: ['Birim testleri', '<code>node:test</code>, Node 22 ve 24', `${kap.tests.pass} test, ${kap.tests.fail} başarısız`, 'sözleşme, oracle, özellik tabanlı (rastgele) testler, kural örnek dosyaları'] },
     { cells: ['Test kapsaması', 'Node yerleşik ölçümü', `satır ${kp('lines')}, dal ${kp('branches')}, işlev ${kp('functions')} (eşik %${kap.thresholds.lines} / %${kap.thresholds.branches} / %${kap.thresholds.functions})`, 'test edilmeyen kod'] },
-    { cells: ['Statik tür denetimi', `TypeScript ${tur.typescript} (<code>--checkJs</code>)`, `${tur.errors} hata (ilk ölçümde ${tur.before})`, 'yanlış alan adı, eksik argüman, bozuk JSDoc'] },
+    { cells: ['Statik tür denetimi', `TypeScript ${tur.typescript} (<code>--checkJs</code>)`, `${tur.errors} hata (ilk ölçümde ${tur.before}); rol arayüzleri için ${tur.negatives} olumsuz kontrol`, 'yanlış alan adı, eksik argüman, bozuk JSDoc, rolünü üstlenmeyen bileşen'] },
     { cells: ['Mutasyon denetimi', '<code>npm run mutation</code>', `${mut[2]} / ${mut[1]} yakalandı`, 'testin gerçekten hata yakalayıp yakalamadığı'] },
     { cells: ['Arayüz denetimi', 'Playwright + Chromium', `${ara.passed} / ${ara.total}`, 'altı paket = komut satırı, geri al, XSS, CSP, 390 px'] },
     { cells: ['Erişilebilirlik', `axe-core ${eri.axe}, WCAG 2.1 AA`, `${eri.pages} taramada ${eri.blocking} engelleyici ihlal`, 'karşıtlık, ekran okuyucu adları, klavye'] },

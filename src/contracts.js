@@ -2,8 +2,15 @@
 //
 // JavaScript'te "interface" anahtar sözcüğü yoktur; arayüzler burada iki biçimde tanımlanır:
 //   1. JSDoc türleri (@typedef): TypeScript denetleyicisi (tsc --checkJs) derleme anında denetler.
+//      Nesne tarafı @implements ile bağlanır (ExactSearchAtom: SearcherInstance, ExactMatch:
+//      MoleculeInstance; molekül atomu çağırır ama kendisi atom değildir, girdisi bir kayıt akışıdır).
+//      Sınıfın statik tarafı (manifest, selection) türlü listelerle bağlanır: registry.js'teki
+//      BUILTIN bir AtomClass[] dizisidir, catalog.js'teki kutu listesi WorkflowComponent[]'tir.
+//      tests/types/roller.js'teki negatif kontroller, bozuk bir bileşenin gerçekten derleme
+//      hatası verdiğini gösterir.
 //   2. Çalışma anı tanımları (ROLES): kayıt defteri ve katalog bir bileşeni kabul ederken hangi
-//      rolleri üstlendiğine bakar, eksik üyeyi adıyla söyler (hızlı hata, fail fast).
+//      rolleri üstlendiğine bakar, eksik üyeyi adıyla söyler (hızlı hata, fail fast). Dışarıdan
+//      çalışma anında eklenen bileşen (registry.register) yalnızca bu yolla denetlenebilir.
 //
 // Roller ve onları KULLANAN taraflar:
 //   Describable        manifest (ad, sürüm, tür, görev, başlık, kaynaklar)  → ios list, atölye, kayıt defteri
@@ -43,9 +50,17 @@
  * @property {(shape: Shape) => boolean | string} [applicable]                       uygun değilse neden
  *
  * @typedef {{ manifest: Manifest }} Describable
- * @typedef {{ prototype: { process(entry: FastaEntry): Iterable<SequenceMatch> } }} Searcher
+ * @typedef {{ process(entry: FastaEntry): Iterable<SequenceMatch> }} SearcherInstance   nesne tarafı (@implements)
+ * @typedef {{ prototype: SearcherInstance }} Searcher
  * @typedef {{ selection: Selection }} SelectionProvider
- * @typedef {(new (params: SearchParams) => { process(entry: FastaEntry): Iterable<SequenceMatch> }) & { manifest: Manifest, selection?: Selection | null }} AtomClass
+ * @typedef {(new (params: SearchParams) => SearcherInstance) & { manifest: Manifest, selection?: Selection | null }} AtomClass
+ *
+ * @typedef {object} DecisionRecord   molekülün karar kaydı (em.record)
+ * @property {string} requested       istenen strateji ("auto" ya da atom adı)
+ * @property {string | null} selected seçilen atom (ilk kayıt okunana dek null)
+ * @property {string} why             seçimin gerekçesi
+ * @typedef {{ run(entries: Iterable<FastaEntry>): Iterable<SequenceMatch>, record: DecisionRecord }} MoleculeInstance   molekülün nesne tarafı (@implements)
+ * @typedef {(new (params: SearchParams & { strategy?: string }, options?: object) => MoleculeInstance) & Describable} MoleculeClass
  */
 
 // ---------------------------------------------------------------------------- iş akışı türleri

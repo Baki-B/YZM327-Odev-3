@@ -24,7 +24,7 @@
 <div class="table-wrap"><table><thead><tr><th>Kapı</th><th>Araç</th><th>Sonuç</th><th>Ne yakalar</th></tr></thead><tbody>
 <tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>436 test, 0 başarısız</td><td>sözleşme, oracle, özellik tabanlı (rastgele) testler, kural örnek dosyaları</td></tr>
 <tr><td>Test kapsaması</td><td>Node yerleşik ölçümü</td><td>satır %99,4, dal %90,4, işlev %97,4 (eşik %95 / %85 / %95)</td><td>test edilmeyen kod</td></tr>
-<tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3 (<code>--checkJs</code>)</td><td>0 hata (ilk ölçümde 138)</td><td>yanlış alan adı, eksik argüman, bozuk JSDoc</td></tr>
+<tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3 (<code>--checkJs</code>)</td><td>0 hata (ilk ölçümde 138); rol arayüzleri için 11 olumsuz kontrol</td><td>yanlış alan adı, eksik argüman, bozuk JSDoc, rolünü üstlenmeyen bileşen</td></tr>
 <tr><td>Mutasyon denetimi</td><td><code>npm run mutation</code></td><td>25 / 25 yakalandı</td><td>testin gerçekten hata yakalayıp yakalamadığı</td></tr>
 <tr><td>Arayüz denetimi</td><td>Playwright + Chromium</td><td>50 / 50</td><td>altı paket = komut satırı, geri al, XSS, CSP, 390 px</td></tr>
 <tr><td>Erişilebilirlik</td><td>axe-core 4.14.1, WCAG 2.1 AA</td><td>20 taramada 0 engelleyici ihlal</td><td>karşıtlık, ekran okuyucu adları, klavye</td></tr>

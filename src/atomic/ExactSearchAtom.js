@@ -43,8 +43,15 @@ export function validateEntry(entry) {
   }
 }
 
+/** @typedef {import('../contracts.js').SearcherInstance} SearcherInstance */
+
+/** @implements {SearcherInstance} */
 export class ExactSearchAtom {
+  // Türler alt sınıfın statik tarafını da bağlar: alt sınıfın manifest'i ya da seçim bilgisi
+  // sözleşmeye uymazsa tsc sınıf bildiriminde hata verir (tests/types/roller.js).
+  /** @type {import('../contracts.js').Manifest} */
   static manifest = null;
+  /** @type {import('../contracts.js').Selection | null} */
   static selection = null;
 
   constructor(params) {

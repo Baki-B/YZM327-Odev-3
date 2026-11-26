@@ -167,7 +167,11 @@ function atomComponent(Atom) {
  * atom kutuları ve molekülün strateji listesi ondan gelir.
  */
 export function createCatalog(registry = defaultRegistry) {
+  // Kutu listesinin türü WorkflowComponent rolünü derleme anında zorunlu kılar (tsc --checkJs);
+  // aşağıdaki assertRoles aynı kuralı çalışma anında da uygular.
+  /** @type {Component[]} */
   const list = [];
+  /** @param {Component} c */
   const add = (c) => list.push(c);
 
   // ---------------------------------------------------------------- KAYNAKLAR
