@@ -28,7 +28,7 @@ jobs:
       - name: Testler (başarısızsa yayımlanmaz)
         run: npm test
       - name: Pages'i etkinleştir (ilk çalıştırmada)
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           enablement: true
       - name: Siteyi hazırla
