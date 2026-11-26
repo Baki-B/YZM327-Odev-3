@@ -22,7 +22,8 @@
     "karar-yuku": "node --expose-gc scripts/karar-yuku.js",
     "ornekler": "node scripts/ornekler.js",
     "kapsama": "node scripts/kapsama.js",
-    "tur-denetimi": "node scripts/tur-denetimi.js"
+    "tur-denetimi": "node scripts/tur-denetimi.js",
+    "rehber": "node scripts/rehber-pdf.js"
   },
   "license": "MIT"
 }

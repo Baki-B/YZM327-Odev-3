@@ -88,7 +88,7 @@ const strip = (html) => html.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<s
 const DOCS = [
   ['docs/rapor/rapor.html', true], ['README.md', false], ['docs/sunum.md', false], ['docs/kontrol.md', false], ['docs/anlatim.md', false], ['KARARLAR.md', false],
   ['CHANGELOG.md', false], ['CONTRIBUTING.md', false], ['SECURITY.md', false], ['docs/benzer-projeler.md', false], ['docs/uml/README.md', false],
-  ['docs/sunum/index.html', true], ...readdirSync(new URL('site/', VIZE)).filter((f) => f.endsWith('.html')).map((f) => [`site/${f}`, true]),
+  ['docs/sunum/index.html', true], ['docs/sunum-rehberi/rehber.html', true], ...readdirSync(new URL('site/', VIZE)).filter((f) => f.endsWith('.html')).map((f) => [`site/${f}`, true]),
 ];
 let bad = 0;
 let checked = 0;
