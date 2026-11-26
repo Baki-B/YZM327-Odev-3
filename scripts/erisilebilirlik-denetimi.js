@@ -6,7 +6,7 @@
 // Kullanım (proje kökünden): node scripts/erisilebilirlik-denetimi.js
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
@@ -19,7 +19,8 @@ try {
   console.error('Playwright ya da axe-core bulunamadı. Kurulum: npm install --no-save --no-package-lock playwright axe-core && npx playwright install chromium');
   process.exit(1);
 }
-const axeVersion = require('axe-core/package.json').version;
+// Sürüm dosyadan okunur (require ile değil): tür denetleyicisi CI'da axe-core kurulu olmadan da geçsin.
+const axeVersion = JSON.parse(readFileSync(require.resolve('axe-core/package.json'), 'utf8')).version;
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = fileURLToPath(new URL('../docs/kalite/', import.meta.url));

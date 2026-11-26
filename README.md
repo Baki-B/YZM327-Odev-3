@@ -231,6 +231,17 @@ Pages ilk kez açılırken iş akışı Pages'i kendisi etkinleştirmeyi dener. 
 
 Paket verilmedi; karşılığı ödevin 4. ve 5. bölümüne göre yazıldı (`ExactSearchAtom`, `NaiveSearch`, `BoyerMooreSearch`, `alphabet.js`, `hits.js`, `fasta.js`, `bench/data.js`, `bench/timing.js`, `contract.test.js`). Proje kendi başına çalışır.
 
+## Yol haritası (geliştirilebilecek noktalar)
+
+Benzer projelerden alınmayıp sonraya bırakılanlar ([docs/benzer-projeler.md](docs/benzer-projeler.md), "gelecek iş") ve bilinen sınırlar (rapor, Bölüm 7 ve Ek C.7):
+
+- **Atölye:** mini harita ve otomatik yerleşim (xyflow, Rete); yalnızca değişen kutuları yeniden çalıştıran önbellek (ComfyUI, Nextflow `-resume`).
+- **Tarama:** düzenli ifade ve entropi tabanlı gizli bilgi kuralları (boşluklu `password = "x"` atamasını da yakalar; detect-secrets); `.gitignore`'un tam anlamı; iş notlarını iş kaydına (issue) çevirme (todo-to-issue); büyük loglar için akış (streaming) kipi (Hyperscan); en uzun eşleşme süzgeci (aho-corasick).
+- **Molekül:** her kayıt için yeniden karar seçeneği (sözleşme kararı ilk kayda göre ister); kelime yapılı metin ve ikili alfabe için yeni şekil özellikleri; öğrenen bir seçiciyle (karar ağacı) karşılaştırma; tarayıcıda kalibrasyon.
+- **Test:** arayüzün DOM'a bağlı kısmı için birim testleri (şimdilik gerçek tarayıcıdaki arayüz denetimiyle sınanıyor); mutasyon denetiminin de CI'da çalışması.
+- **IoS hub:** hub.ioscience.org erişilebildiğinde iş akışlarını onun biçimine aktarma.
+- Bilerek alınmayan: trufflehog'un bulunan anahtarı servise sorarak doğrulaması (atomlarda ağ yasak; başkasının anahtarını denemek etik ve hukuki risk).
+
 ## Katkılar
 
 | Üye | Numara | Katkı |
