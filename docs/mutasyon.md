@@ -2,7 +2,7 @@
 
 Koda bilerek küçük hatalar yerleştirildi; her biri projenin geçici bir kopyasında tek başına uygulanıp bütün birim testleri çalıştırıldı. Bir mutasyon, en az bir test başarısız olursa ya da testler sonsuz döngü yüzünden bitmezse "yakalandı" sayılır.
 
-Değiştirilmemiş kopyada: 468 test geçti, 0 başarısız. Sonuç: **29 mutasyonun 29 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
+Değiştirilmemiş kopyada: 478 test geçti, 0 başarısız. Sonuç: **30 mutasyonun 30 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
 
 | # | Dosya | Yerleştirilen hata | Değişiklik | Yakalandı mı | Nasıl |
 |---:|---|---|---|---|---|
@@ -31,7 +31,8 @@ Değiştirilmemiş kopyada: 468 test geçti, 0 başarısız. Sonuç: **29 mutasy
 | 23 | `src/contracts.js` | Rol denetimi selection.features işlevini aramaz | `      if (!isFn(s.features)) out.push('selection.features bir işlev olmalı');` → `      // features denetimi unutuldu` | evet | 2 test başarısız |
 | 24 | `web/lib/geometry.js` | Sığdırma telefonda da masaüstü alt sınırını kullanır (yazılar okunmaz) | `  return Math.max(mobile ? 0.7 : 0.45, z);` → `  return Math.max(0.45, z);` | evet | 1 test başarısız |
 | 25 | `src/workflows/CodeScan.js` | Satır içi bastırma varsayılan olarak kapalı | `strategy = 'auto', inlineIgnore = true,` → `strategy = 'auto', inlineIgnore = false,` | evet | 3 test başarısız |
-| 26 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
-| 27 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
-| 28 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
-| 29 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |
+| 26 | `src/workflows/engine.js` | Önbellek anahtarı ayarları içermez (ayar değişse de eski sonuç kullanılır) | `return sha256Hex(JSON.stringify([node.type, node.params ?? {}, inputs]));` → `return sha256Hex(JSON.stringify([node.type, inputs]));` | evet | 4 test başarısız |
+| 27 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
+| 28 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
+| 29 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
+| 30 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |

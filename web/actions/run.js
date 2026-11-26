@@ -7,7 +7,7 @@ import { slug } from '../lib/format.js';
 import { explainWorkflow, serializeWorkflow, validateWorkflow } from '../../src/workflows/engine.js';
 import { toMermaid } from '../../src/workflows/diagram.js';
 import { buildRunRecord } from '../../src/workflows/provenance.js';
-import { runWorkflowRemote, raceRemote, runnerMode } from '../runner.js';
+import { runWorkflowRemote, raceRemote, runnerMode, clearCacheRemote } from '../runner.js';
 import { disarm, setTab } from './core.js';
 
 // ------------------------------------------------------------------ çalıştırma
@@ -45,6 +45,12 @@ export async function run() {
   }
   bus.emit('calisma');
   if (!state.run.ok) toast($('durum').textContent, 'err');
+}
+
+/** Önbelleği boşaltır; sonraki çalıştırmada bütün kutular yeniden çalışır. */
+export async function clearCache() {
+  await clearCacheRemote();
+  toast('Önbellek boşaltıldı: sonraki çalıştırmada bütün kutular yeniden çalışır.');
 }
 
 export async function race(nodeId) {

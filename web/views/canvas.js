@@ -4,7 +4,7 @@
 import { state, catalog, doc, compOf, nodeById, sameEdge, runOf } from '../state.js';
 import { bus } from '../lib/bus.js';
 import { $, h, s, isMobile } from '../lib/dom.js';
-import { fmtMs, catClass, tyClass } from '../lib/format.js';
+import { catClass, tyClass } from '../lib/format.js';
 import { NODE_W, HEAD, PAD, ROW, GRID, nodeHeight, portPos as portPosOf, edgePath, boardSize, fitZoom, clampZoom, snap } from '../lib/geometry.js';
 import { canConnect } from '../../src/workflows/engine.js';
 import { nodeFooterText, strongestLint } from '../lib/view-models.js';
@@ -300,7 +300,8 @@ export function initCanvas() {
     const el = nodeElOf(p.node);
     if (!el) return;
     el.dataset.status = p.status;
-    el.querySelector('.node-foot span').textContent = p.status === 'çalışıyor' ? 'çalışıyor…' : `${fmtMs(p.ms)} · ${p.summary ?? p.error ?? ''}`;
+    const node = nodeById(p.node);
+    if (node) el.querySelector('.node-foot span').textContent = nodeFooterText(node, compOf(node), p);
   });
   bus.on('baglanti-red', ({ ports }) => {
     renderCanvas();

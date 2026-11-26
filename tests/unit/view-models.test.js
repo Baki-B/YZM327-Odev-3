@@ -41,6 +41,13 @@ describe('durum rozeti ve bulgu toplamı', () => {
     assert.deepEqual(badgeModel({ running: false, run: gated, dirty: false, nodes }), { text: `bitti: 18 bulgu, ${fmtMs(249.4)} · kapı kaldı`, state: 'gate' });
   });
 
+  test('önbellekten gelen kutular sayılır ve rozette söylenir', () => {
+    const r = run();
+    r.nodes.b1.cached = true;
+    r.nodes.t.cached = true;
+    assert.equal(badgeModel({ running: false, run: r, dirty: false, nodes }).text, `bitti: 18 bulgu, ${fmtMs(249.4)} · 2 kutu önbellekten`);
+  });
+
   test('hata: önce iş akışı sorunu, yoksa hata veren kutunun iletisi, o da yoksa genel ileti', () => {
     assert.deepEqual(badgeModel({ running: false, run: { ok: false, problems: [{ message: 'Sonuç kutusu yok' }], nodes: {} }, dirty: false, nodes }), { text: 'hata: Sonuç kutusu yok', state: 'error' });
     assert.equal(badgeModel({ running: false, run: { ok: false, nodes: { a: { status: 'bitti' }, b: { status: 'hata', error: 'dosya okunamadı' } } }, dirty: false, nodes }).text, 'hata: dosya okunamadı');
@@ -144,6 +151,7 @@ describe('tuvaldeki kutunun alt satırı', () => {
     assert.equal(nodeFooterText(node('cikti.tablo'), {}, { status: 'bitti', ms: 12.34, summary: '18 bulgu' }), `${fmtMs(12.34)} · 18 bulgu`);
     assert.equal(nodeFooterText(node('cikti.tablo'), {}, { status: 'bitti', ms: 1, info: { summary: 'bilgiden' } }), `${fmtMs(1)} · bilgiden`);
     assert.equal(nodeFooterText(node('cikti.tablo'), {}, { status: 'hata', error: 'okunamadı' }), 'hata: okunamadı');
+    assert.equal(nodeFooterText(node('cikti.tablo'), {}, { status: 'bitti', ms: 0, cached: true, summary: '18 bulgu' }), 'önbellekten · 18 bulgu');
   });
 
   test('çalışmadıysa ayarlarının özeti', () => {

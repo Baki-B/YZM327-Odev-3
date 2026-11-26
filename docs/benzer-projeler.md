@@ -16,7 +16,7 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 |---|---:|---|---|---|
 | n8n-io/n8n | 212 114 | geri al / yinele, iş akışını JSON olarak kopyala-yapıştır, hazır şablonlar, iş akışını komut satırından çalıştırma | Command desenli geçmiş; Ctrl+C/Ctrl+V parça ve bütün iş akışı; altı hazır paket; `ios workflow run` | alındı |
 | langflow-ai/langflow | 156 938 | akışı JSON olarak dışa / içe aktarma | `Dışa aktar` / `İçe aktar`, paylaşılabilir bağlantı | zaten vardı |
-| Comfy-Org/ComfyUI | 148 591 | iş akışı dosyasını tuvale bırakarak açma, tarayıcıda otomatik kayıt, yalnızca değişen kutuları yeniden çalıştırma | tuvale JSON bırakma, otomatik kayıt | alındı (yeniden çalıştırma önbelleği: gelecek iş) |
+| Comfy-Org/ComfyUI | 148 591 | iş akışı dosyasını tuvale bırakarak açma, tarayıcıda otomatik kayıt, yalnızca değişen kutuları yeniden çalıştırma | tuvale JSON bırakma, otomatik kayıt, yalnızca değişen kutuları yeniden çalıştıran önbellek | alındı |
 | FlowiseAI/Flowise | 55 595 | görsel akış + aynı akışı bir API'den çalıştırma | aynı iş akışı tarayıcıda ve `ios workflow run` ile CI'da | alındı |
 | xyflow/xyflow | 39 154 | bağlantı doğrulama kancası, klavye erişilebilirliği, mini harita | türlü uçlar ve nedenli red, klavyeyle ekleme / bağlama / taşıma, WCAG 2.1 AA denetimi | alındı (mini harita: gelecek iş) |
 | node-red/node-red | 23 878 | kutunun altında çalışma durumu, panodan içe / dışa aktarma, bilgi kenar çubuğu | kutu alt bilgisinde durum ve süre, pano, özellikler panelinde yardım ve manifest | zaten vardı + pano alındı |
@@ -30,7 +30,7 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 
 | Depo | Yıldız | Öne çıkan özellik | Bizdeki karşılığı | Durum |
 |---|---:|---|---|---|
-| nextflow-io/nextflow | 3 535 | iş akışı grafiği (DAG) çıktısı, çalıştırma izi ve raporu, kaldığı yerden sürdürme | Mermaid / DOT diyagramı; çalıştırma kaydı (sürümler, girdi SHA-256, süreler) | alındı (sürdürme: gelecek iş) |
+| nextflow-io/nextflow | 3 535 | iş akışı grafiği (DAG) çıktısı, çalıştırma izi ve raporu, kaldığı yerden sürdürme | Mermaid / DOT diyagramı; çalıştırma kaydı (sürümler, girdi SHA-256, süreler); kaldığı yerden sürdürme (atölyede önbellek) | alındı |
 | snakemake/snakemake | 2 908 | `--dag`, `--report`, `--lint` | `ios workflow diagram`, çalıştırma kaydı, `ios workflow lint` ve canlı "Denetim" sekmesi | alındı |
 | galaxyproject/galaxy | 1 902 | türlü veri tipleri, aracın içinde testleri, iş geçmişinde köken bilgisi (provenance), iş akışı denetimi | uç türleri; paketlerin beklenen sonucu komut satırıyla eşitleniyor; çalıştırma kaydı; lint | alındı |
 

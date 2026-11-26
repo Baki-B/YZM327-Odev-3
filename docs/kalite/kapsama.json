@@ -11,23 +11,23 @@
     "functions": 95
   },
   "tests": {
-    "pass": 468,
+    "pass": 478,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 4862,
-      "all": 4886,
+      "hit": 4906,
+      "all": 4933,
       "pct": 99.5
     },
     "branches": {
-      "hit": 1548,
-      "all": 1702,
-      "pct": 91
+      "hit": 1579,
+      "all": 1731,
+      "pct": 91.2
     },
     "functions": {
-      "hit": 539,
-      "all": 551,
+      "hit": 542,
+      "all": 554,
       "pct": 97.8
     }
   },
@@ -63,15 +63,15 @@
     },
     {
       "file": "bin/ios.js",
-      "lines": 99.4,
-      "branches": 86,
+      "lines": 98.5,
+      "branches": 85.2,
       "functions": 96.7,
-      "uncoveredLines": 2
+      "uncoveredLines": 5
     },
     {
       "file": "src/workflows/catalog.js",
       "lines": 99.5,
-      "branches": 80.2,
+      "branches": 84.2,
       "functions": 91.4,
       "uncoveredLines": 2
     },
@@ -309,7 +309,7 @@
     {
       "file": "src/workflows/engine.js",
       "lines": 100,
-      "branches": 85.3,
+      "branches": 85.8,
       "functions": 100,
       "uncoveredLines": 0
     },
@@ -344,7 +344,7 @@
     {
       "file": "src/workflows/provenance.js",
       "lines": 100,
-      "branches": 82.6,
+      "branches": 83.3,
       "functions": 87.5,
       "uncoveredLines": 0
     },
@@ -400,7 +400,7 @@
     {
       "file": "web/lib/view-models.js",
       "lines": 100,
-      "branches": 94.8,
+      "branches": 94.9,
       "functions": 100,
       "uncoveredLines": 0
     }

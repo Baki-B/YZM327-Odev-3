@@ -9,6 +9,15 @@ import { loadSampleBrowser } from './samples.js';
 
 const catalog = createCatalog();
 let last = null;
+// Önbellek: son çalıştırmanın kutu çıktıları. Anahtar kutunun türü, ayarları ve girişlerine
+// bağlı kutuların anahtarlarıdır (src/workflows/engine.js); değişmeyen kutu yeniden çalışmaz.
+const cache = new Map();
+
+/** Önbelleği boşaltır: sonraki çalıştırmada bütün kutular çalışır. */
+export function clearCache() {
+  cache.clear();
+  return true;
+}
 
 /**
  * Kaynak kutularının (Source.File üreten) çıktısındaki her dosyanın SHA-256 özeti: çalıştırma
@@ -39,12 +48,13 @@ export async function runSerialized(data, onNode = () => {}) {
   const res = await runWorkflow(wf, catalog, {
     loadSample: loadSampleBrowser,
     now: () => performance.now(),
-    onNode: (id, r) => onNode(id, { status: r.status, ms: r.ms ?? null, summary: r.info?.summary ?? null, error: r.error ?? null }),
+    cache,
+    onNode: (id, r) => onNode(id, { status: r.status, ms: r.ms ?? null, summary: r.info?.summary ?? null, error: r.error ?? null, cached: r.cached ?? false }),
   });
   const totalMs = performance.now() - t0;
   last = { wf, res };
   const nodes = {};
-  for (const [id, r] of Object.entries(res.nodes)) nodes[id] = { status: r.status, ms: r.ms, info: r.info, error: r.error };
+  for (const [id, r] of Object.entries(res.nodes)) nodes[id] = { status: r.status, ms: r.ms, info: r.info, error: r.error, cached: r.cached ?? false };
   let inputs = {};
   try { inputs = await inputDigests(wf, res); } catch { /* özet hesaplanamazsa kayıt özetsiz olur */ }
   return { ok: res.ok, problems: res.problems, order: res.order, totalMs, nodes, inputs };

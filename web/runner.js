@@ -62,9 +62,11 @@ async function call(cmd, payload, onProgress) {
   }
   const core = await import('./core.js');
   if (cmd === 'run') return core.runSerialized(payload, (node, st) => onProgress?.({ node, ...st }));
+  if (cmd === 'clear-cache') return core.clearCache();
   await new Promise((r) => setTimeout(r, 0));
   return core.raceNode(payload.node, payload.reps);
 }
 
 export const runWorkflowRemote = (data, onProgress) => call('run', data, onProgress);
 export const raceRemote = (node, reps = 5) => call('race', { node, reps });
+export const clearCacheRemote = () => call('clear-cache');

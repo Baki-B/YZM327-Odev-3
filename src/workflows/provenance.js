@@ -13,7 +13,7 @@ import { VERSION } from '../version.js';
 /**
  * @typedef {import('./engine.js').Catalog} Catalog
  * @typedef {{ path: string, chars: number, sha256: string }} InputDigest
- * @typedef {{ status: string, ms?: number | null, info?: any, error?: string | null }} NodeRun
+ * @typedef {{ status: string, ms?: number | null, info?: any, error?: string | null, cached?: boolean }} NodeRun
  * @typedef {{ ok: boolean, order?: string[], totalMs?: number, problems?: Array<{ message: string }>, nodes: Record<string, NodeRun> }} RunResult
  */
 
@@ -66,6 +66,7 @@ export function buildRunRecord({ workflow, catalog, run, createdAt, inputs = {},
     };
     if (typeof info.count === 'number') entry.count = info.count;
     if (info.gate) entry.gate = info.gate;
+    if (r.cached) entry.cached = true;
     if (info.record) {
       entry.decision = {
         requested: info.record.requested,

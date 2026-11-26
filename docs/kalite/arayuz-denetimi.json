@@ -1,6 +1,6 @@
 {
-  "total": 50,
-  "passed": 50,
+  "total": 53,
+  "passed": 53,
   "checks": [
     {
       "name": "paket teknik-borc: atölye = komut satırı",
@@ -8,6 +8,18 @@
     },
     {
       "name": "Açıkla: kurala dayalı Türkçe anlatım",
+      "ok": true
+    },
+    {
+      "name": "önbellek: ikinci çalıştırmada 8 kutunun 8'i önbellekten, sonuç aynı",
+      "ok": true
+    },
+    {
+      "name": "önbellek: ayar değişince yalnızca o kutu ve sonrakiler çalışır",
+      "ok": true
+    },
+    {
+      "name": "önbellek: \"Önbelleği boşalt\"tan sonra bütün kutular çalışır",
       "ok": true
     },
     {

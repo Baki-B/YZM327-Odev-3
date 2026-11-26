@@ -114,6 +114,10 @@ const MUTATIONS = [
     file: "src/workflows/CodeScan.js", what: "Satır içi bastırma varsayılan olarak kapalı",
     from: "strategy = 'auto', inlineIgnore = true,", to: "strategy = 'auto', inlineIgnore = false,",
   },
+  {
+    file: "src/workflows/engine.js", what: "Önbellek anahtarı ayarları içermez (ayar değişse de eski sonuç kullanılır)",
+    from: "return sha256Hex(JSON.stringify([node.type, node.params ?? {}, inputs]));", to: "return sha256Hex(JSON.stringify([node.type, inputs]));",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

@@ -93,6 +93,22 @@ try {
       await page.click('#sekme-bulgular');
       await hideToast(page);
       await page.screenshot({ path: SHOTS + 'atolye-tablo.png' });
+      // Önbellek: değişmeyen iş akışında hiçbir kutu yeniden çalışmaz; bir ayar değişince
+      // yalnızca o kutu ve ondan sonrakiler çalışır; önbellek boşaltılınca hepsi çalışır.
+      const cachedOf = () => page.evaluate(() => Object.entries(window.__atolye.state.run.nodes).filter(([, r]) => r.cached).map(([id]) => id).sort());
+      const again = await runAndWait(page);
+      const all = await cachedOf();
+      check('önbellek: ikinci çalıştırmada 8 kutunun 8\'i önbellekten, sonuç aynı', all.length === 8 && /^bitti: 18 bulgu/.test(again) && /8 kutu önbellekten/.test(again), again);
+      await page.click('.node[data-id="bulgu"] .node-head');
+      await page.click('#p-bulgu-word');
+      const changed = await runAndWait(page);
+      const part = await cachedOf();
+      check('önbellek: ayar değişince yalnızca o kutu ve sonrakiler çalışır', JSON.stringify(part) === JSON.stringify(['desen1', 'kaynak', 'molekul', 'uyarlayici']), `${part.join(', ')}; rozet "${changed}"`);
+      await page.click('#tuval', { position: { x: 5, y: 5 } });
+      await page.click('#onbellek-bosalt');
+      await runAndWait(page);
+      const none = await cachedOf();
+      check('önbellek: "Önbelleği boşalt"tan sonra bütün kutular çalışır', none.length === 0, `${none.length} kutu önbellekten`);
     }
     if (p.id === 'biyoloji') {
       await page.click('.node[data-id="molekul"] .node-head');

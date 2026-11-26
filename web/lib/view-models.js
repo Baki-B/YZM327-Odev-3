@@ -12,7 +12,7 @@ import { canConnect } from '../../src/workflows/engine.js';
 /** @typedef {import('../../src/contracts.js').WorkflowNode} WorkflowNode */
 /** @typedef {import('../../src/contracts.js').WorkflowComponent} Component */
 /** @typedef {import('../../src/contracts.js').Catalog} Catalog */
-/** @typedef {{ status: string, ms?: number | null, summary?: string | null, info?: Record<string, any>, error?: string | null }} NodeRun */
+/** @typedef {{ status: string, ms?: number | null, summary?: string | null, info?: Record<string, any>, error?: string | null, cached?: boolean }} NodeRun */
 /** @typedef {{ ok: boolean, totalMs?: number, problems?: Array<{ message: string }>, nodes: Record<string, NodeRun> }} RunResult */
 /** @typedef {{ level: string, code: string, message: string, node?: string }} LintFinding */
 
@@ -44,7 +44,8 @@ export function badgeModel({ running, run, dirty, nodes }) {
   }
   const n = findingTotal(run, nodes);
   const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');
-  return { text: `bitti: ${nf(n, 0)} bulgu, ${fmtMs(run.totalMs)}${gate ? ' · kapı kaldı' : ''}`, state: gate ? 'gate' : 'done' };
+  const cached = Object.values(run.nodes).filter((r) => r.cached).length;
+  return { text: `bitti: ${nf(n, 0)} bulgu, ${fmtMs(run.totalMs)}${gate ? ' · kapı kaldı' : ''}${cached ? ` · ${cached} kutu önbellekten` : ''}`, state: gate ? 'gate' : 'done' };
 }
 
 // ------------------------------------------------------------------ bulgu tablosu
@@ -140,7 +141,8 @@ export function strongestLint(list, id) {
 
 // ------------------------------------------------------------------ tuvaldeki kutu
 /**
- * Kutunun alt satırı: çalıştıysa süre ve özet, çalışmadıysa ayarlarından kısa bir özet.
+ * Kutunun alt satırı: çalıştıysa süre (önbellekten geldiyse "önbellekten") ve özet,
+ * çalışmadıysa ayarlarından kısa bir özet.
  * @param {WorkflowNode} node
  * @param {{ badge?: string, subtitle?: string }} comp
  * @param {NodeRun | null | undefined} r
@@ -148,7 +150,7 @@ export function strongestLint(list, id) {
 export function nodeFooterText(node, comp, r) {
   if (r) {
     if (r.status === 'çalışıyor') return 'çalışıyor…';
-    if (r.status === 'bitti') return `${fmtMs(r.ms)} · ${r.summary ?? r.info?.summary ?? ''}`;
+    if (r.status === 'bitti') return `${r.cached ? 'önbellekten' : fmtMs(r.ms)} · ${r.summary ?? r.info?.summary ?? ''}`;
     return `${r.status}: ${r.error ?? ''}`;
   }
   const p = node.params ?? {};

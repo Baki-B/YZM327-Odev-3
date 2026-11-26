@@ -1,5 +1,5 @@
 // Web Worker: uzun aramalar arayüzü dondurmasın diye iş akışı ayrı bir iş parçacığında çalışır.
-import { runSerialized, raceNode } from './core.js';
+import { runSerialized, raceNode, clearCache } from './core.js';
 
 self.onmessage = async (ev) => {
   const { id, cmd, payload } = ev.data;
@@ -9,6 +9,8 @@ self.onmessage = async (ev) => {
       self.postMessage({ id, result });
     } else if (cmd === 'race') {
       self.postMessage({ id, result: raceNode(payload.node, payload.reps) });
+    } else if (cmd === 'clear-cache') {
+      self.postMessage({ id, result: clearCache() });
     } else {
       throw new Error(`Bilinmeyen komut: ${cmd}`);
     }

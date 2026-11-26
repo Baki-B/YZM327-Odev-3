@@ -11,6 +11,8 @@
 // Uç türleri IoS veri türlerine benzetildi: Source.File, FASTA.Entry, Pattern.Set,
 // Sequence.Match, Finding. Bağlantı yalnızca aynı türdeki uçlar arasında kurulabilir.
 
+import { sha256Hex } from './provenance.js';
+
 /**
  * Türler src/contracts.js'te tanımlıdır; burada kısa adlarla yeniden dışa verilir.
  * @typedef {import('../contracts.js').Workflow} Workflow
@@ -19,7 +21,8 @@
  * @typedef {import('../contracts.js').Catalog} Catalog
  * @typedef {import('../contracts.js').WorkflowComponent} Component
  * @typedef {import('../contracts.js').RunContext} RunContext
- * @typedef {{ status: string, ms: number, outputs: Record<string, any>, info: Record<string, any> | null, error: string | null }} NodeResult
+ * @typedef {{ status: string, ms: number, outputs: Record<string, any>, info: Record<string, any> | null, error: string | null, cached?: boolean }} NodeResult
+ * @typedef {Map<string, { outputs: Record<string, any>, info: Record<string, any> | null }>} RunCache
  * @typedef {{ node?: string, message: string }} Problem
  */
 
@@ -247,13 +250,33 @@ export function validateWorkflow(wf, catalog) {
 }
 
 /**
+ * Kutunun önbellek anahtarı: türü, ayarları ve girişlerine bağlı kutuların anahtarları (uç
+ * adlarıyla, bağlantı sırasıyla). Bir kutunun ya da ondan önceki herhangi bir kutunun ayarı
+ * ya da bağlantısı değişirse anahtar da değişir (Merkle ağacındaki gibi). Anahtar SHA-256
+ * özetidir: yüklenen büyük dosyalar sonraki kutuların anahtarını büyütmez.
+ * @param {WorkflowNode} node
+ * @param {Edge[]} incoming
+ * @param {Record<string, string>} keys  önceki kutuların anahtarları
+ */
+export function cacheKey(node, incoming, keys) {
+  const inputs = incoming.map((e) => [e.to.port, keys[e.from.node], e.from.port]);
+  return sha256Hex(JSON.stringify([node.type, node.params ?? {}, inputs]));
+}
+
+/**
  * İş akışını çalıştırır. Düğümler topolojik sırayla, birer birer çalışır; her düğümün
  * run(inputs, params, ctx) işlevi çıkış adı → değer nesnesi döndürür (ya da Promise).
  * Bir düğüm hata verirse ona bağlı düğümler "atlandı" olur, diğerleri çalışmaya devam eder.
  *
+ * Önbellek (ctx.cache, ComfyUI ve Nextflow -resume gibi): anahtarı önceki çalıştırmadakiyle
+ * aynı olan kutu yeniden çalışmaz, önceki çıktısı kullanılır (cached: true). Bir ayar
+ * değişirse yalnızca o kutu ve ondan sonrakiler çalışır. Hata veren kutu önbelleğe girmez.
+ * Önbellekte yalnızca son çalıştırmanın kutuları kalır (bellek iş akışıyla sınırlı).
+ * Önbellek verilmezse (komut satırı) her kutu her seferinde çalışır.
+ *
  * @param {Workflow} wf
  * @param {Catalog} catalog
- * @param {RunContext} [ctx]  now(), loadSample(ad), onNode(kimlik, durum), yieldEvery — hepsi isteğe bağlı
+ * @param {RunContext & { cache?: RunCache | null }} [ctx]  now(), loadSample(ad), onNode(kimlik, durum), yieldEvery, cache — hepsi isteğe bağlı
  * @returns {Promise<{ ok: boolean, problems: Problem[], order: string[], nodes: Record<string, NodeResult> }>}
  */
 export async function runWorkflow(wf, catalog, ctx = {}) {
@@ -261,6 +284,12 @@ export async function runWorkflow(wf, catalog, ctx = {}) {
   if (problems.length) return { ok: false, problems, order: [], nodes: {} };
   const now = ctx.now ?? (() => Date.now());
   const order = topologicalOrder(wf);
+  // Web Crypto yoksa (çok eski tarayıcı) önbellek kullanılmaz: her kutu çalışır.
+  const cache = ctx.cache instanceof Map && globalThis.crypto?.subtle ? ctx.cache : null;
+  /** @type {RunCache} */
+  const fresh = new Map();
+  /** @type {Record<string, string>} */
+  const keys = {};
   /** @type {Record<string, NodeResult>} */
   const results = {};
   for (const node of order) {
@@ -271,6 +300,16 @@ export async function runWorkflow(wf, catalog, ctx = {}) {
       results[node.id] = { status: 'atlandı', ms: 0, outputs: {}, info: null, error: `Önceki kutu (${failedParent.from.node}) tamamlanamadı.` };
       ctx.onNode?.(node.id, results[node.id]);
       continue;
+    }
+    if (cache) {
+      keys[node.id] = await cacheKey(node, incoming, keys);
+      const hit = cache.get(keys[node.id]);
+      if (hit) {
+        results[node.id] = { status: 'bitti', ms: 0, outputs: hit.outputs, info: hit.info, error: null, cached: true };
+        fresh.set(keys[node.id], hit);
+        ctx.onNode?.(node.id, results[node.id]);
+        continue;
+      }
     }
     const inputs = {};
     for (const p of comp.inputs) {
@@ -283,12 +322,17 @@ export async function runWorkflow(wf, catalog, ctx = {}) {
       const info = {};
       const outputs = (await comp.run(inputs, node.params ?? {}, { ...ctx, info, node })) ?? {};
       results[node.id] = { status: 'bitti', ms: now() - t0, outputs, info, error: null };
+      if (cache) fresh.set(keys[node.id], { outputs, info });
     } catch (err) {
       results[node.id] = { status: 'hata', ms: now() - t0, outputs: {}, info: null, error: err?.message ?? String(err) };
     }
     ctx.onNode?.(node.id, results[node.id]);
     // Uzun iş akışında arayüze (ya da işçi iş parçacığının ileti kuyruğuna) nefes aldır.
     if (ctx.yieldEvery !== 0) await new Promise((r) => setTimeout(r, 0));
+  }
+  if (cache) {
+    cache.clear();
+    for (const [k, v] of fresh) cache.set(k, v);
   }
   const ok = Object.values(results).every((r) => r.status === 'bitti');
   return { ok, problems: [], order: order.map((n) => n.id), nodes: results };

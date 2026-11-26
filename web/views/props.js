@@ -167,6 +167,8 @@ function workflowView(box) {
     h('p', { class: 'sub', text: `${doc.wf.nodes.length} kutu, ${doc.wf.edges.length} bağlantı · çalıştırma: ${runnerMode() === 'worker' ? 'Web Worker (arayüz donmaz)' : runnerMode()}` }),
     problems.length ? h('div', {}, h('h3', { text: 'Çalıştırmadan önce' }), h('ul', { class: 'problems' }, ...problems.map((p) => h('li', { text: p.message })))) : h('p', { class: 'note', text: doc.wf.nodes.length ? 'İş akışı çalıştırılmaya hazır.' : 'Soldan bir hazır paket seçin ya da bileşenleri tuvale sürükleyin.' }),
     state.lint.length ? h('p', { class: 'sub' }, `Denetim: ${ls.hata} hata, ${ls['uyarı']} uyarı, ${ls.bilgi} bilgi · `, h('button', { type: 'button', class: 'linkish', text: 'Denetim sekmesini aç', onclick: () => act.setTab('denetim') })) : null,
+    h('p', { class: 'sub' }, 'Önbellek: ayarı ve girdisi değişmeyen kutu yeniden çalışmaz; bir ayar değişince yalnızca o kutu ve ondan sonrakiler çalışır. ',
+      h('button', { type: 'button', class: 'linkish', id: 'onbellek-bosalt', text: 'Önbelleği boşalt', onclick: () => act.clearCache() })),
     h('h3', { text: 'Uç türleri' }),
     h('div', { class: 'legend' }, ...TYPE_ORDER.map(chip)),
     h('p', { class: 'sub', style: { marginTop: '6px' }, text: 'Yalnızca aynı türdeki uçlar bağlanır; uyumsuz bağlantı nedeniyle birlikte reddedilir.' }),
