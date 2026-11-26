@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir -p _site
           tar --exclude=./.git --exclude=./.github --exclude=./_site --exclude=./node_modules --exclude=./ornek-agora -cf - . | tar -xf - -C _site
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
