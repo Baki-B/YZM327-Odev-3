@@ -8,7 +8,7 @@
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -119,21 +119,40 @@ const MUTATIONS = [
 const work = mkdtempSync(join(tmpdir(), 'mutasyon-'));
 cpSync(ROOT, work, { recursive: true, filter: (src) => !src.includes('/bench/results') && !src.includes('/.git') });
 
-const run = () => {
-  // Başarısız testlerin çıktısı büyük olabilir: tampon 256 MB. Normal tur ~4 sn sürer;
-  // 90 sn'yi aşan tur sonsuz döngü sayılır ve süreç durdurulur.
-  // (Varsayılan 1 MB tampon aşılınca alt süreçler boruyu açık tutup beklemeyi sonsuza uzatıyordu.)
-  const r = spawnSync(process.execPath, ['--test', '--test-concurrency=2', 'tests/unit/**/*.test.js'], {
-    cwd: work, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, timeout: 90 * 1000, killSignal: 'SIGKILL',
-  });
-  const fail = Number((r.stdout.match(/^# fail (\d+)/m) ?? [])[1] ?? NaN);
-  const pass = Number((r.stdout.match(/^# pass (\d+)/m) ?? [])[1] ?? NaN);
-  const killed = r.status === null;
-  const timedOut = /** @type {NodeJS.ErrnoException | undefined} */ (r.error)?.code === 'ETIMEDOUT';
-  return { code: killed ? -1 : r.status, fail, pass, killed, timedOut, signal: r.signal };
+const LIMIT_MS = 90 * 1000;
+
+/** Bir süreç grubunun tamamını durdurur (grup yoksa sessizce geçer). @param {number} pid */
+const killGroup = (pid) => {
+  try { process.kill(-pid, 'SIGKILL'); } catch { /* grup zaten kapanmış */ }
 };
 
-const baseline = run();
+/**
+ * Birim testlerini geçici kopyada çalıştırır. Normal tur birkaç saniye sürer; 90 sn'yi aşan tur
+ * sonsuz döngü sayılır. Testler ayrı bir süreç grubunda başlar ve tur bitince grubun tamamı
+ * durdurulur: yalnızca ana süreç öldürülürse sonsuz döngüdeki test dosyaları sahipsiz kalıp
+ * sonraki turların işlemcisini yiyordu.
+ * @returns {Promise<{ code: number, fail: number, pass: number, killed: boolean, timedOut: boolean, signal: string | null }>}
+ */
+const run = () => new Promise((resolve, reject) => {
+  const child = spawn(process.execPath, ['--test', '--test-concurrency=2', 'tests/unit/**/*.test.js'], {
+    cwd: work, detached: true, stdio: ['ignore', 'pipe', 'ignore'],
+  });
+  let out = '';
+  child.stdout.setEncoding('utf8').on('data', (d) => { out += d; });
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; killGroup(/** @type {number} */ (child.pid)); }, LIMIT_MS);
+  child.on('error', reject);
+  child.on('close', (status, signal) => {
+    clearTimeout(timer);
+    killGroup(/** @type {number} */ (child.pid));
+    const fail = Number((out.match(/^# fail (\d+)/m) ?? [])[1] ?? NaN);
+    const pass = Number((out.match(/^# pass (\d+)/m) ?? [])[1] ?? NaN);
+    const killed = status === null;
+    resolve({ code: killed ? -1 : status, fail, pass, killed, timedOut, signal });
+  });
+});
+
+const baseline = await run();
 if (baseline.code !== 0) throw new Error(`Değiştirilmemiş kopyada testler geçmiyor: ${JSON.stringify(baseline)}`);
 
 const rows = [];
@@ -142,7 +161,7 @@ for (const mu of MUTATIONS) {
   const original = readFileSync(path, 'utf8');
   if (!original.includes(mu.from)) throw new Error(`${mu.file}: mutasyon yeri bulunamadı: ${mu.from}`);
   writeFileSync(path, original.replace(mu.from, mu.to));
-  const r = run();
+  const r = await run();
   writeFileSync(path, original);
   const how = r.timedOut
     ? 'testler 90 sn içinde bitmedi (sonsuz döngü), süreç durduruldu'

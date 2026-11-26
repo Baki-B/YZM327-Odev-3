@@ -55,6 +55,21 @@ jobs:
       - name: Tür denetimi
         run: npm run tur-denetimi
 
+  mutasyon:
+    name: Mutasyon denetimi (testler bilerek konan hataları yakalıyor mu)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Mutasyon denetimi (yakalanmayan hata varsa kaldı)
+        run: npm run mutation
+      - name: Mutasyon raporu
+        if: always()
+        run: cat docs/mutasyon.md >> "$GITHUB_STEP_SUMMARY"
+
   tarayici:
     name: Tarayıcı denetimleri (arayüz, bağlantı, erişilebilirlik)
     runs-on: ubuntu-latest

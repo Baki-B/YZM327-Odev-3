@@ -35,6 +35,8 @@ geçmişindedir.
 - Site ve sunum sayfalarında İçerik Güvenliği Politikası (CSP); sunumun betiği ayrı dosyada.
 - Mutasyon denetimi 12 hatadan 25 hataya genişledi (geçmiş, tarama, denetim modülleri); ilk turda
   kaçan parmak izi mutasyonu için test güçlendirildi.
+- Mutasyon denetimi CI'da her gönderimde çalışır; yakalanmayan hata varsa iş kalır. Testler ayrı
+  bir süreç grubunda başlar ve tur bitince grubun tamamı durdurulur.
 
 ### Düzeltildi
 - Özellikler panelinde yazarken her tuşta panel yeniden çiziliyor, yalnızca ilk harf kaydediliyor
@@ -43,6 +45,8 @@ geçmişindedir.
 - Erişilebilirlik: soluk yazıların karşıtlık oranı (açık temada 3,74 → 5,56), sekme listesinin
   yapısı, bileşen düğmelerinin ekran okuyucu adı, kayan panellere klavyeyle erişim.
 - `engine.js` ve `race.js`'teki sözdizimi bozuk JSDoc tür yorumları (tür denetimi buldu).
+- Mutasyon denetiminde süre aşımı yalnızca ana test sürecini durduruyordu; sonsuz döngüdeki test
+  dosyası sahipsiz kalıp sonraki turlarda işlemciyi kullanmayı sürdürüyordu.
 
 ### Güvenlik
 - Paylaşılan bağlantıdaki iş akışı metinleri HTML olarak yorumlanmaz (testle gösterildi); CSP

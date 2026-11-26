@@ -100,7 +100,7 @@ Güçlendirme turundan sonra bütün denetimler yeniden çalıştırıldı (say�
 | Birim testleri | `npm test` | 436/436 geçti |
 | Test kapsaması | `npm run kapsama` | satır %99,4 (4 502 / 4 528), dal %90,4 (1 342 / 1 484), işlev %97,4 (480 / 493); eşikler %95 / %85 / %95 |
 | Statik tür denetimi | `npm run tur-denetimi` | 0 hata (ilk ölçümde 138) |
-| Mutasyon denetimi | `npm run mutation` | 25/25 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi) |
+| Mutasyon denetimi | `npm run mutation` | 25/25 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi); CI'da her gönderimde ayrı iş olarak çalışır |
 | Arayüz denetimi (gerçek Chromium) | `node scripts/arayuz-denetimi.js` | 50/50 |
 | Kırık bağlantı | `node scripts/baglanti-denetimi.js` | 18 sayfa, 206 bağlantı, 0 kırık |
 | Erişilebilirlik (WCAG 2.1 AA) | `node scripts/erisilebilirlik-denetimi.js` | 20 taramada 0 ihlal (ilk ölçümde 25 engelleyici) |
