@@ -74,6 +74,8 @@ async function dragBetween(page, a, b) {
 try {
   // ------------------------------------------------------------ 1. hazır paketler = komut satırı
   const page = await newPage({ width: 1280, height: 800 });
+  const blanks = [];
+  let views = 0;
   for (const p of PACKAGES) {
     await page.goto(`${BASE}/web/#paket=${p.id}`, { waitUntil: 'networkidle' });
     await page.reload({ waitUntil: 'networkidle' });
@@ -126,6 +128,17 @@ try {
       const after = await posOf();
       await page.keyboard.press('Control+z');
       const undone = await posOf();
+      const mmHidden = await page.evaluate(() => document.getElementById('mini-harita').classList.contains('empty'));
+      await page.click('#harita-ac');
+      for (let i = 0; i < 4; i++) await page.click('#yaklas');
+      const mmNodes = await page.evaluate(() => document.querySelectorAll('#mini-harita .mm-node').length);
+      const scrollOf = () => page.evaluate(() => `${document.getElementById('tuval').scrollLeft},${document.getElementById('tuval').scrollTop}`);
+      const s0 = await scrollOf();
+      const mm = await page.locator('#mini-harita').boundingBox();
+      await page.mouse.click(mm.x + mm.width - 4, mm.y + mm.height - 4);
+      const s1 = await scrollOf();
+      const pressed = await page.getAttribute('#harita-ac', 'aria-pressed');
+      check('mini harita: kapalıyken gizli; ▦ düğmesiyle her kutu çizili, tıklayınca tuval oraya kayar', mmHidden && pressed === 'true' && mmNodes === 12 && s1 !== s0, `kapalıyken gizli ${mmHidden}; ${mmNodes} kutu; kaydırma ${s0} → ${s1}`);
       check('Düzenle: kablolar soldan sağa; tek Ctrl+Z eski yerleşime döner', leftToRight && after !== before && undone === before, `soldan sağa ${leftToRight}, geri alındı ${undone === before}`);
     }
     if (p.id === 'biyoloji') {
@@ -136,7 +149,18 @@ try {
       const note = await page.textContent('#panel-yaris .note');
       check('Atomları yarıştır: 8 atom ölçüldü, uyarı metni var', rows === 8 && /gösterim amaçlıdır/.test(note), `${rows} satır`);
     }
+    // Özellikler paneli boş değeri yazıya dökmez: DOM'un append'i null'ı "null" metnine çevirir.
+    const blank = /\bnull\b|\bundefined\b/;
+    await page.evaluate(() => document.getElementById('mini-harita').classList.add('empty')); // teknik-borç bloğunda açılan harita kutuları örtmesin
+    if (blank.test(await page.textContent('#props'))) blanks.push(`${p.id}: iş akışı`);
+    for (const id of await page.evaluate(() => window.__atolye.state.wf.nodes.map((n) => n.id))) {
+      await page.click(`#dugumler [data-id="${id}"] .node-head`);
+      views++;
+      if (blank.test(await page.textContent('#props'))) blanks.push(`${p.id}: ${id}`);
+    }
+    views++;
   }
+  check('özellikler paneli "null" / "undefined" yazmaz: her paket, her kutu', blanks.length === 0, blanks.length ? blanks.join(', ') : `${views} görünüm`);
 
   // Karar kaydı ekran görüntüsü (rapor ve README için): tek desen paketi, 16 desenli dalın molekülü seçili
   const desk = await newPage({ width: 1280, height: 800 }, { deviceScaleFactor: 2 });

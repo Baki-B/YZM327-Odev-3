@@ -31,6 +31,7 @@ export function applyZoom() {
   $('kablolar').setAttribute('width', String(w));
   $('kablolar').setAttribute('height', String(hh));
   $('olcek').textContent = `${Math.round(state.zoom * 100)}%`;
+  bus.emit('olcek');
 }
 
 export function setZoom(z) {

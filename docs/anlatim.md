@@ -250,4 +250,4 @@ Her gönderimde GitHub Actions şunları çalıştırır; biri kalırsa gönderi
 | Bağlantı ve sayı denetimi | Kırık bağlantı ya da kaynağı olmayan sayı var mı? |
 | CodeQL ve kendi taramamız | Güvenlik açığı ya da depoya girmiş parola var mı? |
 
-**Mutasyon denetimi bir şey öğretti:** Koda bilerek 25 hata koyduk (sonra arayüz için 4; önbellek, otomatik yerleşim, akış kipi, en uzun eşleşme, .gitignore ve entropi için birer tane daha; toplam 35); ilk turda biri yakalanmadı. Sebep testteydi: iki satırın parmak izinin farklı olduğunu denetliyordu ama satırların metni zaten farklıydı. Testi metni birebir aynı satırlarla güçlendirdik.
+**Mutasyon denetimi bir şey öğretti:** Koda bilerek 25 hata koyduk (sonra arayüz için 4; önbellek, otomatik yerleşim, akış kipi, en uzun eşleşme, .gitignore, entropi ve mini harita için birer tane daha; toplam 36); ilk turda biri yakalanmadı. Sebep testteydi: iki satırın parmak izinin farklı olduğunu denetliyordu ama satırların metni zaten farklıydı. Testi metni birebir aynı satırlarla güçlendirdik.

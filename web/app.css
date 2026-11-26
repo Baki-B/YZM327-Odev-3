@@ -122,6 +122,14 @@ textarea { font-family: var(--mono); font-size: 12.5px; min-height: 96px; resize
 
 /* ------------------------------------------------------------ tuval */
 .canvas-wrap { position: relative; min-width: 0; min-height: 0; background: var(--canvas); overflow: hidden; }
+/* Mini harita: kutular ve görünen alan (fare için; ekran okuyuculardan gizli). Araç çubuğunun
+   üstünde durur: çubuğu genişletmez, çubuk da onu örtmez. */
+.minimap-box { position: absolute; right: 10px; bottom: 56px; z-index: 5; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.minimap-box > .icon-btn { background: var(--bg); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.minimap { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; opacity: .92; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
+.minimap.empty { display: none; }
+.minimap .mm-node { fill: var(--muted); opacity: .55; }
+.minimap .mm-view { fill: var(--accent-soft); fill-opacity: .35; stroke: var(--accent); stroke-width: 1.5; }
 .scroller { position: absolute; inset: 0; overflow: auto; outline: none; }
 .sizer { position: relative; }
 .board { position: absolute; left: 0; top: 0; transform-origin: 0 0;
@@ -291,6 +299,7 @@ table.kisayol td:first-child { white-space: nowrap; }
   .work { grid-template-columns: minmax(0, 1fr) 280px; }
 }
 @media (max-width: 760px) {
+  .minimap-box { display: none; }
   .app { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 100dvh; }
   .only-mobile { display: inline-block; }
   .side { position: fixed; z-index: 60; inset: 0 auto 0 0; width: min(86vw, 310px); transform: translateX(-102%); transition: transform .18s ease; }

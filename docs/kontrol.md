@@ -47,10 +47,10 @@
 | Rapor PDF | yapıldı | `docs/rapor/Rapor.pdf` |
 | Sunum | 10 slayt + konuşma notları; canlı demo atölyede | `docs/sunum/index.html`, `docs/sunum.md`, `docs/anlatim.md` |
 | Site | yapıldı (sayılar sonuç dosyalarından üretilir) | `site/`, `scripts/site-uret.js` |
-| Arayüz (Kod Bilimi Atölyesi) | yapıldı; 54/54 tarayıcı denetimi | `web/`, `scripts/arayuz-denetimi.js` |
+| Arayüz (Kod Bilimi Atölyesi) | yapıldı; 56/56 tarayıcı denetimi | `web/`, `scripts/arayuz-denetimi.js` |
 | UML diyagramları | 10 diyagram (kullanım durumu, 4 sınıf, 4 sıralı, paket) | `docs/uml/` |
 | Depo yapısı (src/functions, src/atomic, src/molecules/ExactMatch.js, src/registry.js, src/shape.js, bin/ios.js, bench/, tests/unit/, tests/benchmarks/) | yapıldı | README "Depo yapısı" |
-| `npm test` temiz kopyada, bağımlılıksız | 504/504 | temiz klonda ve CI'da (Node 22 ve 24) |
+| `npm test` temiz kopyada, bağımlılıksız | 506/506 | temiz klonda ve CI'da (Node 22 ve 24) |
 
 ## Yazılım mühendisliği uygulamaları (ek)
 
@@ -97,11 +97,11 @@ Güçlendirme turundan sonra bütün denetimler yeniden çalıştırıldı (say�
 
 | Denetim | Komut | Sonuç |
 |---|---|---|
-| Birim testleri | `npm test` | 504/504 geçti |
-| Test kapsaması | `npm run kapsama` | satır %99,6 (5 330 / 5 354), dal %91,7 (1 762 / 1 921), işlev %98,0 (596 / 608); eşikler %95 / %85 / %95 |
+| Birim testleri | `npm test` | 506/506 geçti |
+| Test kapsaması | `npm run kapsama` | satır %99,6 (5 365 / 5 389), dal %91,7 (1 766 / 1 925), işlev %98,0 (600 / 612); eşikler %95 / %85 / %95 |
 | Statik tür denetimi | `npm run tur-denetimi` | 0 hata (ilk ölçümde 138); rol arayüzleri için 11 olumsuz kontrol (`tests/types/roller.js`) |
-| Mutasyon denetimi | `npm run mutation` | 35/35 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi; arayüz katmanına 4; önbelleğe, otomatik yerleşime, akış kipine, en uzun eşleşme süzgecine, .gitignore olumsuzlamasına ve entropi süzgecine birer mutasyon eklendi); CI'da her gönderimde ayrı iş olarak çalışır |
-| Arayüz denetimi (gerçek Chromium) | `node scripts/arayuz-denetimi.js` | 54/54 |
+| Mutasyon denetimi | `npm run mutation` | 36/36 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi; arayüz katmanına 4; önbelleğe, otomatik yerleşime, akış kipine, en uzun eşleşme süzgecine, .gitignore olumsuzlamasına, entropi süzgecine ve mini haritaya birer mutasyon eklendi); CI'da her gönderimde ayrı iş olarak çalışır |
+| Arayüz denetimi (gerçek Chromium) | `node scripts/arayuz-denetimi.js` | 56/56 |
 | Kırık bağlantı | `node scripts/baglanti-denetimi.js` | 18 sayfa, 206 bağlantı, 0 kırık |
 | Erişilebilirlik (WCAG 2.1 AA) | `node scripts/erisilebilirlik-denetimi.js` | 20 taramada 0 ihlal (ilk ölçümde 25 engelleyici) |
 | Belgelerdeki sayılar | `node scripts/sayi-denetimi.js` | kaynaksız sayı yok; hedefli iddiaların hepsi tutarlı |
@@ -113,7 +113,7 @@ Teslim öncesi bütün iş yeniden denetlendi. Sonuçlar:
 
 | Denetim | Sonuç |
 |---|---|
-| `npm test` | 328/328 geçti |
+| `npm test` | 506/506 geçti |
 | Bağımsız rastgele karşılaştırma (projenin test yardımcıları ve NaiveSearch kullanılmadan, ayrı bir kaba kuvvet aramasıyla): 4 tohum, 39 000 vaka, 16 alfabe (Unicode, vekil çift, NUL, Türkçe harfler dahil), çok kayıt, ignoreCase, metinden uzun / tekrar eden desen, iç içe tüketilen üreteçler | ~795 000 karşılaştırma, **0 fark** |
 | Büyük ve kötü huylu girdiler (2·10⁶ eşleşme, en kötü durum desenleri, k = 20 000, m = 5 000, 3·10⁶ karakter × 5 000 desen, 3 000 farklı CJK karakteri) | bütün atomlar NaiveSearch ile aynı |
 | Komut satırı: `run`, `explain`, `scan` (4 hazır küme, `--json`, `--fail`), `list`, hata kodları; lambda'da sonuç Python ile ayrıca sayıldı (GATC 116 + GGATCC 5 = 121) | doğru |

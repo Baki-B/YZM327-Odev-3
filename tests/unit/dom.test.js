@@ -3,7 +3,7 @@
 import { test, describe, mock, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom } from '../helpers/fake-dom.js';
-import { $, h, s, toast, download, isTyping, isMobile, isMac } from '../../web/lib/dom.js';
+import { $, append, h, s, toast, download, isTyping, isMobile, isMac } from '../../web/lib/dom.js';
 
 let dom;
 afterEach(() => dom?.restore());
@@ -35,6 +35,16 @@ describe('web/lib/dom.js: h() öğe kurma', () => {
     const el = h('p', {}, 'a', [h('b', { text: 'b' }), null, 'c', false], undefined, 7);
     assert.deepEqual(Array.from(el.childNodes, (n) => n.textContent), ['a', 'b', 'c', '7']);
     assert.equal(el.children.length, 1);
+  });
+
+  test('append: var olan öğeye aynı kuralla ekler (paneldeki "null" yazısı hatası)', () => {
+    // DOM'un kendi append'i null'ı "null" metnine çevirir: özellikler panelinde yardım metni
+    // olmayan kutu, paketsiz iş akışı ve boş denetim listesi böyle "null" yazıyordu.
+    const box = h('div', {}, 'önce');
+    const same = append(box, null, h('i', { text: 'x' }), undefined, false, ['y', null], 0);
+    assert.equal(same, box);
+    assert.deepEqual(Array.from(box.childNodes, (n) => n.textContent), ['önce', 'x', 'y', '0']);
+    assert.ok(!box.textContent.includes('null') && !box.textContent.includes('undefined'));
   });
 
   test('metin hiçbir zaman HTML olarak yorumlanmaz (innerHTML kullanılmaz)', () => {

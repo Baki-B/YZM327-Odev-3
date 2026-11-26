@@ -1,6 +1,6 @@
 {
-  "total": 54,
-  "passed": 54,
+  "total": 56,
+  "passed": 56,
   "checks": [
     {
       "name": "paket teknik-borc: atölye = komut satırı",
@@ -39,6 +39,10 @@
       "ok": true
     },
     {
+      "name": "mini harita: kapalıyken gizli; ▦ düğmesiyle her kutu çizili, tıklayınca tuval oraya kayar",
+      "ok": true
+    },
+    {
       "name": "Düzenle: kablolar soldan sağa; tek Ctrl+Z eski yerleşime döner",
       "ok": true
     },
@@ -48,6 +52,10 @@
     },
     {
       "name": "Atomları yarıştır: 8 atom ölçüldü, uyarı metni var",
+      "ok": true
+    },
+    {
+      "name": "özellikler paneli \"null\" / \"undefined\" yazmaz: her paket, her kutu",
       "ok": true
     },
     {

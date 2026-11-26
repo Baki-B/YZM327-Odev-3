@@ -35,6 +35,8 @@ geçmişindedir.
   `XXXX-XXXX`); detect-secrets ve gitleaks'teki entropi denetimi.
 - **Akış kipi** (`src/stream.js`): büyük metin parça parça aranır; (m − 1) karakterlik örtüşmeyle
   sınırdaki eşleşme kaçmaz, sıra bütün metni aramakla aynı (özellik tabanlı test).
+- **Mini harita** (atölye, ▦ düğmesi): bütün tuvalin küçültülmüş görünümü ve görünen alan; tıklanan yer
+  ortaya gelir. Varsayılan kapalı, telefonda gösterilmez.
 - **Otomatik yerleşim** (atölye, "Düzenle"): katmanlı çizim (en uzun yol, barycenter sıralaması,
   kesişen kablo sayısıyla seçim); bütün taşımalar tek adımda geri alınır.
 - **Görünüm modelleri** (`web/lib/view-models.js`): arayüzün ekrana yazdığı metin, sıra ve oranlar
@@ -54,12 +56,15 @@ geçmişindedir.
 - Site ve sunum sayfalarında İçerik Güvenliği Politikası (CSP); sunumun betiği ayrı dosyada.
 - Mutasyon denetimi 12 hatadan 25 hataya genişledi (geçmiş, tarama, denetim modülleri); ilk turda
   kaçan parmak izi mutasyonu için test güçlendirildi. Sonra arayüz katmanından 4; önbellekten, otomatik
-  yerleşimden, akış kipinden, en uzun eşleşme süzgecinden, `.gitignore` olumsuzlamasından ve entropi süzgecinden birer
-  hata eklendi (toplam 35; biri metni `innerHTML` ile yazarak XSS açığı açar).
+  yerleşimden, akış kipinden, en uzun eşleşme süzgecinden, `.gitignore` olumsuzlamasından, entropi süzgecinden ve mini haritadan
+  birer hata eklendi (toplam 36; biri metni `innerHTML` ile yazarak XSS açığı açar).
 - Mutasyon denetimi CI'da her gönderimde çalışır; yakalanmayan hata varsa iş kalır. Testler ayrı
   bir süreç grubunda başlar ve tur bitince grubun tamamı durdurulur.
 
 ### Düzeltildi
+- Özellikler panelinde boş değerler "null" yazısı olarak görünüyordu (yardım metni olmayan kutu,
+  paketsiz iş akışı, boş denetim listesi): DOM'un `append`'i `null`'ı metne çevirir. Yeni `append`
+  yardımcısı (`web/lib/dom.js`) bunları atlar; arayüz denetimi her paketin her kutusunda paneli denetler.
 - Özellikler panelinde yazarken her tuşta panel yeniden çiziliyor, yalnızca ilk harf kaydediliyor
   ve odak kayboluyordu.
 - Eklenen kutuya gecikmeli verilen odak, kullanıcının o arada seçtiği uçtan odağı çalabiliyordu.

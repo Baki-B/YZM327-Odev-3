@@ -18,7 +18,7 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 | langflow-ai/langflow | 156 938 | akışı JSON olarak dışa / içe aktarma | `Dışa aktar` / `İçe aktar`, paylaşılabilir bağlantı | zaten vardı |
 | Comfy-Org/ComfyUI | 148 591 | iş akışı dosyasını tuvale bırakarak açma, tarayıcıda otomatik kayıt, yalnızca değişen kutuları yeniden çalıştırma | tuvale JSON bırakma, otomatik kayıt, yalnızca değişen kutuları yeniden çalıştıran önbellek | alındı |
 | FlowiseAI/Flowise | 55 595 | görsel akış + aynı akışı bir API'den çalıştırma | aynı iş akışı tarayıcıda ve `ios workflow run` ile CI'da | alındı |
-| xyflow/xyflow | 39 154 | bağlantı doğrulama kancası, klavye erişilebilirliği, mini harita | türlü uçlar ve nedenli red, klavyeyle ekleme / bağlama / taşıma, WCAG 2.1 AA denetimi | alındı (mini harita: gelecek iş) |
+| xyflow/xyflow | 39 154 | bağlantı doğrulama kancası, klavye erişilebilirliği, mini harita | türlü uçlar ve nedenli red, klavyeyle ekleme / bağlama / taşıma, WCAG 2.1 AA denetimi; sonradan mini harita | alındı |
 | node-red/node-red | 23 878 | kutunun altında çalışma durumu, panodan içe / dışa aktarma, bilgi kenar çubuğu | kutu alt bilgisinde durum ve süre, pano, özellikler panelinde yardım ve manifest | zaten vardı + pano alındı |
 | RaspberryPiFoundation/blockly | 13 621 | tür denetimli bağlantılar, kategorili araç kutusu | uç türleri (Source.File, FASTA.Entry...), kategorili palet | zaten vardı |
 | retejs/rete | 12 323 | eklentiyle geçmiş (geri al / yinele), otomatik yerleşim | geçmiş çekirdeğe alındı (DOM'suz, test edilir); otomatik yerleşim ("Düzenle", katmanlı çizim) | alındı |

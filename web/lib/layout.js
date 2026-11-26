@@ -7,7 +7,7 @@
 //      aşağı ve yukarı birkaç süpürmeden kesişen kablosu en az olan sıra seçilir.
 //   3. Konum: sütunlar soldan sağa, kutular yukarıdan aşağıya; sütunlar dikeyde ortalanır ve
 //      ızgaraya oturtulur.
-import { NODE_W, nodeHeight, snap } from './geometry.js';
+import { NODE_W, boardSize, nodeHeight, snap } from './geometry.js';
 import { topologicalOrder } from '../../src/workflows/engine.js';
 
 /** @typedef {import('../../src/contracts.js').Workflow} Workflow */
@@ -121,3 +121,26 @@ export function layeredLayout(wf, compOf, { x0 = 40, y0 = 40, gapX = 70, gapY = 
   });
   return out;
 }
+
+/**
+ * Mini harita: tuvalin (kaydırılabilir alanın tamamı) küçültülmüş görünümü. Kutular ve görünen
+ * alan aynı ölçekle küçülür; ölçek mini haritaya sığacak en büyük değerdir.
+ * @param {Workflow} wf
+ * @param {(n: WorkflowNode) => Component} compOf
+ * @param {{ left: number, top: number, width: number, height: number }} view  görünen alan (tuval koordinatı)
+ * @param {{ width: number, height: number }} size  mini haritanın boyutu (px)
+ */
+export function minimapModel(wf, compOf, view, size) {
+  const board = boardSize(wf.nodes, compOf);
+  const worldW = Math.max(board.w, view.left + view.width);
+  const worldH = Math.max(board.h, view.top + view.height);
+  const scale = Math.min(size.width / worldW, size.height / worldH);
+  return {
+    scale,
+    nodes: wf.nodes.map((n) => ({ id: n.id, category: compOf(n).category, x: n.x * scale, y: n.y * scale, w: NODE_W * scale, h: nodeHeight(compOf(n)) * scale })),
+    view: { x: view.left * scale, y: view.top * scale, w: view.width * scale, h: view.height * scale },
+  };
+}
+
+/** Mini haritadaki bir noktanın tuvaldeki karşılığı. @param {{ x: number, y: number }} point */
+export const minimapToBoard = (point, model) => ({ x: point.x / model.scale, y: point.y / model.scale });

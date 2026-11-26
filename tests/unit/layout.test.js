@@ -3,8 +3,8 @@
 // bir yerleşimde kesişen kablo sayısı azalır.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { layeredLayout, edgeCrossings } from '../../web/lib/layout.js';
-import { NODE_W, GRID, nodeHeight } from '../../web/lib/geometry.js';
+import { layeredLayout, edgeCrossings, minimapModel, minimapToBoard } from '../../web/lib/layout.js';
+import { NODE_W, GRID, nodeHeight, boardSize } from '../../web/lib/geometry.js';
 import { createCatalog } from '../../src/workflows/catalog.js';
 import { createWorkflow, addNode, connect, deserializeWorkflow } from '../../src/workflows/engine.js';
 import { PACKAGES, packageById } from '../../src/workflows/packages.js';
@@ -60,6 +60,20 @@ describe('otomatik yerleşim', () => {
       const after = edgeCrossings(wf, compOf, layeredLayout(wf, compOf));
       assert.deepEqual([before, after], expected, id);
     }
+  });
+
+  test('mini harita: tuval sığar, kutular ve görünen alan aynı ölçekle; tıklanan nokta tuvale çevrilir', () => {
+    const wf = build('teknik-borc');
+    const size = { width: 180, height: 120 };
+    const m = minimapModel(wf, compOf, { left: 100, top: 50, width: 600, height: 400 }, size);
+    const { w, h } = boardSize(wf.nodes, compOf);
+    assert.equal(m.scale, Math.min(180 / w, 120 / h));
+    assert.equal(m.nodes.length, wf.nodes.length);
+    for (const n of m.nodes) assert.ok(n.x >= 0 && n.y >= 0 && n.x + n.w <= 180 + 1e-9 && n.y + n.h <= 120 + 1e-9, n.id);
+    assert.deepEqual(m.view, { x: 100 * m.scale, y: 50 * m.scale, w: 600 * m.scale, h: 400 * m.scale });
+    assert.deepEqual(minimapToBoard({ x: 90, y: 60 }, m), { x: 90 / m.scale, y: 60 / m.scale });
+    const wide = minimapModel(wf, compOf, { left: 0, top: 0, width: 5000, height: 300 }, size);
+    assert.ok(wide.view.w <= 180 + 1e-9, 'görünen alan tuvalden genişse harita ona göre küçülür');
   });
 
   test('boş iş akışı, tek kutu ve birbirine bağlı olmayan iki kol', () => {

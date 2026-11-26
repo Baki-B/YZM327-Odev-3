@@ -138,6 +138,10 @@ const MUTATIONS = [
     file: "src/scan/entropy.js", what: "Entropi süzgeci açılış tırnağını atlamaz (tırnaklı her değer boş sayılır, gerçek anahtar da atılır)",
     from: "  if (QUOTES.has(text[i])) i++;", to: "  if (false) i++;",
   },
+  {
+    file: "web/lib/layout.js", what: "Mini harita büyük ölçeği seçer (tuvalin bir kısmı haritanın dışında kalır)",
+    from: "  const scale = Math.min(size.width / worldW, size.height / worldH);", to: "  const scale = Math.max(size.width / worldW, size.height / worldH);",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

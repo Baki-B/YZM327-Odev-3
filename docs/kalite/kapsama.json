@@ -11,23 +11,23 @@
     "functions": 95
   },
   "tests": {
-    "pass": 504,
+    "pass": 506,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 5330,
-      "all": 5354,
+      "hit": 5365,
+      "all": 5389,
       "pct": 99.6
     },
     "branches": {
-      "hit": 1762,
-      "all": 1921,
+      "hit": 1766,
+      "all": 1925,
       "pct": 91.7
     },
     "functions": {
-      "hit": 596,
-      "all": 608,
+      "hit": 600,
+      "all": 612,
       "pct": 98
     }
   },
@@ -386,7 +386,7 @@
     {
       "file": "web/lib/dom.js",
       "lines": 100,
-      "branches": 95.2,
+      "branches": 95.3,
       "functions": 100,
       "uncoveredLines": 0
     },
@@ -407,7 +407,7 @@
     {
       "file": "web/lib/layout.js",
       "lines": 100,
-      "branches": 95.2,
+      "branches": 95.4,
       "functions": 100,
       "uncoveredLines": 0
     },

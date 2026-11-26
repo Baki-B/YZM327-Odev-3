@@ -96,7 +96,7 @@ node bin/ios.js scan --preset banned-api ornek-agora/forum
 8. **Atomlarda hazır `indexOf` kullanmadığınızı nasıl biliyoruz?**
    `forbidden.test.js` kaynak dosyaları tarıyor: indexOf, includes, RegExp, `.test(`, console, Node modülü, saat, rastgelelik. Taramanın kötü örnekleri gerçekten yakaladığını da ayrı bir test gösteriyor.
 9. **Testleriniz gerçekten hata yakalıyor mu?**
-   Mutasyon denetimi: koda 35 küçük hata yerleştirdik (kaymayı bir artırmak, `<` yerine `<=`, geri al yığınını unutmak, metni `innerHTML` ile yazmak vb.). İlk turda biri yakalanmadı; sebep testteydi, güçlendirdik ve hepsi yakalandı (`docs/mutasyon.md`, ilk tur: `docs/kalite/mutasyon-ilk-tur.md`).
+   Mutasyon denetimi: koda 36 küçük hata yerleştirdik (kaymayı bir artırmak, `<` yerine `<=`, geri al yığınını unutmak, metni `innerHTML` ile yazmak vb.). İlk turda biri yakalanmadı; sebep testteydi, güçlendirdik ve hepsi yakalandı (`docs/mutasyon.md`, ilk tur: `docs/kalite/mutasyon-ilk-tur.md`).
 10. **Atölye algoritmaları kopyalıyor mu?**
     Hayır. `web/` doğrudan `../src/` altındaki kayıt defterini, molekülü ve uyarlayıcıları içe aktarıyor. İş akışı motoru (`src/workflows/engine.js`) DOM'suz ve `node:test` ile test ediliyor. Altı hazır paketin her birinde atölyenin bulgu sayısı komut satırınınkiyle aynı (`npm run paketler`, `scripts/arayuz-denetimi.js`).
 11. **Uyumsuz bağlantı nasıl engelleniyor?**

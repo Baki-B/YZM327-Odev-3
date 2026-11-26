@@ -2,7 +2,7 @@
 // iş akışının genel durumu. Ayarlar denetleyici üzerinden (geri alınabilir komutlarla) değişir.
 import { state, catalog, doc, compOf, nodeById } from '../state.js';
 import { bus } from '../lib/bus.js';
-import { $, h, isMac } from '../lib/dom.js';
+import { $, append, h, isMac } from '../lib/dom.js';
 import { nf, fmtMs, catClass, tyClass } from '../lib/format.js';
 import { SHORTCUTS, keyLabel } from '../lib/shortcuts.js';
 import { TYPES } from '../../src/workflows/catalog.js';
@@ -124,7 +124,7 @@ function nodeView(box, node) {
   const comp = compOf(node);
   const r = state.run && !state.dirty ? state.run.nodes[node.id] : null;
   const race = state.race;
-  box.append(
+  append(box,
     h('h2', {}, h('span', { class: catClass(comp.category), 'aria-hidden': 'true' }, h('span', { class: 'node-ico', text: comp.icon ?? '•' })), comp.title),
     h('p', { class: 'sub', text: `${comp.category} · kimlik: ${node.id}${comp.subtitle ? ' · ' + comp.subtitle : ''}` }),
     comp.help ? h('p', { class: 'note', text: comp.help }) : null);
@@ -161,7 +161,7 @@ function nodeView(box, node) {
 function workflowView(box) {
   const problems = validateWorkflow(doc.wf, catalog);
   const ls = lintSummary(state.lint);
-  box.append(
+  append(box,
     h('h2', { text: 'İş akışı' }),
     packageInfo(),
     h('p', { class: 'sub', text: `${doc.wf.nodes.length} kutu, ${doc.wf.edges.length} bağlantı · çalıştırma: ${runnerMode() === 'worker' ? 'Web Worker (arayüz donmaz)' : runnerMode()}` }),

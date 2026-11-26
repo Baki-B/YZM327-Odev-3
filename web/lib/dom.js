@@ -20,6 +20,18 @@ export function h(tag, attrs = {}, ...kids) {
     else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
     else el.setAttribute(k, v === true ? '' : v);
   }
+  return append(el, ...kids);
+}
+
+/**
+ * Çocukları ekler; null, undefined ve false atlanır (DOM'un kendi append'i bunları "null" yazısına
+ * çevirir), diziler bir düzey açılır, düz değerler metin olur (hiçbir zaman HTML değil).
+ * @template {Element} E
+ * @param {E} el
+ * @param {...any} kids
+ * @returns {E}
+ */
+export function append(el, ...kids) {
   for (const kid of kids.flat()) if (kid !== null && kid !== undefined && kid !== false) el.append(kid.nodeType ? kid : String(kid));
   return el;
 }
