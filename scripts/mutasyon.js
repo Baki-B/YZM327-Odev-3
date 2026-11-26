@@ -114,6 +114,23 @@ const MUTATIONS = [
     file: "src/workflows/CodeScan.js", what: "Satır içi bastırma varsayılan olarak kapalı",
     from: "strategy = 'auto', inlineIgnore = true,", to: "strategy = 'auto', inlineIgnore = false,",
   },
+  // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
+  {
+    file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",
+    from: "const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');", to: "const gate = false;",
+  },
+  {
+    file: "web/lib/view-models.js", what: "Atom yarışı tablosu ölçülen süreye göre sıralanmaz",
+    from: "const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);", to: "const rows = [...rc.rows];",
+  },
+  {
+    file: "web/lib/view-models.js", what: "Klavyeyle bağlama türü uymayan girişleri de önerir",
+    from: "if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {", to: "if (true) {",
+  },
+  {
+    file: "web/lib/dom.js", what: "Metin textContent yerine innerHTML ile yazılır (XSS açığı)",
+    from: "else if (k === 'text') el.textContent = v;", to: "else if (k === 'text') el.innerHTML = v;",
+  },
 ];
 
 const work = mkdtempSync(join(tmpdir(), 'mutasyon-'));

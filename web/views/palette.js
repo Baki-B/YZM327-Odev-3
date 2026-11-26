@@ -3,6 +3,7 @@ import { state, catalog } from '../state.js';
 import { bus } from '../lib/bus.js';
 import { $, h, isMobile } from '../lib/dom.js';
 import { PACKAGES } from '../../src/workflows/packages.js';
+import { normalizeQuery, paletteGroups, paletteItem } from '../lib/view-models.js';
 import * as act from '../actions.js';
 
 export function renderPackages() {
@@ -12,36 +13,26 @@ export function renderPackages() {
       h('span', { class: 'hash', 'aria-hidden': 'true', text: '#' }), p.channel))));
 }
 
-/** Arama metni bir bileşene uyuyor mu? (ad, açıklama, kategori, tür, uç türleri) */
-export function matchesQuery(c, q) {
-  if (!q) return true;
-  return [c.title, c.subtitle, c.badge, c.category, c.help, c.type, ...c.inputs.map((p) => p.type), ...c.outputs.map((p) => p.type)]
-    .filter(Boolean).join(' ').toLocaleLowerCase('tr-TR').includes(q);
-}
-
 export function renderPalette() {
-  const q = /** @type {HTMLInputElement} */ ($('ara')).value.trim().toLocaleLowerCase('tr-TR');
+  const q = normalizeQuery(/** @type {HTMLInputElement} */ ($('ara')).value);
   const box = $('palet');
   box.replaceChildren();
   let shown = 0;
-  for (const cat of catalog.categories) {
-    const items = [...catalog.values()].filter((c) => c.category === cat && matchesQuery(c, q));
-    if (!items.length) continue;
+  for (const { category: cat, items } of paletteGroups(catalog, q)) {
     shown += items.length;
     const det = h('details', { class: 'cat', open: true },
       h('summary', {}, cat, h('span', { class: 'count', text: String(items.length) })),
-      ...items.map((c) => h('button', {
+      ...items.map((c) => ({ c, v: paletteItem(c) })).map(({ c, v }) => h('button', {
         type: 'button', class: 'pal-item', draggable: 'true', 'data-type': c.type,
-        title: `${c.help ?? ''}\nGiriş: ${c.inputs.map((p) => p.type).join(', ') || '—'} · Çıkış: ${c.outputs.map((p) => p.type).join(', ') || '—'}`,
-        // Ekran okuyucu adı görünen yazıyla (ad + rozet) başlar, sonra ne yapılacağını söyler (WCAG 2.5.3).
-        'aria-label': `${[c.title, c.badge ?? c.subtitle ?? (c.outputs[0]?.type ?? '')].filter(Boolean).join(' ')}: tuvale ekle (${c.category})`,
+        title: v.title,
+        'aria-label': v.ariaLabel,
         onclick: () => { act.addComponent(c.type); if (isMobile()) openSide(false); },
         ondragstart: (e) => {
           e.dataTransfer.setData('application/x-kba-type', c.type);
           e.dataTransfer.setData('text/plain', c.type);
           e.dataTransfer.effectAllowed = 'copy';
         },
-      }, h('span', { class: 'ico', 'aria-hidden': 'true', text: c.icon ?? '•' }), h('span', { class: 't', text: c.title }), ' ', h('span', { class: 'b', text: c.badge ?? c.subtitle ?? (c.outputs[0]?.type ?? '') }))));
+      }, h('span', { class: 'ico', 'aria-hidden': 'true', text: c.icon ?? '•' }), h('span', { class: 't', text: c.title }), ' ', h('span', { class: 'b', text: v.badge }))));
     box.append(det);
   }
   $('ara-bos').hidden = shown > 0;

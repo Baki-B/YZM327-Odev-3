@@ -2,11 +2,11 @@
 
 Koda bilerek küçük hatalar yerleştirildi; her biri projenin geçici bir kopyasında tek başına uygulanıp bütün birim testleri çalıştırıldı. Bir mutasyon, en az bir test başarısız olursa ya da testler sonsuz döngü yüzünden bitmezse "yakalandı" sayılır.
 
-Değiştirilmemiş kopyada: 436 test geçti, 0 başarısız. Sonuç: **25 mutasyonun 25 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
+Değiştirilmemiş kopyada: 468 test geçti, 0 başarısız. Sonuç: **29 mutasyonun 29 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
 
 | # | Dosya | Yerleştirilen hata | Değişiklik | Yakalandı mı | Nasıl |
 |---:|---|---|---|---|---|
-| 1 | `src/functions/horspool.js` | Horspool kayması bir fazla (m − i) | `shift[p[i]] = m - 1 - i;` → `shift[p[i]] = m - i;` | evet | 48 test başarısız |
+| 1 | `src/functions/horspool.js` | Horspool kayması bir fazla (m − i) | `shift[p[i]] = m - 1 - i;` → `shift[p[i]] = m - i;` | evet | 49 test başarısız |
 | 2 | `src/functions/kmp.js` | KMP uyuşmazlıkta sınırı unutur (q = 0) | `while (q > 0 && p[q] !== c) q = fail[q - 1];` → `while (q > 0 && p[q] !== c) q = 0;` | evet | 10 test başarısız |
 | 3 | `src/functions/bm4dnaDs.js` | bm4DNADS sentinel denetiminde < yerine <= (j > n) | `if (j >= n) return;` → `if (j > n) return;` | evet | testler 90 sn içinde bitmedi (sonsuz döngü), süreç durduruldu |
 | 4 | `src/functions/bm4dnaHmbs.js` | bm4DNAHMbs desende olmayan q-gram için m kadar kayar (ödevin ipucu hatası) | `const dflt = m - q + 1;` → `const dflt = m;` | evet | 34 test başarısız |
@@ -27,7 +27,11 @@ Değiştirilmemiş kopyada: 436 test geçti, 0 başarısız. Sonuç: **25 mutasy
 | 19 | `src/scan/report.js` | Gizli bilgi değeri maskelenmez | `  return after.slice(0, i) + MASK + after.slice(j);` → `  return after;` | evet | 3 test başarısız |
 | 20 | `src/scan/report.js` | Aynı metinli iki satır aynı parmak izini alır (sıra numarası artmaz) | `    seen.set(base, k + 1);` → `    seen.set(base, k);` | evet | 1 test başarısız |
 | 21 | `src/scan/report.js` | SARIF'te önem düzeyi her zaman "warning" | `      level: LEVEL[f.severity ?? rule?.severity] ?? 'warning',` → `      level: 'warning',` | evet | 1 test başarısız |
-| 22 | `src/workflows/engine.js` | Tür denetimi kapalı: uyumsuz uçlar bağlanır | `  if (out.type !== inp.type) {` → `  if (false) {` | evet | 4 test başarısız |
+| 22 | `src/workflows/engine.js` | Tür denetimi kapalı: uyumsuz uçlar bağlanır | `  if (out.type !== inp.type) {` → `  if (false) {` | evet | 5 test başarısız |
 | 23 | `src/contracts.js` | Rol denetimi selection.features işlevini aramaz | `      if (!isFn(s.features)) out.push('selection.features bir işlev olmalı');` → `      // features denetimi unutuldu` | evet | 2 test başarısız |
 | 24 | `web/lib/geometry.js` | Sığdırma telefonda da masaüstü alt sınırını kullanır (yazılar okunmaz) | `  return Math.max(mobile ? 0.7 : 0.45, z);` → `  return Math.max(0.45, z);` | evet | 1 test başarısız |
 | 25 | `src/workflows/CodeScan.js` | Satır içi bastırma varsayılan olarak kapalı | `strategy = 'auto', inlineIgnore = true,` → `strategy = 'auto', inlineIgnore = false,` | evet | 3 test başarısız |
+| 26 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
+| 27 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
+| 28 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
+| 29 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |

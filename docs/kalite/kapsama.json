@@ -11,27 +11,27 @@
     "functions": 95
   },
   "tests": {
-    "pass": 436,
+    "pass": 468,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 4536,
-      "all": 4562,
-      "pct": 99.4
+      "hit": 4862,
+      "all": 4886,
+      "pct": 99.5
     },
     "branches": {
-      "hit": 1342,
-      "all": 1484,
-      "pct": 90.4
+      "hit": 1548,
+      "all": 1702,
+      "pct": 91
     },
     "functions": {
-      "hit": 480,
-      "all": 493,
-      "pct": 97.4
+      "hit": 539,
+      "all": 551,
+      "pct": 97.8
     }
   },
-  "files": 51,
+  "files": 53,
   "perFile": [
     {
       "file": "src/molecules/costModel.js",
@@ -60,13 +60,6 @@
       "branches": 94.1,
       "functions": 100,
       "uncoveredLines": 3
-    },
-    {
-      "file": "src/workflows/packages.js",
-      "lines": 98.7,
-      "branches": 100,
-      "functions": 93.8,
-      "uncoveredLines": 2
     },
     {
       "file": "bin/ios.js",
@@ -335,6 +328,13 @@
       "uncoveredLines": 0
     },
     {
+      "file": "src/workflows/packages.js",
+      "lines": 100,
+      "branches": 95,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
       "file": "src/workflows/presets.js",
       "lines": 100,
       "branches": 100,
@@ -370,6 +370,13 @@
       "uncoveredLines": 0
     },
     {
+      "file": "web/lib/dom.js",
+      "lines": 100,
+      "branches": 95.2,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
       "file": "web/lib/format.js",
       "lines": 100,
       "branches": 100,
@@ -387,6 +394,13 @@
       "file": "web/lib/shortcuts.js",
       "lines": 100,
       "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "web/lib/view-models.js",
+      "lines": 100,
+      "branches": 94.8,
       "functions": 100,
       "uncoveredLines": 0
     }

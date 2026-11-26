@@ -6,14 +6,14 @@ import { $, h, isMac } from '../lib/dom.js';
 import { nf, fmtMs, catClass, tyClass } from '../lib/format.js';
 import { SHORTCUTS, keyLabel } from '../lib/shortcuts.js';
 import { TYPES } from '../../src/workflows/catalog.js';
-import { canConnect, validateWorkflow } from '../../src/workflows/engine.js';
+import { validateWorkflow } from '../../src/workflows/engine.js';
 import { packageById } from '../../src/workflows/packages.js';
 import { lintSummary } from '../../src/workflows/lint.js';
 import { runnerMode } from '../runner.js';
+import { connectionItems, connectOptions, decisionModel, expectedText } from '../lib/view-models.js';
 import * as act from '../actions.js';
 
 const TYPE_ORDER = ['Source.File', 'FASTA.Entry', 'Pattern.Set', 'Sequence.Match', 'Finding'];
-const EXPECTED_LABELS = { bulgu: 'molekül dalı', bulgu_atom: 'tek atom dalı', tek_bulgu: 'tek desen dalı', cok_bulgu: '16 desen dalı' };
 
 export function chip(type) {
   return h('span', { class: 'chip', title: TYPES[type] ?? '' }, h('i', { class: tyClass(type) }), type);
@@ -74,23 +74,10 @@ function paramField(node, p) {
 
 function connectionsOf(node) {
   const comp = compOf(node);
-  const items = doc.wf.edges.filter((e) => e.from.node === node.id || e.to.node === node.id).map((e) => {
-    const other = e.from.node === node.id ? nodeById(e.to.node) : nodeById(e.from.node);
-    const dir = e.from.node === node.id ? `→ ${compOf(other).title} (${e.to.port})` : `← ${compOf(other).title} (${e.from.port})`;
-    return h('li', {}, h('span', { text: dir }), h('button', { type: 'button', text: 'sil', 'aria-label': `Bağlantıyı sil: ${dir}`, onclick: () => act.removeEdge(e) }));
-  });
+  const items = connectionItems(doc.wf, node, compOf).map(({ edge, label }) =>
+    h('li', {}, h('span', { text: label }), h('button', { type: 'button', text: 'sil', 'aria-label': `Bağlantıyı sil: ${label}`, onclick: () => act.removeEdge(edge) })));
   // Klavyeyle bağlantı: bu kutunun bir çıkışından uyumlu bir girişe
-  const options = [];
-  for (const out of comp.outputs) {
-    for (const other of doc.wf.nodes) {
-      if (other.id === node.id) continue;
-      for (const inp of compOf(other).inputs) {
-        if (canConnect(doc.wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {
-          options.push({ value: JSON.stringify([out.name, other.id, inp.name]), label: `${out.label ?? out.name} → ${compOf(other).title} · ${inp.label ?? inp.name}` });
-        }
-      }
-    }
-  }
+  const options = connectOptions(doc.wf, catalog, node, compOf);
   const sel = /** @type {HTMLSelectElement} */ (h('select', { id: 'bagla-sec', 'aria-label': 'Bağlanacak giriş' }, ...options.map((o) => h('option', { value: o.value, text: o.label }))));
   return h('div', {},
     items.length ? h('ul', { class: 'conn-list' }, ...items) : h('p', { class: 'sub', text: 'Bağlantı yok.' }),
@@ -106,23 +93,17 @@ function connectionsOf(node) {
 }
 
 function recordView(rec, info) {
-  const est = Object.entries(rec.estimates ?? {});
-  const ok = est.filter(([, e]) => e.applicable).sort((a, b) => a[1].ms - b[1].ms);
-  const na = est.filter(([, e]) => !e.applicable);
-  const max = Math.max(...ok.map(([, e]) => e.ms), 1e-9);
-  const sh = rec.shape ?? {};
+  const m = decisionModel(rec);
   return h('div', {},
     h('h3', { text: 'Karar kaydı (record)' }),
-    h('p', {}, 'Seçilen atom: ', h('b', { text: rec.selected }), rec.requested !== 'auto' ? ` (istenen: ${rec.requested})` : ''),
-    h('dl', { class: 'kv' },
-      ...[['n (ilk kayıt)', sh.n], ['σ', sh.sigma], ['σe (etkin)', sh.sigmaEff], ['k', sh.k], ['mMin / mMax', `${sh.mMin} / ${sh.mMax}`], ['mMean', sh.mMean], ['örneklendi', sh.sampled ? 'evet (64 × 256 karakter)' : 'hayır (tam sayım)']]
-        .flatMap(([k, v]) => [h('dt', { text: k }), h('dd', { text: String(v) })])),
+    h('p', {}, 'Seçilen atom: ', h('b', { text: rec.selected }), m.requested),
+    h('dl', { class: 'kv' }, ...m.shape.flatMap(([k, v]) => [h('dt', { text: k }), h('dd', { text: v })])),
     h('h3', { text: 'Atomların tahmini süresi' }),
-    h('div', { class: 'bars', role: 'list' }, ...ok.map(([name, e]) => h('div', { class: `bar${name === rec.selected ? ' selected' : ''}`, role: 'listitem', title: `${name}: ${e.ms} ms (tahmin)` },
-      h('span', { class: 'n', text: name.replace('Search', '') }),
-      h('span', { class: 'track' }, h('span', { class: 'fill', style: { width: `${(e.ms / max) * 100}%` } })),
-      h('span', { class: 'v', text: `${nf(e.ms, 3)} ms` }))),
-    ...na.map(([name, e]) => h('div', { class: 'bar na', role: 'listitem' }, h('span', { class: 'n', text: name.replace('Search', '') }), h('span', { class: 'sub', text: `uygun değil: ${e.reason}` }), h('span')))),
+    h('div', { class: 'bars', role: 'list' }, ...m.bars.map((b) => h('div', { class: `bar${b.selected ? ' selected' : ''}`, role: 'listitem', title: b.title },
+      h('span', { class: 'n', text: b.short }),
+      h('span', { class: 'track' }, h('span', { class: 'fill', style: { width: `${b.width}%` } })),
+      h('span', { class: 'v', text: b.value }))),
+    ...m.unfit.map((u) => h('div', { class: 'bar na', role: 'listitem' }, h('span', { class: 'n', text: u.short }), h('span', { class: 'sub', text: u.reason }), h('span')))),
     h('h3', { text: 'Neden' }),
     h('p', { class: 'why', text: rec.why }),
     info?.searchMs != null ? h('p', { class: 'sub', text: `Karar + arama bu tarayıcıda ${fmtMs(info.searchMs)} sürdü; ${nf(info.count, 0)} eşleşme.` }) : null);
@@ -131,8 +112,7 @@ function recordView(rec, info) {
 function packageInfo() {
   const p = state.pkg && packageById(state.pkg);
   if (!p) return null;
-  const keys = Object.keys(p.expected);
-  const expected = keys.length === 1 ? `${nf(p.expected[keys[0]], 0)} bulgu` : keys.map((k) => `${EXPECTED_LABELS[k] ?? k}: ${nf(p.expected[k], 0)}`).join(' · ');
+  const expected = expectedText(p.expected);
   return h('section', { class: 'pkg', 'aria-label': 'Hazır paket' },
     h('h3', { text: `Paket: # ${p.channel}` }),
     h('p', { text: p.summary }),

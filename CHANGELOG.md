@@ -22,6 +22,8 @@ geçmişindedir.
   (yalnızca yeni bulgular), gizli bilgi değerlerinin maskelenmesi; kural kimliği, önem ve CWE.
 - **`ios workflow run|lint|explain|diagram`**: atölyede kurulan iş akışı tarayıcısız (CI'da).
 - Atölyede **SARIF indir** kutusu; "Eşleşme → Bulgu" kutusunda bastırma ve tam sözcük ayarları.
+- **Görünüm modelleri** (`web/lib/view-models.js`): arayüzün ekrana yazdığı metin, sıra ve oranlar
+  DOM'suz işlevlerde, birim testli; öğe kurma yardımcıları elle yazılmış sahte bir DOM'la sınanır.
 - **Rol arayüzleri** (`src/contracts.js`): Describable, Searcher, SelectionProvider, WorkflowComponent.
   Derleme anında da zorunlu: atomun nesne tarafı `@implements`, statik tarafı türlü yerleşik liste;
   `tests/types/roller.js`'teki olumsuz kontroller bozuk bileşenin derleme hatası verdiğini gösterir.
@@ -36,7 +38,8 @@ geçmişindedir.
 - Kayıt defteri ve katalog sözleşmeyi rol denetimiyle uygular; eksik üye adıyla söylenir.
 - Site ve sunum sayfalarında İçerik Güvenliği Politikası (CSP); sunumun betiği ayrı dosyada.
 - Mutasyon denetimi 12 hatadan 25 hataya genişledi (geçmiş, tarama, denetim modülleri); ilk turda
-  kaçan parmak izi mutasyonu için test güçlendirildi.
+  kaçan parmak izi mutasyonu için test güçlendirildi. Sonra arayüz katmanından 4 hata eklendi
+  (toplam 29; biri metni `innerHTML` ile yazarak XSS açığı açar).
 - Mutasyon denetimi CI'da her gönderimde çalışır; yakalanmayan hata varsa iş kalır. Testler ayrı
   bir süreç grubunda başlar ve tur bitince grubun tamamı durdurulur.
 

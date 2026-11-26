@@ -136,7 +136,7 @@ for (const [file, html] of DOCS) {
   const claims = [
     ['rapor: bm4DNAHMbs mutasyonunda düşen test', rapor, `Mutasyonla sınandı: ${failCount(4)} test başarısız`],
     // Türkçe ek sayıya göre değişir (12'si, 25'i): ek ne olursa olsun sayı doğru olmalı.
-    ['rapor: yakalanan mutasyon', rapor, new RegExp(`\\b${caught}'(?:i|ı|u|ü|si|sı|su|sü) de yakalandı`)],
+    ['rapor: yakalanan mutasyon', rapor, new RegExp(`\\b${caught}'(?:i|ı|u|ü|si|sı|su|sü) d[ae] yakalandı`)],
     ['rapor: yerleştirilen mutasyon', rapor, `koda ${mutRows.length} küçük hata yerleştirdi`],
     ['rapor: kapsama', rapor, `kapsama satır %${tr(kap.lines.pct, 1)} / dal %${tr(kap.branches.pct, 1)}`],
     ['README: kapsama', readme, `kapsama satır %${tr(kap.lines.pct, 1)} / dal %${tr(kap.branches.pct, 1)} / işlev %${tr(kap.functions.pct, 1)}`],

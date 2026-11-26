@@ -6,40 +6,17 @@ import { bus } from '../lib/bus.js';
 import { $, h, s, isMobile } from '../lib/dom.js';
 import { fmtMs, catClass, tyClass } from '../lib/format.js';
 import { NODE_W, HEAD, PAD, ROW, GRID, nodeHeight, portPos as portPosOf, edgePath, boardSize, fitZoom, clampZoom, snap } from '../lib/geometry.js';
-import { SAMPLES, parsePatternList } from '../../src/workflows/catalog.js';
 import { canConnect } from '../../src/workflows/engine.js';
+import { nodeFooterText, strongestLint } from '../lib/view-models.js';
 import * as act from '../actions.js';
 
 const portPos = (node, side, name) => portPosOf(compOf(node), node, side, name);
 const drag = { temp: null };
-const LINT_RANK = { hata: 3, 'uyarı': 2, bilgi: 1 };
-
 /** Kutunun en önemli denetim bulgusu (kutu çerçevesinde işaret). */
-function lintOf(id) {
-  let best = null;
-  for (const f of state.lint) if (f.node === id && (!best || LINT_RANK[f.level] > LINT_RANK[best.level])) best = f;
-  return best;
-}
+const lintOf = (id) => strongestLint(state.lint, id);
 
-export function nodeFooter(node) {
-  const r = runOf(node.id);
-  if (r) {
-    if (r.status === 'çalışıyor') return 'çalışıyor…';
-    if (r.status === 'bitti') return `${fmtMs(r.ms)} · ${r.summary ?? r.info?.summary ?? ''}`;
-    return `${r.status}: ${r.error ?? ''}`;
-  }
-  const c = compOf(node);
-  const p = node.params ?? {};
-  switch (node.type) {
-    case 'kaynak.ornek': return SAMPLES[p.sample]?.title ?? p.sample;
-    case 'kaynak.kod': case 'kaynak.log': case 'kaynak.fasta': return `${p.path} · ${String(p.text ?? '').length} karakter`;
-    case 'kaynak.dosyalar': return `${(p.files ?? []).length} dosya`;
-    case 'desen.ozel': return `${parsePatternList(p.patterns).length} desen${p.ignoreCase ? ' · ignoreCase' : ''}`;
-    case 'molekul.ExactMatch': return `strateji: ${p.strategy}`;
-    case 'cikti.jsonl': case 'cikti.sarif': return p.filename;
-    default: return c.badge ?? c.subtitle ?? '';
-  }
-}
+/** Kutunun alt satırı (süre ve özet ya da ayarlarının özeti). */
+export const nodeFooter = (node) => nodeFooterText(node, compOf(node), runOf(node.id));
 
 // ------------------------------------------------------------------ yakınlaştırma
 export function applyZoom() {
