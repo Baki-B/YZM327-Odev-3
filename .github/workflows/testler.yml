@@ -1,21 +1,93 @@
+# Sürekli entegrasyon (CI): her gönderimde ve pull request'te çalışan kalite kapıları.
+# Bir iş başarısız olursa GitHub gönderimi kırmızıyla işaretler. Proje bağımlılıksızdır;
+# denetim araçları (TypeScript, Playwright, axe-core) yalnızca burada geçici kurulur.
 name: Testler
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  testler:
+  birim:
+    name: Birim testleri (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22
-      - name: Birim testleri
+          node-version: ${{ matrix.node }}
+      - name: Birim testleri (npm test)
         run: npm test
       - name: Hazır paketler = komut satırı
         run: node scripts/paketler.js
+
+  kapsama:
+    name: Test kapsaması (eşik)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Kapsama (satır %95, dal %85, işlev %95 altına düşerse kaldı)
+        run: npm run kapsama
+      - name: Kapsama raporu
+        run: cat docs/kalite/kapsama.md >> "$GITHUB_STEP_SUMMARY"
+
+  tur:
+    name: Statik tür denetimi (tsc --checkJs)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: TypeScript denetleyicisi (geçici kurulum)
+        run: npm install --no-save --no-package-lock typescript@6.0.3 @types/node@22
+      - name: Tür denetimi
+        run: npm run tur-denetimi
+
+  tarayici:
+    name: Tarayıcı denetimleri (arayüz, bağlantı, erişilebilirlik)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Playwright ve axe-core (geçici kurulum)
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0 axe-core@4.14.1
+          npx playwright install --with-deps chromium
+      - name: Arayüz denetimi (gerçek Chromium)
+        run: node scripts/arayuz-denetimi.js
+      - name: Kırık bağlantı denetimi
+        run: node scripts/baglanti-denetimi.js
+      - name: Erişilebilirlik denetimi (WCAG 2.1 AA)
+        run: node scripts/erisilebilirlik-denetimi.js
+      - name: Ekran görüntüleri
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekran-goruntuleri
+          path: docs/ekran/*.png
+          retention-days: 14
+
+  belgeler:
+    name: Belgelerdeki sayılar kaynaklı mı
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Sayı denetimi
+        run: node scripts/sayi-denetimi.js

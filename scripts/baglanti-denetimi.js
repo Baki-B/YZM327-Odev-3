@@ -1,6 +1,7 @@
 // Site, slaytlar ve atölyedeki bütün göreli bağlantıları (href, src, data) yerel sunucudan ister;
 // 200 dönmeyeni listeler. Kullanım (proje kökünden): node scripts/baglanti-denetimi.js
 import { spawn } from 'node:child_process';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const VIZE = fileURLToPath(new URL('..', import.meta.url));
@@ -44,6 +45,8 @@ try {
 } finally {
   server.kill();
 }
+mkdirSync(new URL('../docs/kalite/', import.meta.url), { recursive: true });
+writeFileSync(new URL('../docs/kalite/baglanti-denetimi.json', import.meta.url), JSON.stringify({ pages, links, broken: broken.length }, null, 2) + '\n');
 console.log(`${pages} sayfa, ${links} bağlantı denetlendi; kırık: ${broken.length}`);
 for (const b of broken) console.log('  ' + b);
 process.exitCode = broken.length ? 1 : 0;

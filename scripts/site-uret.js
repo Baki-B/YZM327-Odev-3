@@ -1,6 +1,7 @@
 // Proje sitesini (site/) ve sunum slaytlarını (docs/sunum/index.html) ölçüm dosyalarından üretir: bütün sayılar bench/results/*.json'dan
 // okunur, elle yazılmaz. Sayfalar statik ve bağımlılıksızdır; göreli yollarla çalışır.
-//   site/index.html, bilesenler.html, bilesen/<Ad>.html, sonuclar.html, rapor.html, ekip.html
+//   site/index.html, bilesenler.html, bilesen/<Ad>.html, sonuclar.html, kalite.html, rapor.html, ekip.html
+//   Kalite sayfasının sayıları docs/kalite/*.json'dan (denetim betiklerinin yazdığı sonuçlar) gelir.
 // Kullanım (proje kökünden): node scripts/site-uret.js
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { registry } from '../src/registry.js';
@@ -25,7 +26,57 @@ const int = (x) => String(Math.round(x)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const ms = (x) => (x < 1 ? dec(x, 3) : dec(x, 2));
 
 const LOGO = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#fff" opacity=".16"/><path d="M9 11h6M9 16h10M9 21h6" stroke="#f2c14e" stroke-width="3" stroke-linecap="round"/><circle cx="23" cy="21" r="3" fill="#36c2b4"/></svg>';
-const NAV = [['index.html', 'Ana sayfa'], ['../web/index.html', 'Atölye'], ['bilesenler.html', 'Bileşenler'], ['sonuclar.html', 'Sonuçlar'], ['rapor.html', 'Rapor'], ['ekip.html', 'Ekip']];
+const NAV = [['index.html', 'Ana sayfa'], ['../web/index.html', 'Atölye'], ['bilesenler.html', 'Bileşenler'], ['sonuclar.html', 'Sonuçlar'], ['kalite.html', 'Kalite'], ['rapor.html', 'Rapor'], ['ekip.html', 'Ekip']];
+
+const SLIDE_CSS = String.raw`  :root { --ink: #1d1c1f; --ink2: #55535a; --line: #e4e1e6; --soft: #f6f5f8; --accent: #127c86; --accent-soft: #e2f3f4; --head: #3b1239; --warn-soft: #fff5dd; --warn: #8a5a00; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #26092a; font-family: "Inter", "Segoe UI", system-ui, Arial, sans-serif; color: var(--ink); }
+.deck { height: 100%; display: grid; place-items: center; }
+section { display: none; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; background: #fff; padding: 3.6% 5.5%; position: relative; overflow: hidden; font-size: min(2.2vw, 3.9vh); line-height: 1.4; }
+section.on { display: block; }
+section::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1.1%; background: var(--head); }
+h1 { font-size: 2.5em; margin: 18% 0 .3em; letter-spacing: -.02em; color: var(--head); }
+h2 { font-size: 1.55em; margin: 0 0 .6em; color: var(--head); letter-spacing: -.01em; }
+h3 { font-size: 1em; margin: .2em 0; color: var(--accent); }
+.big { font-size: 1.15em; max-width: 85%; }
+.muted { color: var(--ink2); font-size: .8em; }
+ul, ol { margin: .2em 0; padding-left: 1.2em; } li { margin: .25em 0; }
+code { font-family: "JetBrains Mono", Consolas, monospace; font-size: .85em; background: var(--soft); padding: 0 .2em; border-radius: 3px; }
+.two { display: grid; grid-template-columns: 1.25fr 1fr; gap: 4%; align-items: start; }
+.two ol, .two ul { font-size: .9em; }
+.two img { width: 100%; border: 1px solid var(--line); border-radius: 8px; }
+.table-wrap { margin: .3em 0 .5em; }
+table { border-collapse: collapse; width: 100%; font-size: .78em; }
+th, td { text-align: left; padding: .28em .5em; border-bottom: 1px solid var(--line); }
+th { color: var(--ink2); font-weight: 600; } td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.hl td { background: var(--accent-soft); font-weight: 700; } tr.e2e td { background: var(--soft); }
+.ph { background: var(--warn-soft); color: var(--warn); padding: 0 .2em; border-radius: 3px; }
+.num { position: absolute; right: 2.5%; bottom: 3%; font-size: .6em; color: var(--ink2); }
+.help { position: fixed; left: 10px; bottom: 8px; color: #d9c6d8; font-size: 12px; }
+@media print {
+  @page { size: 297mm 167mm; margin: 0; }
+  html, body { background: #fff; height: auto; } .deck { display: block; } .help { display: none; }
+  section { display: block !important; width: 297mm; height: 167mm; aspect-ratio: auto; font-size: 15pt; page-break-after: always; break-after: page; }
+}
+`;
+const SLIDE_JS = String.raw`// Sunum: ok tuşları, boşluk, Page Up/Down, Home/End; slayt numarası adres çubuğunda (#3). P: yazdır.
+const s = [...document.querySelectorAll('section')];
+let i = Math.min(s.length - 1, Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
+const show = (j) => { i = Math.min(s.length - 1, Math.max(0, j)); s.forEach((x, k) => x.classList.toggle('on', k === i)); history.replaceState(null, '', '#' + (i + 1)); };
+show(i);
+addEventListener('keydown', (e) => {
+  if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+  else if (e.key === 'Home') show(0); else if (e.key === 'End') show(s.length - 1);
+  else if (e.key === 'p' || e.key === 'P') print();
+});
+addEventListener('click', (e) => { if (!e.target.closest('a')) show(e.clientX > innerWidth / 3 ? i + 1 : i - 1); });
+`;
+
+// İçerik Güvenliği Politikası: site sayfalarında hiç betik yok; yalnızca kendi stil dosyası ve görselleri.
+const CSP_SITE = "default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'";
+// Sunum: betik ve stil ayrı dosyalarda (docs/sunum/sunum.js, sunum.css); satır içi kod yok.
+const CSP_SLIDES = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'";
 
 function page(file, title, body, { depth = 0, description = '' } = {}) {
   const up = '../'.repeat(depth);
@@ -37,6 +88,7 @@ function page(file, title, body, { depth = 0, description = '' } = {}) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description || 'Akıllı tam desen eşleştirme: IoS atomları, seçici molekül ve yazılım mühendisliği için Kod Bilimi Atölyesi.')}">
+<meta http-equiv="Content-Security-Policy" content="${CSP_SITE}">
 <link rel="stylesheet" href="${up}site.css">
 </head>
 <body>
@@ -277,6 +329,8 @@ const rapor = `
 <li><a href="../docs/anlatim.md">Her dosyanın sade anlatımı</a></li>
 <li><a href="../docs/kontrol.md">Ödev kontrol listesi</a></li>
 <li><a href="../KARARLAR.md">Kararlar</a></li>
+<li><a href="../docs/benzer-projeler.md">Benzer projeler ve aldıklarımız</a></li>
+<li><a href="../CHANGELOG.md">Değişiklik günlüğü</a></li>
 </ul>`;
 writeFileSync(new URL('rapor.html', SITE), page('rapor.html', 'Rapor · Kod Bilimi Atölyesi', rapor));
 
@@ -292,7 +346,58 @@ ${table(['Üye', 'Numara', 'Katkı'], [
 <p>Ders politikası yapay zekâ kullanımını serbest bırakıyor. Kod, testler, ölçüm betikleri, atölye, site, sunum ve rapor bir yapay zekâ kodlama aracıyla (Claude Code) üretildi; bütün sayılar çalıştırılan komutların çıktısından alındı. Sunumda her bölümün anlatılabilmesi için <a href="../docs/anlatim.md">docs/anlatim.md</a> hazırlandı.</p>`;
 writeFileSync(new URL('ekip.html', SITE), page('ekip.html', 'Ekip · Kod Bilimi Atölyesi', ekip));
 
-console.log(`site/: ${6 + atoms.length} sayfa yazıldı (model ${coefficients.model}; D ${SETS.D.data.cases.length} vaka, E ${SETS.E.data.cases.length} vaka)`);
+// ------------------------------------------------------------------ kalite sayfası
+const KQ = new URL('docs/kalite/', VIZE);
+const kq = (name) => JSON.parse(readFileSync(new URL(name, KQ), 'utf8'));
+const kap = kq('kapsama.json');
+const tur = kq('tur-denetimi.json');
+const ara = kq('arayuz-denetimi.json');
+const eri = kq('erisilebilirlik.json');
+const bag = kq('baglanti-denetimi.json');
+const eriOnce = Number(readFileSync(new URL('erisilebilirlik-oncesi.md', KQ), 'utf8').match(/engelleyici \(kritik \+ ciddi\) ihlal: (\d+)/)[1]);
+const mut = readFileSync(new URL('docs/mutasyon.md', VIZE), 'utf8').match(/\*\*(\d+) mutasyonun (\d+) tanesi yakalandı\.\*\*/);
+const gh = kq('github-arastirma.json');
+const star = (name) => int(gh.depolar.find((d) => d.full_name === name).stars);
+const kp = (k) => `%${dec(kap.totals[k].pct, 1)}`;
+const kalite = `
+<h1>Kalite güvencesi</h1>
+<p class="lead">Her gönderimde GitHub Actions'ta çalışan kalite kapıları (quality gates). Aşağıdaki sayılar denetim betiklerinin yazdığı <code>docs/kalite/*.json</code> dosyalarından üretildi.</p>
+<div class="kpis">
+<div class="kpi"><b>${kap.tests.pass}</b><span>birim testi (Node 22 ve 24)</span></div>
+<div class="kpi"><b>${kp('lines')}</b><span>satır kapsaması (dal ${kp('branches')})</span></div>
+<div class="kpi"><b>${tur.errors}</b><span>tür hatası (ilk ölçümde ${tur.before})</span></div>
+<div class="kpi"><b>${eri.blocking}</b><span>erişilebilirlik ihlali (ilk ölçümde ${eriOnce})</span></div>
+</div>
+<h2>Kapılar</h2>
+${table(['Kapı', 'Araç', 'Sonuç', 'Ne yakalar'], [
+    { cells: ['Birim testleri', '<code>node:test</code>, Node 22 ve 24', `${kap.tests.pass} test, ${kap.tests.fail} başarısız`, 'sözleşme, oracle, özellik tabanlı (rastgele) testler, kural örnek dosyaları'] },
+    { cells: ['Test kapsaması', 'Node yerleşik ölçümü', `satır ${kp('lines')}, dal ${kp('branches')}, işlev ${kp('functions')} (eşik %${kap.thresholds.lines} / %${kap.thresholds.branches} / %${kap.thresholds.functions})`, 'test edilmeyen kod'] },
+    { cells: ['Statik tür denetimi', `TypeScript ${tur.typescript} (<code>--checkJs</code>)`, `${tur.errors} hata (ilk ölçümde ${tur.before})`, 'yanlış alan adı, eksik argüman, bozuk JSDoc'] },
+    { cells: ['Mutasyon denetimi', '<code>npm run mutation</code>', `${mut[2]} / ${mut[1]} yakalandı`, 'testin gerçekten hata yakalayıp yakalamadığı'] },
+    { cells: ['Arayüz denetimi', 'Playwright + Chromium', `${ara.passed} / ${ara.total}`, 'altı paket = komut satırı, geri al, XSS, CSP, 390 px'] },
+    { cells: ['Erişilebilirlik', `axe-core ${eri.axe}, WCAG 2.1 AA`, `${eri.pages} taramada ${eri.blocking} engelleyici ihlal`, 'karşıtlık, ekran okuyucu adları, klavye'] },
+    { cells: ['Bağlantılar', 'yerel sunucu', `${bag.broken} kırık`, 'site, sunum ve atölyede kırık bağlantı'] },
+    { cells: ['Belgelerdeki sayılar', '<code>scripts/sayi-denetimi.js</code>', 'kaynaksız sayı yok', 'uydurma ya da eski sayı'] },
+    { cells: ['Güvenlik', 'CodeQL + kendi taramamız (SARIF)', 'CI’da', 'XSS, enjeksiyon; depoya girmiş gizli bilgi'] },
+  ])}
+<h2>Tasarım ilkeleri ve desenler</h2>
+${table(['İlke / desen', 'Nerede', 'Kanıt'], [
+    { cells: ['Tek sorumluluk (S)', 'çekirdek, atom, molekül, motor, tarama ve arayüz ayrı modüllerde; arayüz durum, denetleyici, görünüm ve olay yolu olarak bölündü', '<code>web.test.js</code>: her dosya 450 satırın altında'] },
+    { cells: ['Açık/Kapalı (O)', 'molekülde, katalogda, denetimde atom ya da bileşen adı geçmez', 'sahte atom molekül değişmeden seçilir'] },
+    { cells: ['Yerine geçebilme (L)', 'her atom aynı sözleşmeyle', 'sözleşme ve oracle testleri her atoma aynen'] },
+    { cells: ['Arayüz ayrımı (I)', 'Describable, Searcher, SelectionProvider, WorkflowComponent rolleri', '<code>contracts.test.js</code>'] },
+    { cells: ['Bağımlılığın tersine çevrilmesi (D)', 'kayıt defteri, katalog, örnek veri yükleyicisi dışarıdan', 'testlerde sahte atom ve yükleyici'] },
+    { cells: ['Command + Composite', 'geri al / yinele, birleşik komut', 'özellik tabanlı test (4 tohum × 400 işlem)'] },
+    { cells: ['Observer, Facade', 'olay yolu; denetleyicinin tek kapısı', 'denetleyici görünümleri içe aktarmaz (testle)'] },
+    { cells: ['Template Method, Strategy, Registry, Adapter', 'atom iskeleti, atomlar, kayıt defteri, kaynak → FASTA', 'Şekil 4, 5 (rapor)'] },
+  ])}
+<h2>Benzer projeler ve aldıklarımız</h2>
+<p>GitHub'da en çok yıldız alan ilgili projeler incelendi. Örnekler: n8n (${star('n8n-io/n8n')} yıldız: geri al / yinele, iş akışını komut satırından çalıştırma), ripgrep (${star('BurntSushi/ripgrep')}: tam sözcük), gitleaks (${star('gitleaks/gitleaks')}: satır içi bastırma, taban çizgisi, maskeleme, SARIF), semgrep (${star('semgrep/semgrep')}: kural kimliği ve işaretli örnek dosyalarla kural testi), Snakemake (${star('snakemake/snakemake')}: diyagram, rapor, lint). Tablonun tamamı: <a href="../docs/benzer-projeler.md">docs/benzer-projeler.md</a>.</p>`;
+writeFileSync(new URL('kalite.html', SITE), page('kalite.html', 'Kalite · Kod Bilimi Atölyesi', kalite, { description: 'Kalite güvencesi: testler, kapsama, tür denetimi, mutasyon, erişilebilirlik, güvenlik ve benzer projeler.' }));
+
+
+
+console.log(`site/: ${7 + atoms.length} sayfa yazıldı (model ${coefficients.model}; D ${SETS.D.data.cases.length} vaka, E ${SETS.E.data.cases.length} vaka)`);
 
 // ------------------------------------------------------------------ sunum (docs/sunum/index.html)
 // Slaytlar da aynı ölçüm dosyalarından üretilir; ok tuşlarıyla ilerler, PDF'ye yazdırılabilir.
@@ -312,7 +417,7 @@ console.log(`site/: ${6 + atoms.length} sayfa yazıldı (model ${coefficients.mo
     `<h2>CANLI: atölye</h2><div class="two"><img src="../ekran/atolye-masaustu.png" alt="Atölye ekran görüntüsü"><ol><li><code>npm run web</code> → <code>/web/</code></li><li>Sol panel: <b># tek-desen-büyük-dosya</b></li><li><b>Tarayıcıda çalıştır</b> → rozet: bulgu sayısı ve süre</li><li>ExactMatch kutusu → karar kaydı: tek desende Horspool ailesi (bm4DNADS), 16 desende Aho-Corasick</li><li><b>Açıkla</b> → iş akışı düz Türkçe</li><li>Yedek: <b># gizli-bilgi-sızıntısı</b> (kapı kaldı)</li></ol></div>`,
     `<h2>Doğrulama (taze D, v4, ${SETS.D.data.cases.length} vaka)</h2>${mini(D, [AUTO, E2E, bestD[0], 'her zaman AhoCorasickSearch', 'Allmer 2016 kuralı'])}<p class="muted">Tek desen (E): seçilen ${f3(E[AUTO].geomeanSlowdown)}, uçtan uca ${f3(E[E2E].geomeanSlowdown)}; Allmer ${f3(E['Allmer 2016 kuralı'].geomeanSlowdown)}, hep Horspool ${f3(E['her zaman HorspoolSearch'].geomeanSlowdown)}.</p>`,
     `<h2>Bir yanlış seçim: D, vaka ${w.id}</h2><p>${w.alphabet === 'text' ? 'İngilizce benzeri metin (kalibrasyonda yok)' : w.alphabet}, n = ${int(w.n)}, k = ${w.k}, m = ${w.lengths.join('/')}</p>${table(['Atom', { t: 'Tahmin (ms)', n: 1 }, { t: 'Ölçülen (ms)', n: 1 }], [w.selected, w.best].map((n) => ({ cells: [n.replace('Search', '') + (n === w.selected ? ' (seçilen)' : ' (en hızlı)'), ms(est(n)), ms(tm(n))] })))}<ul><li>Yavaşlama ${wx(tm(w.selected) / w.bestMs)}: iki tahmin <b>ters yönde</b> yanıldı (${dec(tm(w.selected) / est(w.selected), 2)}× az, ${dec(est(w.best) / tm(w.best), 2)}× fazla).</li><li>Model metni tekdüze rastgele sayar. Olası neden: kelimelerden oluşan metinde sık q-gramlar desende de geçer, q-gram kayması öngörülenden kısa kalır; Wu-Manber'in blok tablosu ise bu metinde öngörülenden seyrek doğrulama yapar. (Doğrulamadan sonra model değiştirilmedi.)</li></ul>`,
-    `<h2>Sınırlar</h2><ul><li><b>Tek desen</b>: seçim zayıf; uçtan uca molekül hep Horspool / Allmer kuralının gerisinde (E)</li><li><b>İkili alfabe</b>: E'nin en kötü 5 vakasının 5'i</li><li><b>Karar ilk kayda göre</b> (sözleşme): ilk dosya küçükse seçim kötü olabilir</li><li><b>Ölçüm</b>: D'de uçtan uca oran 1'in altına düştü (medyan ${f3(overheadD)}) → düzenek küçük farkı ayıramıyor; karar süresi ayrıca ölçüldü (medyan ${pct(KD.ratio)})</li><li>v3 ve v4 farklı makinelerde ölçüldü; fark ayrıştırılamaz</li></ul>`,
+    `<h2>Sınırlar</h2><ul><li><b>Tek desen</b>: seçim zayıf; uçtan uca molekül hep Horspool / Allmer kuralının gerisinde (E)</li><li><b>İkili alfabe</b>: E'nin en kötü 5 vakasının 5'i</li><li><b>Karar ilk kayda göre</b> (sözleşme): ilk dosya küçükse seçim kötü olabilir</li><li><b>Ölçüm</b>: D'de uçtan uca oran 1'in altına düştü (medyan ${f3(overheadD)}) → düzenek küçük farkı ayıramıyor; karar süresi ayrıca ölçüldü (medyan ${pct(KD.ratio)})</li><li>v3 ve v4 farklı makinelerde ölçüldü; fark ayrıştırılamaz</li></ul><p class="muted">Kalite kapıları (her gönderimde): ${kap.tests.pass} test, kapsama satır ${kp('lines')}, tür hatası ${tur.errors}, WCAG 2.1 AA ihlali ${eri.blocking}, mutasyon ${mut[2]}/${mut[1]}.</p>`,
     `<h2>Ekip ve katkılar</h2>${table(['Üye', 'Katkı'], [{ cells: ['Baki <span class="ph">[soyad, numara]</span>', '<span class="ph">[...]</span>'] }, { cells: ['<span class="ph">[Üye 2 ad soyad, numara]</span>', '<span class="ph">[...]</span>'] }])}<p class="muted">Yapay zekâ kullanımı ders politikasında serbest; kod, testler, atölye, site, rapor ve bu slaytlar Claude Code ile üretildi, sayılar çalıştırılan komutlardan. Sorular: <code>docs/sunum.md</code>.</p><p class="muted">Kod: <b>github.com/Baki-B/YZM327-Odev-3</b> · Site: <b>baki-b.github.io/YZM327-Odev-3</b></p>`,
   ];
   const html = `<!doctype html>
@@ -321,62 +426,21 @@ console.log(`site/: ${6 + atoms.length} sayfa yazıldı (model ${coefficients.mo
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kod Bilimi Atölyesi · Sunum</title>
-<style>
-  :root { --ink: #1d1c1f; --ink2: #55535a; --line: #e4e1e6; --soft: #f6f5f8; --accent: #127c86; --accent-soft: #e2f3f4; --head: #3b1239; --warn-soft: #fff5dd; --warn: #8a5a00; }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: #26092a; font-family: "Inter", "Segoe UI", system-ui, Arial, sans-serif; color: var(--ink); }
-  .deck { height: 100%; display: grid; place-items: center; }
-  section { display: none; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; background: #fff; padding: 3.6% 5.5%; position: relative; overflow: hidden; font-size: min(2.2vw, 3.9vh); line-height: 1.4; }
-  section.on { display: block; }
-  section::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1.1%; background: var(--head); }
-  h1 { font-size: 2.5em; margin: 18% 0 .3em; letter-spacing: -.02em; color: var(--head); }
-  h2 { font-size: 1.55em; margin: 0 0 .6em; color: var(--head); letter-spacing: -.01em; }
-  h3 { font-size: 1em; margin: .2em 0; color: var(--accent); }
-  .big { font-size: 1.15em; max-width: 85%; }
-  .muted { color: var(--ink2); font-size: .8em; }
-  ul, ol { margin: .2em 0; padding-left: 1.2em; } li { margin: .25em 0; }
-  code { font-family: "JetBrains Mono", Consolas, monospace; font-size: .85em; background: var(--soft); padding: 0 .2em; border-radius: 3px; }
-  .two { display: grid; grid-template-columns: 1.25fr 1fr; gap: 4%; align-items: start; }
-  .two ol, .two ul { font-size: .9em; }
-  .two img { width: 100%; border: 1px solid var(--line); border-radius: 8px; }
-  .table-wrap { margin: .3em 0 .5em; }
-  table { border-collapse: collapse; width: 100%; font-size: .78em; }
-  th, td { text-align: left; padding: .28em .5em; border-bottom: 1px solid var(--line); }
-  th { color: var(--ink2); font-weight: 600; } td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
-  tr.hl td { background: var(--accent-soft); font-weight: 700; } tr.e2e td { background: var(--soft); }
-  .ph { background: var(--warn-soft); color: var(--warn); padding: 0 .2em; border-radius: 3px; }
-  .num { position: absolute; right: 2.5%; bottom: 3%; font-size: .6em; color: var(--ink2); }
-  .help { position: fixed; left: 10px; bottom: 8px; color: #d9c6d8; font-size: 12px; }
-  @media print {
-    @page { size: 297mm 167mm; margin: 0; }
-    html, body { background: #fff; height: auto; } .deck { display: block; } .help { display: none; }
-    section { display: block !important; width: 297mm; height: 167mm; aspect-ratio: auto; font-size: 15pt; page-break-after: always; break-after: page; }
-  }
-</style>
+<meta http-equiv="Content-Security-Policy" content="${CSP_SLIDES}">
+<link rel="stylesheet" href="sunum.css">
 </head>
 <body>
 <div class="deck">
 ${slides.map((s, i) => `<section aria-label="Slayt ${i + 1}"${i === 0 ? ' class="on"' : ''}>${s}<span class="num">${i + 1} / ${slides.length}</span></section>`).join('\n')}
 </div>
 <p class="help">← → ya da boşluk: ilerle · Home/End · P: yazdır (PDF)</p>
-<script>
-  // Ok tuşları, boşluk, Page Up/Down, Home/End; slayt numarası adres çubuğunda (#3).
-  const s = [...document.querySelectorAll('section')];
-  let i = Math.min(s.length - 1, Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
-  const show = (j) => { i = Math.min(s.length - 1, Math.max(0, j)); s.forEach((x, k) => x.classList.toggle('on', k === i)); history.replaceState(null, '', '#' + (i + 1)); };
-  show(i);
-  addEventListener('keydown', (e) => {
-    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
-    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
-    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(s.length - 1);
-    else if (e.key === 'p' || e.key === 'P') print();
-  });
-  addEventListener('click', (e) => { if (!e.target.closest('a')) show(e.clientX > innerWidth / 3 ? i + 1 : i - 1); });
-</script>
+<script src="sunum.js"></script>
 </body>
 </html>
 `;
   mkdirSync(new URL('docs/sunum/', VIZE), { recursive: true });
   writeFileSync(new URL('docs/sunum/index.html', VIZE), html);
+  writeFileSync(new URL('docs/sunum/sunum.css', VIZE), SLIDE_CSS);
+  writeFileSync(new URL('docs/sunum/sunum.js', VIZE), SLIDE_JS);
   console.log(`docs/sunum/index.html: ${slides.length} slayt`);
 }

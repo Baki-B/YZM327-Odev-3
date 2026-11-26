@@ -1,20 +1,20 @@
 /* Proje sitesi: bağımlılıksız, statik. Renkler atölyeyle aynı ailedendir. */
 :root {
   --head: #3b1239; --head-2: #4c1f49; --head-ink: #f1e6f0; --head-muted: #c4a9c1;
-  --bg: #ffffff; --ink: #1d1c1f; --ink2: #55535a; --muted: #85838a; --line: #e4e1e6; --soft: #f6f5f8;
+  --bg: #ffffff; --ink: #1d1c1f; --ink2: #55535a; --muted: #696770; --line: #e4e1e6; --soft: #f6f5f8;
   --accent: #127c86; --accent-ink: #fff; --accent-soft: #e2f3f4; --warn-soft: #fff5dd; --warn: #8a5a00; --bad-soft: #fbe7ea; --bad: #b0233a;
   --font: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif; --mono: "JetBrains Mono", Consolas, "DejaVu Sans Mono", monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --head: #250b24; --head-2: #351633; --bg: #1a1c20; --ink: #e9e8ec; --ink2: #b6b4bb; --muted: #8b8990; --line: #31343a; --soft: #22252b;
+    --head: #250b24; --head-2: #351633; --bg: #1a1c20; --ink: #e9e8ec; --ink2: #b6b4bb; --muted: #9e9ca3; --line: #31343a; --soft: #22252b;
     --accent: #1aa3ae; --accent-ink: #061416; --accent-soft: #123538; --warn-soft: #33290f; --warn: #e3b25a; --bad-soft: #3a1b21; --bad: #ef6d80;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --head: #250b24; --head-2: #351633; --bg: #1a1c20; --ink: #e9e8ec; --ink2: #b6b4bb; --muted: #8b8990; --line: #31343a; --soft: #22252b;
+  --head: #250b24; --head-2: #351633; --bg: #1a1c20; --ink: #e9e8ec; --ink2: #b6b4bb; --muted: #9e9ca3; --line: #31343a; --soft: #22252b;
   --accent: #1aa3ae; --accent-ink: #061416; --accent-soft: #123538; --warn-soft: #33290f; --warn: #e3b25a; --bad-soft: #3a1b21; --bad: #ef6d80;
   color-scheme: dark;
 }
@@ -30,7 +30,7 @@ header.top svg { width: 28px; height: 28px; }
 header.top nav { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
 header.top nav a { color: var(--head-ink); text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 14.5px; opacity: .9; }
 header.top nav a:hover { background: var(--head-2); opacity: 1; }
-header.top nav a[aria-current="page"] { background: var(--accent); color: #fff; opacity: 1; }
+header.top nav a[aria-current="page"] { background: var(--accent); color: var(--accent-ink); opacity: 1; }
 main { max-width: 1060px; margin: 0 auto; padding: 24px 16px 48px; }
 h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 8px 0 10px; letter-spacing: -.02em; }
 h2 { font-size: 22px; margin: 34px 0 10px; letter-spacing: -.01em; }

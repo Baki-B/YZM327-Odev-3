@@ -230,7 +230,7 @@ function cmdScan(targets, opts) {
     const extra = [
       suppressed ? `${suppressed} bulgu "ios:ignore" yorumuyla bastırıldı` : '',
       notWord ? `${notWord} bulgu tam sözcük olmadığı için elendi` : '',
-      walkStats.ignored ? `${walkStats.ignored} yol .iosignore ile atlandı` : '',
+      walkStats.ignored ? `${walkStats.ignored} yol yok sayma dosyasıyla atlandı` : '',
       opts.baseline ? `${known} bulgu taban çizgisinde zaten vardı` : '',
     ].filter(Boolean).join('; ');
     const selected = scans.map((s) => s.record.selected).join(' + ');

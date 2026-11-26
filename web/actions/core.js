@@ -31,7 +31,7 @@ export function changed({ structure = true } = {}) {
 }
 
 /** Komutu uygular; motor reddederse (ör. tür uyuşmazlığı) nedenini gösterir. */
-export function exec(cmd, { structure = true } = {}) {
+export function applyCommand(cmd, { structure = true } = {}) {
   try {
     history.execute(cmd);
   } catch (err) {

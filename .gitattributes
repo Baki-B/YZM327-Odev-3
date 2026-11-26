@@ -1,0 +1,15 @@
+# Satır sonları her işletim sisteminde LF (Windows'ta CRLF karışmasın; konum hesapları buna bağlı).
+* text=auto eol=lf
+*.png binary
+*.pdf binary
+*.ico binary
+# GitHub dil istatistiği: üretilmiş ve örnek veri dosyaları sayılmasın.
+site/** linguist-generated
+docs/sunum/index.html linguist-generated
+docs/sunum/sunum.css linguist-generated
+docs/sunum/sunum.js linguist-generated
+docs/rapor/*.svg linguist-generated
+docs/uml/svg/** linguist-generated
+web/data/** linguist-vendored
+bench/corpus/** linguist-vendored
+bench/results/** linguist-generated

@@ -1,0 +1,75 @@
+@startuml 2c_sinif_komut_gecmisi
+!include _stil.iuml
+title Sınıf diyagramı (3/4): geri al / yinele — Command ve Composite desenleri
+class "actions/edit.js" as ACT <<denetleyici (istemci)>> {
+  addComponent(), connectPorts()
+  deleteSelection(), setParam()
+  undo(), redo()
+  pasteFragment()
+}
+class History <<çağıran (invoker)>> {
+  - undo : Command[*]
+  - redo : Command[*]
+  - sealed : bool
+  + limit : sayı
+  + execute(cmd)
+  + record(cmd)
+  + undo() : Command
+  + redo() : Command
+  + seal()
+  + canUndo, canRedo : bool
+}
+class Doc <<belge>> {
+  + wf : Workflow
+}
+class engine <<alıcı (receiver)>> {
+  addNode(), connect()
+  removeEdge()
+}
+interface Command {
+  + label : dizgi
+  + key? : dizgi
+  + do(doc)
+  + undo(doc)
+  + merge?(next) : Command
+}
+class MacroCommand <<Composite>> {
+  - commands : Command[*]
+  + do(doc) : sırayla
+  + undo(doc) : ters sırayla
+}
+class AddNodeCommand
+class RemoveNodeCommand {
+  - saved : kutu, sıra, bağlantılar
+}
+class ConnectCommand
+class MoveNodeCommand {
+  key = "tasi:<id>"
+  + merge(next)
+}
+class SetParamCommand {
+  key = "ayar:<id>:<k>"
+  + merge(next)
+}
+class ReplaceWorkflowCmd {
+  - before, after
+  + meta : açık paket
+}
+ACT --> History : execute(cmd)
+History o-- "*" Command : yığınlar
+History --> Doc : doc
+Command <|.. AddNodeCommand
+Command <|.. RemoveNodeCommand
+Command <|.. ConnectCommand
+Command <|.. MoveNodeCommand
+Command <|.. SetParamCommand
+Command <|.. ReplaceWorkflowCmd
+Command <|.. MacroCommand
+MacroCommand o-- "*" Command : commands
+Command ..> engine : do / undo motorun işlevleriyle
+note bottom of ReplaceWorkflowCmd
+  Aynı anahtarlı ardışık komutlar tek adımda birleşir;
+  seal() birleştirmeyi keser. Paket açma da bir komuttur.
+  Özellik tabanlı test: 4 tohum × 400 rastgele işlem.
+end note
+@enduml

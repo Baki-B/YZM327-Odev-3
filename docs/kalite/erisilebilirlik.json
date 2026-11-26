@@ -1,0 +1,139 @@
+{
+  "axe": "4.14.1",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "pages": 20,
+  "byImpact": {
+    "critical": 0,
+    "serious": 0,
+    "moderate": 0,
+    "minor": 0
+  },
+  "blocking": 0,
+  "report": [
+    {
+      "page": "Atölye (paket açık, çalıştırılmış)",
+      "url": "/web/#paket=teknik-borc",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Atölye (paket açık, çalıştırılmış)",
+      "url": "/web/#paket=teknik-borc",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Atölye (telefon, 390 px)",
+      "url": "/web/#paket=gizli-bilgi",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Atölye (telefon, 390 px)",
+      "url": "/web/#paket=gizli-bilgi",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: ana sayfa",
+      "url": "/site/index.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: ana sayfa",
+      "url": "/site/index.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: bileşenler",
+      "url": "/site/bilesenler.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: bileşenler",
+      "url": "/site/bilesenler.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: bir bileşen sayfası",
+      "url": "/site/bilesen/HorspoolSearch.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: bir bileşen sayfası",
+      "url": "/site/bilesen/HorspoolSearch.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: sonuçlar",
+      "url": "/site/sonuclar.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: sonuçlar",
+      "url": "/site/sonuclar.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: kalite",
+      "url": "/site/kalite.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: kalite",
+      "url": "/site/kalite.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: rapor",
+      "url": "/site/rapor.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: rapor",
+      "url": "/site/rapor.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Site: ekip",
+      "url": "/site/ekip.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Site: ekip",
+      "url": "/site/ekip.html",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "page": "Sunum",
+      "url": "/docs/sunum/index.html",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "page": "Sunum",
+      "url": "/docs/sunum/index.html",
+      "theme": "dark",
+      "violations": []
+    }
+  ]
+}

@@ -78,9 +78,9 @@ export const MASK = '****';
 
 /**
  * Bir gizli bilgi deseninin hemen ardından gelen metindeki değeri maskeler.
- *   "AKIA" + "IOSFODNN7EXAMPLE"   → "AKIA" + "****"        (desen bir belirtecin başı)
- *   "password=" + "hunter2 # not" → "password=" + "**** # not"
- *   "API_KEY" + ' = "abc"'        → "API_KEY" + ' = "****"'
+ *   "AKIA" + "IOSFODNN7EXAMPLE"   → "AKIA" + "****"        (desen bir belirtecin başı)  ios:ignore
+ *   "password=" + "hunter2 # not" → "password=" + "**** # not"  ios:ignore
+ *   "API_KEY" + ' = "abc"'        → "API_KEY" + ' = "****"'  ios:ignore
  * @param {string} after  eşleşmenin bittiği yerden satır sonuna kadar olan metin
  * @param {string} hit    eşleşen metin (desenin kendisi)
  */

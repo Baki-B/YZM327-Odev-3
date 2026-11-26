@@ -83,19 +83,21 @@
     </div>
 
     <section class="results" id="sonuclar" aria-label="Sonuçlar">
+      <div class="tabs-row">
       <div class="tabs" role="tablist" aria-label="Sonuç sekmeleri">
         <button role="tab" id="sekme-bulgular" aria-controls="panel-bulgular" aria-selected="true">Bulgular</button>
         <button role="tab" id="sekme-ozet" aria-controls="panel-ozet" aria-selected="false">Özet</button>
         <button role="tab" id="sekme-aciklama" aria-controls="panel-aciklama" aria-selected="false">Açıklama</button>
         <button role="tab" id="sekme-yaris" aria-controls="panel-yaris" aria-selected="false">Atom yarışı</button>
         <button role="tab" id="sekme-denetim" aria-controls="panel-denetim" aria-selected="false">Denetim</button>
-        <button class="icon-btn collapse" id="sonuc-katla" aria-label="Sonuç panelini daralt" aria-expanded="true">▾</button>
       </div>
-      <div class="tabpanel" role="tabpanel" id="panel-bulgular" aria-labelledby="sekme-bulgular"><p class="empty">Henüz çalıştırılmadı. Soldan bir hazır paket seçin ya da kutuları bağlayıp "Tarayıcıda çalıştır"a basın.</p></div>
-      <div class="tabpanel" role="tabpanel" id="panel-ozet" aria-labelledby="sekme-ozet" hidden><p class="empty">Özet, çalıştırmadan sonra burada görünür.</p></div>
-      <div class="tabpanel" role="tabpanel" id="panel-aciklama" aria-labelledby="sekme-aciklama" hidden><p class="empty">"Açıkla" düğmesi iş akışını düz Türkçe cümlelerle anlatır.</p></div>
-      <div class="tabpanel" role="tabpanel" id="panel-yaris" aria-labelledby="sekme-yaris" hidden><p class="empty">Bir ExactMatch kutusunu seçip özellikler panelindeki "Atomları yarıştır" düğmesine basın (önce iş akışını çalıştırın).</p></div>
-      <div class="tabpanel" role="tabpanel" id="panel-denetim" aria-labelledby="sekme-denetim" hidden><p class="empty">Denetim, iş akışındaki olası hataları çalıştırmadan önce listeler.</p></div>
+      <button class="icon-btn collapse" id="sonuc-katla" aria-label="Sonuç panelini daralt" aria-expanded="true">▾</button>
+      </div>
+      <div class="tabpanel" role="tabpanel" tabindex="0" id="panel-bulgular" aria-labelledby="sekme-bulgular"><p class="empty">Henüz çalıştırılmadı. Soldan bir hazır paket seçin ya da kutuları bağlayıp "Tarayıcıda çalıştır"a basın.</p></div>
+      <div class="tabpanel" role="tabpanel" tabindex="0" id="panel-ozet" aria-labelledby="sekme-ozet" hidden><p class="empty">Özet, çalıştırmadan sonra burada görünür.</p></div>
+      <div class="tabpanel" role="tabpanel" tabindex="0" id="panel-aciklama" aria-labelledby="sekme-aciklama" hidden><p class="empty">"Açıkla" düğmesi iş akışını düz Türkçe cümlelerle anlatır.</p></div>
+      <div class="tabpanel" role="tabpanel" tabindex="0" id="panel-yaris" aria-labelledby="sekme-yaris" hidden><p class="empty">Bir ExactMatch kutusunu seçip özellikler panelindeki "Atomları yarıştır" düğmesine basın (önce iş akışını çalıştırın).</p></div>
+      <div class="tabpanel" role="tabpanel" tabindex="0" id="panel-denetim" aria-labelledby="sekme-denetim" hidden><p class="empty">Denetim, iş akışındaki olası hataları çalıştırmadan önce listeler.</p></div>
     </section>
 
     <footer class="foot">

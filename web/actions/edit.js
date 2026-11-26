@@ -10,7 +10,7 @@ import {
   addNodeCommand, connectCommand, fragmentOf, macroCommand, moveNodeCommand, pasteCommand, removeEdgeCommand,
   removeNodeCommand, setFieldCommand, setParamCommand,
 } from '../../src/workflows/history.js';
-import { autosave, changed, exec, refreshLint, resetRun, select } from './core.js';
+import { applyCommand, autosave, changed, refreshLint, resetRun, select } from './core.js';
 import { importText } from './io.js';
 
 const FRAGMENT = 'kod-bilimi-atolyesi/fragment';
@@ -21,7 +21,7 @@ export function addComponent(type, at = null) {
   const sc = $('tuval');
   const pos = at ?? freeSpot(doc.wf.nodes, { left: sc.scrollLeft / state.zoom, top: sc.scrollTop / state.zoom });
   const cmd = addNodeCommand(catalog, type, pos);
-  if (!exec(cmd)) return null;
+  if (!applyCommand(cmd)) return null;
   select({ kind: 'node', id: cmd.node.id });
   bus.emit('odak', { id: cmd.node.id, added: true });
   toast(`"${compOf(cmd.node).title}" eklendi. Uçlarına tıklayarak bağlayın.`);
@@ -75,14 +75,14 @@ export function connectPorts(a, b) {
     toast(`Bağlantı reddedildi. ${r.reason}`, 'err');
     return false;
   }
-  if (!exec(connectCommand(catalog, { node: from.node, port: from.port }, { node: to.node, port: to.port }))) return false;
+  if (!applyCommand(connectCommand(catalog, { node: from.node, port: from.port }, { node: to.node, port: to.port }))) return false;
   toast(`Bağlandı: ${compOf(nodeById(from.node)).title} → ${compOf(nodeById(to.node)).title}`);
   return true;
 }
 
 export function removeEdge(edge) {
   if (state.sel?.kind === 'edge' && sameEdge(state.sel.edge, edge)) state.sel = null;
-  if (exec(removeEdgeCommand(edge))) toast('Bağlantı silindi.');
+  if (applyCommand(removeEdgeCommand(edge))) toast('Bağlantı silindi.');
   bus.emit('secim');
 }
 
@@ -92,8 +92,8 @@ export function deleteSelection() {
   state.sel = null;
   if (sel.kind === 'node') {
     const title = compOf(nodeById(sel.id))?.title;
-    if (exec(removeNodeCommand(sel.id))) toast(`"${title}" silindi. Geri almak için Ctrl+Z.`);
-  } else if (exec(removeEdgeCommand(sel.edge))) {
+    if (applyCommand(removeNodeCommand(sel.id))) toast(`"${title}" silindi. Geri almak için Ctrl+Z.`);
+  } else if (applyCommand(removeEdgeCommand(sel.edge))) {
     toast('Bağlantı silindi. Geri almak için Ctrl+Z.');
   }
   bus.emit('secim');

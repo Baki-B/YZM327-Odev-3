@@ -175,13 +175,25 @@ Açık/Kapalı ilkesi: sistem genişlemeye açık, değişikliğe kapalı. Yeni 
 | Uyarlayıcılar | Kaynak → FASTA.Entry, FASTA okuyucu, Eşleşme → Bulgu | `FASTA.Entry`, `Finding` |
 | Desen kümeleri | todo, secrets, banned-api, errors, özel liste | `Pattern.Set` |
 | Atomlar / molekül | HorspoolSearch … / ExactMatch | `Sequence.Match` |
-| Çıktılar | Bulgu tablosu, Özet, JSONL indir, "Bulgu varsa başarısız" kapısı | (yok) |
+| Çıktılar | Bulgu tablosu, Özet, JSONL indir, SARIF indir, "Bulgu varsa başarısız" kapısı | (yok) |
 
 **Neden böyle yazıldı:**
 - **Algoritmalar kopyalanmadı.** `web/` dosyaları `../src/` altındaki modülleri doğrudan içe aktarır. Komut satırı ve atölye aynı kodu çalıştırır; bu yüzden altı paketin altısında da bulgu sayıları aynı (`npm run paketler`).
 - **Arayüz donmaz.** Arama bir Web Worker (arka plan iş parçacığı) içinde çalışır; arayüz yalnızca ilerleme iletilerini alır. Tarayıcı Worker açamazsa aynı kod ana iş parçacığında, kutular arasında nefes alarak çalışır.
 - **Bağımlılık yok.** npm paketi, CDN, çerçeve, derleme adımı yok: düz HTML, CSS ve ES modülleri. Bu yüzden `file://` ile değil, küçük bir sunucuyla açılır (`npm run web`).
-- **Klavye ve telefon.** Bileşen listesinde Enter kutu ekler; kutuda ok tuşları taşır, Delete siler; bir uçta Enter, karşı uçta Enter bağlar. 390 px genişlikte kenar çubuğu çekmeceye dönüşür.
+- **Klavye ve telefon.** Bileşen listesinde Enter kutu ekler; kutuda ok tuşları taşır, Delete siler; bir uçta Enter, karşı uçta Enter bağlar. Ctrl+Z geri alır, Ctrl+D çoğaltır, `?` bütün kısayolları gösterir. 390 px genişlikte kenar çubuğu çekmeceye dönüşür.
+
+**Kodun düzeni (tek sorumluluk):** Arayüz eskiden tek bir 1 060 satırlık dosyaydı. Şimdi:
+
+| Dosya | Görevi | Benzetme |
+|---|---|---|
+| `state.js` | Paylaşılan durum: iş akışı, seçim, son sonuç, geçmiş | Ortak not defteri |
+| `actions.js` + `actions/` | Denetleyici: düğmeye basılınca ne olacağı (kutu ekle, bağla, geri al, çalıştır, dışa aktar) | Mutfaktaki aşçıbaşı |
+| `views/` | Görünümler: tuval, özellikler paneli, sonuçlar, kenar çubuğu, kısayol penceresi | Garsonlar: yalnızca masaya getirir |
+| `lib/bus.js` | Olay yolu: denetleyici "iş akışı değişti" diye duyurur, ilgili görünümler kendini çizer | Restoranın sipariş zili |
+| `lib/` | DOM'suz yardımcılar (biçim, geometri, depo): Node'da birim testiyle sınanır | Ölçü kapları |
+
+Kural: görünümler birbirini çağırmaz, yalnızca zile (olay yolu) kulak verir; aşçıbaşı da garsonları tanımaz. Bu kuralları ve "her dosya 450 satırın altında"yı bir test denetler.
 
 **Hoca sorarsa:** "IoS'taki atom ve molekülü biyoloji yerine yazılım mühendisliğine uyguladık. Atölye, CI'da kullanılan `ios scan --fail` kuralını görsel bir kutu olarak gösteriyor: gizli bilgi bulunursa kapı 'kaldı' der, yani derleme durur."
 
@@ -208,3 +220,33 @@ Açık/Kapalı ilkesi: sistem genişlemeye açık, değişikliğe kapalı. Yeni 
 - **Çözüm:** 64 × 256 karakterlik örneklem. Şekil hesabı D'de medyanda 0,648 ms'den 0,063 ms'ye indi.
 - **Dürüstlük:** Değişiklik eski kümeleri gördükten sonra yapıldığı için yeni iki taze kümede (D, E) bir kez ölçüldü ve sonuca göre ayarlanmadı. Tek desende molekül uçtan uca hâlâ hep Horspool'un gerisinde; bu raporda yazılı.
 - **Ölçüm sapması:** D'de molekül, kendi seçtiği atomdan medyanda kısa ölçüldü (0,951). Bu olanaksız; iki ayrı gürültülü ölçümün farkı küçük karar süresini ayıramıyor. Bu yüzden karar süresini ayrıca tek başına ölçtük.
+
+## 11. Geri al / yinele, denetim, diyagram ve çalıştırma kaydı
+
+- **Geri al / yinele (`src/workflows/history.js`, Command deseni):** Her değişiklik bir "komut" nesnesidir: nasıl yapılacağını (`do`) ve nasıl geri alınacağını (`undo`) bilir. Geçmiş, yapılan komutları bir yığında tutar. Benzetme: kelime işlemcideki geri al; her adımın adı vardır ("Geri al: Kutu silme"). Aynı alana harf harf yazmak tek adım sayılır. Doğruluğu özellik tabanlı testle gösterildi: rastgele 400 işlem (ekle, sil, bağla, taşı, yaz, paket aç, geri al, yinele) yapılır ve her adımda iş akışı basit bir modelle karşılaştırılır.
+- **Denetim (`lint.js`):** Çalıştırmadan önce "anlamlı mı?" sorusu: hiçbir yere bağlı olmayan kutu, sonucu kullanılmayan kutu, sonuç gösteren kutusu olmayan iş akışı, test referansı atomu. Derleyicinin uyarılarına benzer. Atölyede canlıdır: kutunun çerçevesi turuncu ya da kırmızı olur.
+- **Diyagram (`diagram.js`):** İş akışını Mermaid ya da Graphviz metnine çevirir; GitHub Mermaid'i Markdown içinde çizer.
+- **Çalıştırma kaydı (`provenance.js`):** Bir çalıştırmanın kimlik kartı: hangi iş akışı, hangi bileşen sürümleri, girdi dosyalarının SHA-256 özetleri (dosyanın parmak izi), her kutunun süresi, molekülün kararı. Benzetme: laboratuvar defteri; başkası aynı deneyi aynı malzemeyle tekrarlayabilir. Dosya içerikleri kayda yazılmaz.
+
+## 12. Tarama katmanı (`src/scan/`)
+
+- **Kurallar (`rules.js`):** Her desen bir kural: kalıcı kimlik (`secrets/akia`), önem (hata / uyarı / not), açıklama ve güvenlik kurallarında CWE numarası (yazılım zayıflıklarının uluslararası kataloğu).
+- **Süzgeçler (`filters.js`):** `ios:ignore` yorumu bilerek bırakılan satırı bastırır; `--word` yalnızca tam sözcükleri tutar; `.iosignore` taranmayacak yolları söyler.
+- **Rapor (`report.js`):** SARIF (statik analiz sonuçları için standart biçim; GitHub kod tarama ekranı okur), parmak izi (bulguyu satır numarasından bağımsız tanır, böylece "yalnızca yeni bulgular" denebilir) ve gizli bilgi maskeleme (`password=****`).
+- **Kendi depomuzu tarıyoruz:** CI'da projenin tarayıcısı bu depoyu tarar; ilk taramada atölyenin kendi `exec(...)` adlı işlevini "riskli API" olarak yakaladı (yanlış alarm ama kural doğru çalışıyor); işlevin adı değiştirildi.
+
+## 13. Kalite kapıları (hoca sorarsa)
+
+Her gönderimde GitHub Actions şunları çalıştırır; biri kalırsa gönderim kırmızı görünür:
+
+| Kapı | Ne sorar |
+|---|---|
+| Birim testleri (Node 22 ve 24) | Kod doğru mu? |
+| Kapsama eşiği | Testler kodun ne kadarını çalıştırıyor? |
+| Tür denetimi (TypeScript, JSDoc ile) | Yanlış alan adı, eksik argüman var mı? |
+| Arayüz denetimi (gerçek Chromium) | Düğmeler, sürükle-bırak, geri al, telefon görünümü çalışıyor mu? |
+| Erişilebilirlik (WCAG 2.1 AA) | Görme engelli ya da yalnızca klavye kullanan biri de kullanabilir mi? |
+| Bağlantı ve sayı denetimi | Kırık bağlantı ya da kaynağı olmayan sayı var mı? |
+| CodeQL ve kendi taramamız | Güvenlik açığı ya da depoya girmiş parola var mı? |
+
+**Mutasyon denetimi bir şey öğretti:** Koda bilerek 25 hata koyduk; ilk turda biri yakalanmadı. Sebep testteydi: iki satırın parmak izinin farklı olduğunu denetliyordu ama satırların metni zaten farklıydı. Testi metni birebir aynı satırlarla güçlendirdik.

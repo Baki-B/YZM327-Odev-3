@@ -1,0 +1,17 @@
+name: Öneri
+description: Yeni bir atom, bileşen, hazır desen kümesi ya da atölye özelliği
+labels: [öneri]
+body:
+  - type: textarea
+    id: sorun
+    attributes:
+      label: Hangi ihtiyacı karşılıyor?
+    validations:
+      required: true
+  - type: textarea
+    id: oneri
+    attributes:
+      label: Önerilen çözüm
+      description: Yeni bir atomsa kaynağını (makale / algoritma) ve hangi girdilerde hızlı olmasını beklediğinizi yazın.
+    validations:
+      required: true

@@ -1,0 +1,206 @@
+{
+  "total": 50,
+  "passed": 50,
+  "checks": [
+    {
+      "name": "paket teknik-borc: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "Açıkla: kurala dayalı Türkçe anlatım",
+      "ok": true
+    },
+    {
+      "name": "paket gizli-bilgi: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "paket yasakli-api: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "paket log: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "paket tek-desen: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "paket biyoloji: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "Atomları yarıştır: 8 atom ölçüldü, uyarı metni var",
+      "ok": true
+    },
+    {
+      "name": "ekran görüntüsü: masaüstü 1280 px",
+      "ok": true
+    },
+    {
+      "name": "1280 px: yatay taşma yok",
+      "ok": true
+    },
+    {
+      "name": "koyu tema",
+      "ok": true
+    },
+    {
+      "name": "Temizle: boş tuval",
+      "ok": true
+    },
+    {
+      "name": "sürükle-bırak: paletten tuvale 3 kutu",
+      "ok": true
+    },
+    {
+      "name": "uyumsuz bağlantı reddedildi ve nedeni gösterildi",
+      "ok": true
+    },
+    {
+      "name": "sürükleyerek bağlantı",
+      "ok": true
+    },
+    {
+      "name": "klavye: Enter ile kutu ekleme",
+      "ok": true
+    },
+    {
+      "name": "klavye: uçlarda Enter ile bağlama",
+      "ok": true
+    },
+    {
+      "name": "klavye: ok tuşuyla taşıma",
+      "ok": true
+    },
+    {
+      "name": "fareyle kutu taşıma",
+      "ok": true
+    },
+    {
+      "name": "elle kurulan iş akışı çalışır",
+      "ok": true
+    },
+    {
+      "name": "dışa aktarma: JSON iş akışıyla aynı",
+      "ok": true
+    },
+    {
+      "name": "içe aktarma",
+      "ok": true
+    },
+    {
+      "name": "bozuk içe aktarma reddedilir",
+      "ok": true
+    },
+    {
+      "name": "paylaşılabilir bağlantı aynı iş akışını açar",
+      "ok": true
+    },
+    {
+      "name": "Delete ile kutu silme (bağlantılarıyla)",
+      "ok": true
+    },
+    {
+      "name": "Ctrl+Z: silinen kutu bağlantılarıyla geri gelir",
+      "ok": true
+    },
+    {
+      "name": "Ctrl+Shift+Z: yineler",
+      "ok": true
+    },
+    {
+      "name": "geri al / yinele düğmeleri ve ipucu",
+      "ok": true
+    },
+    {
+      "name": "Ctrl+D: seçili kutuyu çoğaltır",
+      "ok": true
+    },
+    {
+      "name": "kopyala / yapıştır: panoya JSON parçası, yapıştırınca yeni kimlik",
+      "ok": true
+    },
+    {
+      "name": "iki adım geri alınır (yapıştır, çoğalt)",
+      "ok": true
+    },
+    {
+      "name": "özellikler panelinde tuş tuş yazma: metin tam, odak alanda",
+      "ok": true
+    },
+    {
+      "name": "yazma tek adımda geri alınır",
+      "ok": true
+    },
+    {
+      "name": "denetim: bağlanmamış kutu işaretlenir ve sekmede listelenir",
+      "ok": true
+    },
+    {
+      "name": "\"?\" kısayol penceresini açar, Esc kapatır",
+      "ok": true
+    },
+    {
+      "name": "diyagram: Mermaid olarak indirilir",
+      "ok": true
+    },
+    {
+      "name": "çalıştırma kaydı: biçim, sürüm, girdi SHA-256, düğümler",
+      "ok": true
+    },
+    {
+      "name": "otomatik kayıt: sayfa yeniden açılınca son iş akışı gelir",
+      "ok": true
+    },
+    {
+      "name": "tuvale JSON dosyası bırakınca içe aktarılır",
+      "ok": true
+    },
+    {
+      "name": "paket açmak da geri alınır",
+      "ok": true
+    },
+    {
+      "name": "tam sözcük süzgeci: atölye = komut satırı (--word)",
+      "ok": true
+    },
+    {
+      "name": "SARIF: atölye ve komut satırı aynı kurallar; gizli değer maskeli",
+      "ok": true
+    },
+    {
+      "name": "XSS: bağlantıdaki HTML metin olarak kalır, betik çalışmaz",
+      "ok": true
+    },
+    {
+      "name": "CSP: sayfaya sonradan sokulan satır içi betik çalışmaz",
+      "ok": true
+    },
+    {
+      "name": "sunum: CSP altında ok tuşlarıyla ilerler (betik ayrı dosyada)",
+      "ok": true
+    },
+    {
+      "name": "390 px: yatay taşma yok",
+      "ok": true
+    },
+    {
+      "name": "390 px: menüden dokunarak kutu ekleme",
+      "ok": true
+    },
+    {
+      "name": "390 px: yeni araç düğmeleriyle de yatay taşma yok",
+      "ok": true
+    },
+    {
+      "name": "ekran görüntüsü: telefon 390 px",
+      "ok": true
+    },
+    {
+      "name": "konsolda hata / uyarı yok",
+      "ok": true
+    }
+  ]
+}

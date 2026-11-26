@@ -61,6 +61,58 @@ const MUTATIONS = [
   {
     file: 'src/molecules/ExactMatch.js', what: 'Molekül en pahalı atomu seçer (sıralama ters)',
     from: 'ranked.sort((a, b) => a.seconds - b.seconds);', to: 'ranked.sort((a, b) => b.seconds - a.seconds);',
+  },  // İş akışı, tarama ve arayüz katmanları (geri al / yinele, denetim, süzgeçler, SARIF, roller)
+  {
+    file: "src/workflows/history.js", what: "Geri alınan komut yinele yığınına konmaz",
+    from: "    this.#redo.push(cmd);", to: "    // this.#redo.push(cmd);",
+  },
+  {
+    file: "src/workflows/history.js", what: "Birleştirme seal() sonrasında da sürer (ayrı adımlar tek adıma karışır)",
+    from: "if (!this.#sealed && top && cmd.key !== undefined", to: "if (top && cmd.key !== undefined",
+  },
+  {
+    file: "src/workflows/history.js", what: "Kutu silmeyi geri almak bağlantıları eski sırasına koymaz",
+    from: "for (const { i, edge } of saved.edges) doc.wf.edges.splice(i, 0, clone(edge));", to: "for (const { edge } of saved.edges) doc.wf.edges.push(clone(edge));",
+  },
+  {
+    file: "src/workflows/lint.js", what: "Çıkmaz kutu denetimi çıkış yerine giriş bağlantısına bakar",
+    from: "!wf.edges.some((e) => e.from.node === n.id)", to: "!wf.edges.some((e) => e.to.node === n.id)",
+  },
+  {
+    file: "src/scan/filters.js", what: "\"ios:ignore-next-line\" alttaki satırı değil kendi satırını bastırır",
+    from: "return line > 1 && lineAt(text, starts, line - 1).includes(INLINE_IGNORE_NEXT);", to: "return line > 1 && lineAt(text, starts, line).includes(INLINE_IGNORE_NEXT);",
+  },
+  {
+    file: "src/scan/filters.js", what: "Tam sözcük: sağ sınır yanlış karakterde denetlenir",
+    from: "if (isWordChar(last) && isWordChar(text[position + length])) return false;", to: "if (isWordChar(last) && isWordChar(text[position + length - 1])) return false;",
+  },
+  {
+    file: "src/scan/report.js", what: "Gizli bilgi değeri maskelenmez",
+    from: "  return after.slice(0, i) + MASK + after.slice(j);", to: "  return after;",
+  },
+  {
+    file: "src/scan/report.js", what: "Aynı metinli iki satır aynı parmak izini alır (sıra numarası artmaz)",
+    from: "    seen.set(base, k + 1);", to: "    seen.set(base, k);",
+  },
+  {
+    file: "src/scan/report.js", what: "SARIF'te önem düzeyi her zaman \"warning\"",
+    from: "      level: LEVEL[f.severity ?? rule?.severity] ?? 'warning',", to: "      level: 'warning',",
+  },
+  {
+    file: "src/workflows/engine.js", what: "Tür denetimi kapalı: uyumsuz uçlar bağlanır",
+    from: "  if (out.type !== inp.type) {", to: "  if (false) {",
+  },
+  {
+    file: "src/contracts.js", what: "Rol denetimi selection.features işlevini aramaz",
+    from: "      if (!isFn(s.features)) out.push('selection.features bir işlev olmalı');", to: "      // features denetimi unutuldu",
+  },
+  {
+    file: "web/lib/geometry.js", what: "Sığdırma telefonda da masaüstü alt sınırını kullanır (yazılar okunmaz)",
+    from: "  return Math.max(mobile ? 0.7 : 0.45, z);", to: "  return Math.max(0.45, z);",
+  },
+  {
+    file: "src/workflows/CodeScan.js", what: "Satır içi bastırma varsayılan olarak kapalı",
+    from: "strategy = 'auto', inlineIgnore = true,", to: "strategy = 'auto', inlineIgnore = false,",
   },
 ];
 

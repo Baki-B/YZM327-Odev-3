@@ -1,0 +1,11 @@
+# Dependabot: GitHub Actions sürümlerini haftada bir denetler, yeni sürüm varsa pull request açar.
+# Projenin npm bağımlılığı olmadığı için yalnızca iş akışlarındaki eylemler izlenir.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "CI"

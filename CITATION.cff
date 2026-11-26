@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "Bu yazılımı kullanırsanız lütfen aşağıdaki bilgilerle atıf yapın."
+title: "Kod Bilimi Atölyesi: akıllı tam desen eşleştirme (IoS sequence.pattern-match.exact)"
+type: software
+authors:
+  - name: "Kod Bilimi Atölyesi ekibi"
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/Baki-B/YZM327-Odev-3"
+url: "https://baki-b.github.io/YZM327-Odev-3/"
+abstract: >-
+  Bir metinde bir ya da çok desenin bütün geçişlerini bulan sekiz atom, girdinin şekline bakıp
+  kalibre edilmiş bir maliyet modeliyle en hızlısını seçen ExactMatch molekülü ve bunları kaynak
+  kod, log ve biyolojik dizilerde kullanan tarayıcı tabanlı bir iş akışı düzenleyicisi.
+keywords:
+  - string matching
+  - algorithm selection
+  - Internet of Science
+  - workflow editor
+  - static analysis
+  - bioinformatics

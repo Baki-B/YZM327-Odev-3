@@ -2,12 +2,12 @@
 !include _stil.iuml
 title Paket (katman) diyagramı: modüller ve bağımlılık yönü
 package "bin/ios.js «komut satırı»" as CLI
-package "web/ «atölye (tarayıcı)»" as WEB
+package "web/ «atölye (tarayıcı)»\nstate, actions/, views/, lib/, keyboard" as WEB
 package "tests/ + scripts/ «doğrulama»" as TST
-package "src/workflows «iş akışı»" as WF
+package "src/workflows + src/scan «iş akışı ve tarama»\nengine, catalog, history, lint, diagram, provenance, CodeScan · rules, report" as WF
 package "src/adapters + fasta «uyarlayıcı»" as AD
 package "src/molecules «molekül»" as MOL
-package "src/registry.js «kayıt defteri»" as REG
+package "src/registry.js + contracts.js «kayıt defteri»\nRegistry, BUILTIN, rol arayüzleri (ISP)" as REG
 package "src/shape.js «veri şekli»" as SH
 package "src/atomic «atomlar»" as AT
 package "src/functions «saf çekirdekler»" as FN

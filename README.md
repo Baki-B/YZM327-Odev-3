@@ -1,5 +1,7 @@
 # Akıllı Tam Desen Eşleştirme ve Kod Bilimi Atölyesi (IoS: `sequence.pattern-match.exact`)
 
+[![Testler](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/testler.yml/badge.svg)](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/testler.yml) [![CodeQL](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/codeql.yml/badge.svg)](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/codeql.yml) [![Kendi taramamız](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/tarama.yml/badge.svg)](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/tarama.yml) [![GitHub Pages](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/sayfalar.yml/badge.svg)](https://github.com/Baki-B/YZM327-Odev-3/actions/workflows/sayfalar.yml) · Lisans: [MIT](LICENSE) · [Değişiklik günlüğü](CHANGELOG.md) · [Katkı rehberi](CONTRIBUTING.md) · [Güvenlik](SECURITY.md)
+
 **Canlı site:** <https://baki-b.github.io/YZM327-Odev-3/> · atölye: [`web/`](https://baki-b.github.io/YZM327-Odev-3/web/) · sunum: [`docs/sunum/`](https://baki-b.github.io/YZM327-Odev-3/docs/sunum/) · rapor: [`docs/rapor/Rapor.pdf`](docs/rapor/Rapor.pdf)
 
 Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log) bir ya da daha çok desenin geçtiği bütün yerleri bulan **yedi yeni atom** (+ Boyer-Moore), girdinin şekline bakıp en hızlısını seçen **ExactMatch molekülü** ve bunları yazılım mühendisliğinde kullanan tarayıcı tabanlı bir iş akışı düzenleyicisi: **Kod Bilimi Atölyesi**. Seçim, ölçümle kalibre edilmiş bir maliyet modeliyle yapılır.
@@ -11,15 +13,49 @@ Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log)
 - **Karar yükü:** v3'te karar için metin 262 144 karaktere kadar sayılıyordu; v4 en fazla 64 × 256 karakter sayar. Şekil hesabı D'de medyanda 0,648 ms'den 0,063 ms'ye indi; karar süresi / seçilen atomun süresi medyanda %4,1 (D), %11,4 (E). Uçtan uca oranın 1'in altına düşmesi ölçüm sapmasıdır (molekül, kendi seçtiği atomdan medyanda kısa ölçüldü: 0,951); bu yüzden karar süresi ayrıca ölçüldü.
 - v3 (A, B, C) ile v4 (D, E) farklı makinelerde ölçüldü; yeni makine aynı ölçümleri medyanda 1,74 kat yavaş yaptı. Ayrıntı: rapor bölüm 6–7, [bench/results/makine-karsilastirma.md](bench/results/makine-karsilastirma.md).
 
+## Öne çıkanlar
+
+- **Atölye** (tarayıcıda, kurulumsuz): türlü uçlarla iş akışı kurma; uyumsuz bağlantı nedeniyle reddedilir. **Geri al / yinele** (Command deseni; paket açma dahil), kopyala-yapıştır-çoğalt, **canlı denetim** (bağlanmamış ya da sonucu kullanılmayan kutu), otomatik kayıt, kısayol penceresi, Mermaid diyagramı ve **çalıştırma kaydı** (bileşen sürümleri, girdilerin SHA-256 özetleri, kararlar) indirme.
+- **`ios scan`**: birden çok hazır küme, **SARIF** çıktısı (GitHub kod tarama ekranı), kural kimliği / önem / CWE, satır içi bastırma (`ios:ignore`), `.iosignore`, **taban çizgisi** (yalnızca yeni bulgular), tam sözcük, gizli bilgi değerlerini maskeleme. Atölyedeki "SARIF indir" kutusu birebir aynı dosyayı üretir.
+- **`ios workflow run | lint | diagram`**: atölyede kurulan iş akışı CI'da tarayıcısız çalışır; kapı kalırsa çıkış kodu 1.
+- **Kalite kapıları** (her gönderimde GitHub Actions): 436 birim testi (Node 22 ve 24), kapsama satır %99,4 / dal %90,4 / işlev %97,4, statik tür denetimi 0 hata (ilk ölçümde 138), gerçek tarayıcıda 50/50 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
+- **Benzer projeler**: GitHub'da en çok yıldız alan iş akışı düzenleyicileri, bilimsel iş akışı yöneticileri ve kod tarayıcıları incelendi; alınan ve alınmayan fikirler gerekçesiyle: [docs/benzer-projeler.md](docs/benzer-projeler.md).
+
+Örnek: "gizli bilgi sızıntısı" paketi (`node bin/ios.js workflow diagram is-akisi.json` çıktısı; GitHub bu diyagramı çizer):
+
+```mermaid
+flowchart LR
+  n_kaynak["★ Örnek veri<br/><small>KAYNAKLAR · kaynak</small>"]:::kaynak
+  n_uyarlayici["⇄ Kaynak → FASTA.Entry<br/><small>UYARLAYICILAR · uyarlayici</small>"]:::uyarlayici
+  n_desen1["# secrets<br/><small>DESEN KÜMELERİ · desen1</small>"]:::desen
+  n_molekul["⬢ ExactMatch<br/><small>MOLEKÜL · molekul</small>"]:::molekul
+  n_bulgu["⇄ Eşleşme → Bulgu<br/><small>UYARLAYICILAR · bulgu</small>"]:::uyarlayici
+  n_cikti1["▤ Bulgu tablosu<br/><small>ÇIKTILAR · cikti1</small>"]:::cikti
+  n_cikti2["⛔ Bulgu varsa başarısız<br/><small>ÇIKTILAR · cikti2</small>"]:::cikti
+  n_cikti3["∑ Özet sayaçlar<br/><small>ÇIKTILAR · cikti3</small>"]:::cikti
+  n_kaynak -->|Source.File| n_uyarlayici
+  n_uyarlayici -->|FASTA.Entry| n_molekul
+  n_desen1 -->|Pattern.Set| n_molekul
+  n_molekul -->|Sequence.Match| n_bulgu
+  n_bulgu -->|Finding| n_cikti1
+  n_bulgu -->|Finding| n_cikti2
+  n_bulgu -->|Finding| n_cikti3
+  classDef kaynak fill:#e8f1fb,stroke:#2f6fb0,color:#1b1b1b
+  classDef uyarlayici fill:#eef6ec,stroke:#3f8a3a,color:#1b1b1b
+  classDef desen fill:#fdf3e1,stroke:#b7791f,color:#1b1b1b
+  classDef molekul fill:#fbe9ef,stroke:#b23a62,color:#1b1b1b
+  classDef cikti fill:#eaf6f6,stroke:#23807a,color:#1b1b1b
+```
+
 ## Teslim parçaları
 
 | Parça | Nerede |
 |---|---|
 | **Rapor** | [docs/rapor/Rapor.pdf](docs/rapor/Rapor.pdf): IoS bileşen yayını biçiminde 8 bölüm (ana metin 5 sayfa) + ekler (gereksinimler, SOLID, test stratejisi, UML) |
 | **Sunum** | [docs/sunum/index.html](docs/sunum/index.html): 10 slayt, ← → ile ilerler, `P` ile PDF'ye yazdırılır; konuşma notları [docs/sunum.md](docs/sunum.md) |
-| **Site** | [site/index.html](site/index.html): ana sayfa, atölye, bileşenler (her bileşen için yayın sayfası), sonuçlar, rapor, ekip |
+| **Site** | [site/index.html](site/index.html): ana sayfa, atölye, bileşenler (her bileşen için yayın sayfası), sonuçlar, kalite, rapor, ekip |
 | **Atölye** | [web/index.html](web/index.html): iş akışı düzenleyicisi (aşağıda nasıl açılacağı) |
-| **UML** | [docs/uml/](docs/uml/README.md): kullanım durumu, 2 sınıf, 3 sıralı, paket diyagramı; tek dosyada [UML_Diyagramlari.pdf](docs/uml/UML_Diyagramlari.pdf) |
+| **UML** | [docs/uml/](docs/uml/README.md): kullanım durumu, 4 sınıf, 4 sıralı, paket diyagramı; tek dosyada [UML_Diyagramlari.pdf](docs/uml/UML_Diyagramlari.pdf) |
 | **GitHub** | bu depo; commit geçmişi |
 
 | Belge | İçinde |
@@ -33,7 +69,10 @@ Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log)
 | [docs/mutasyon.md](docs/mutasyon.md) | Mutasyon denetimi |
 | [docs/anlatim.md](docs/anlatim.md) | Her dosyanın, atölyenin ve iş akışı motorunun sade anlatımı |
 | [docs/kontrol.md](docs/kontrol.md) | Ödev kontrol listesi |
-| [KARARLAR.md](KARARLAR.md) | Ödev metninin açık bıraktığı noktalarda verilen kararlar |
+| [KARARLAR.md](KARARLAR.md) | Ödev metninin açık bıraktığı noktalarda ve tasarımda verilen kararlar |
+| [docs/benzer-projeler.md](docs/benzer-projeler.md) | GitHub'daki benzer projeler, alınan ve alınmayan fikirler |
+| [docs/kalite/](docs/kalite/) | Kalite kapılarının sonuçları: kapsama, tür denetimi, arayüz, erişilebilirlik, bağlantı; ilk ölçümler |
+| [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) | Değişiklik günlüğü, katkı rehberi (yeni atom / kural / kutu nasıl eklenir), güvenlik politikası ve tehdit modeli |
 
 ## Kurulum
 
@@ -53,7 +92,7 @@ npm run web
 
 Sonra tarayıcıda: atölye `http://localhost:8327/web/`, site `http://localhost:8327/site/`, sunum `http://localhost:8327/docs/sunum/`. Başka bir bağlantı noktası için: `node scripts/sunucu.js --port 9000`.
 
-Atölyede: soldan bir hazır paket seçin (ya da bileşenleri tuvale sürükleyip uçlarını bağlayın) ve **Tarayıcıda çalıştır**'a basın. ExactMatch kutusunu seçince molekülün karar kaydı (`explain`) sağ panelde görünür; **Açıkla** iş akışını Türkçe cümlelerle anlatır; **Atomları yarıştır** aynı girdide bütün atomları tarayıcıda ölçer (gösterim amaçlı; rapordaki sayılar Node ölçümleridir). Kutu ekleme, taşıma ve bağlama klavyeyle de yapılır (Enter, ok tuşları, Delete, Esc; Ctrl+Enter çalıştırır).
+Atölyede: soldan bir hazır paket seçin (ya da bileşenleri tuvale sürükleyip uçlarını bağlayın) ve **Tarayıcıda çalıştır**'a basın. ExactMatch kutusunu seçince molekülün karar kaydı (`explain`) sağ panelde görünür; **Açıkla** iş akışını Türkçe cümlelerle anlatır; **Atomları yarıştır** aynı girdide bütün atomları tarayıcıda ölçer (gösterim amaçlı; rapordaki sayılar Node ölçümleridir). Kutu ekleme, taşıma ve bağlama klavyeyle de yapılır. Kısayollar: Ctrl+Enter çalıştır, Ctrl+Z / Ctrl+Shift+Z geri al / yinele, Ctrl+D çoğalt, Ctrl+C / Ctrl+V kopyala / yapıştır, `?` bütün kısayollar. **Denetim** sekmesi iş akışındaki sorunları çalıştırmadan önce listeler; **Özet** sekmesinden çalıştırma kaydı, **Açıklama** sekmesinden Mermaid diyagramı indirilir. Son iş akışı bu tarayıcıda otomatik saklanır; bir JSON iş akışı dosyasını tuvale bırakmak onu açar.
 
 Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), yasaklı / riskli API, log incelemesi, tek desen / büyük dosya, biyoloji köprüsü (lambda genomu). Her birinin bulgu sayısı komut satırıyla aynıdır (`npm run paketler`).
 
@@ -61,12 +100,14 @@ Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), y
 
 | Komut | Ne yapar |
 |---|---|
-| `npm test` | 360 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, hazır paketler, komut satırı, yasaklı işlev taraması |
+| `npm test` | 436 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, geri al / yinele (özellik tabanlı), denetim, tarama kuralları ve SARIF, roller, hazır paketler, komut satırı, yasaklı işlev taraması |
+| `npm run kapsama` | Test kapsaması (Node'un yerleşik ölçümü; eşik: satır %95, dal %85, işlev %95) → `docs/kalite/kapsama.md` |
+| `npm run tur-denetimi` | Statik tür denetimi (`tsc --checkJs`; TypeScript geçici kurulur: `npm install --no-save --no-package-lock typescript@6.0.3 @types/node@22`) |
 | `npm run calibrate` | Kalibrasyon ızgarasını ölçer (180 vaka × 8 atom), katsayıları `src/molecules/coefficients.json` ve `.js`'e yazar (bu makinede 233,9 s) |
 | `npm run bench` | Doğrulama kümesi A. Taze kümeler: `node --expose-gc tests/benchmarks/validate.js --seed 16180339 --name validation-d` (D) ve `... --seed 14142135 --name validation-e --k 1` (E). `--retable` ölçüm yapmadan tabloları yeniden kurar |
 | `npm run karar-yuku` | Karar süresinin doğrudan ölçümü ve örneklem doğruluğu → `bench/results/karar-yuku-v4.md` |
 | `npm run figures` | Rapor şekilleri (`docs/rapor/*.svg`) |
-| `npm run mutation` | Mutasyon denetimi (12 bilerek konmuş hata) → `docs/mutasyon.md` |
+| `npm run mutation` | Mutasyon denetimi (25 bilerek konmuş hata) → `docs/mutasyon.md` |
 | `npm run web` | Bağımlılıksız yerel sunucu (atölye, site, sunum) |
 | `npm run paketler` | Hazır paketleri iş akışı motoruyla çalıştırıp komut satırıyla karşılaştırır (Agora örneğini `web/data/agora.json`'dan `ornek-agora/` klasörüne açar) |
 | `npm run ornekler` | Atölyenin örnek verilerini gerçek dosyalardan üretir (`web/data/`; Agora örneği yalnızca Agora kaynağı yanındayken yenilenir) |
@@ -75,6 +116,8 @@ Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), y
 | `node scripts/uml-ciz.js --pdf` | UML diyagramları (`docs/uml/`) |
 | `node scripts/sayi-denetimi.js` | Rapor, README, sunum, site ve kontrol listesindeki her sayıyı kaynak dosyalara karşı denetler |
 | `node scripts/arayuz-denetimi.js` | Atölyenin gerçek Chromium'da uçtan uca denetimi (Playwright gerekir), ekran görüntüleri `docs/ekran/` |
+| `node scripts/erisilebilirlik-denetimi.js` | Atölye, site ve sunumda WCAG 2.1 AA denetimi (Playwright + axe-core) → `docs/kalite/erisilebilirlik.md` |
+| `node scripts/baglanti-denetimi.js` | Site, sunum ve atölyede kırık bağlantı denetimi |
 | `npm run report` | `docs/rapor/rapor.html` → `Rapor.pdf` (Playwright gerekir) |
 
 Ölçüm yaparken makinede başka ağır iş çalışmamalı. Sonuçlar makineye bağlıdır: teslimden önce `npm run calibrate` ve ardından taze kümeler kendi bilgisayarınızda yeniden çalıştırılabilir (yeni tohumla; eski sonuçlar silinmeden).
@@ -99,8 +142,20 @@ node bin/ios.js scan --preset todo ornek-agora/forum
 
 - `run`: stdout'a satır başına bir `Sequence.Match` (JSONL) yazar; karar özeti stderr'e gider. Bileşen adı `ExactMatch` ya da bir atomun adı olabilir.
 - `explain`: yalnızca molekülün kararını (`record`) JSON olarak yazar.
-- `scan`: dosya ya da klasörlerde arar; çıktı `dosya:satır:sütun: desen`. Hazır kümeler: `todo`, `secrets`, `banned-api`, `errors`. `--json` (JSONL), `--fail` (bulgu varsa çıkış kodu 1; sürekli entegrasyon için).
+- `scan`: dosya ya da klasörlerde arar; çıktı `dosya:satır:sütun: desen`. Hazır kümeler: `todo`, `secrets`, `banned-api`, `errors` (virgülle birden çok). Seçenekler: `--format text|json|sarif` (`--json`, `--sarif` kısaltmaları), `--fail` (bulgu varsa çıkış kodu 1), `--word` (tam sözcük), `--no-inline-ignore`, `--ignore-file <yol>` (varsayılan `./.iosignore`), `--baseline <eski.sarif>` (yalnızca yeni bulgular), `--no-redact`.
+- `workflow run | lint | explain | diagram <is-akisi.json>`: atölyede "Dışa aktar" ile indirilen iş akışını tarayıcısız çalıştırır, denetler, anlatır ya da Mermaid / DOT diyagramını yazar.
 - `list`: kayıtlı atomları listeler.
+- Çıkış kodları: 0 başarılı · 1 bulgu var (`--fail`), kapı kaldı, denetimde hata ya da çalışma hatası · 2 kullanım hatası.
+
+Bir satırı bilerek bırakmak için satıra `ios:ignore`, bir üst satıra `ios:ignore-next-line` yazılır (gitleaks'teki `gitleaks:allow`, ESLint'teki `eslint-disable-next-line` gibi). Sürekli entegrasyonda yalnızca yeni bulgularla kalmak için:
+
+```bash
+node bin/ios.js scan --preset secrets,banned-api --format sarif . > taban.sarif
+```
+
+```bash
+node bin/ios.js scan --preset secrets,banned-api --baseline taban.sarif --fail .
+```
 
 Kod içinden kullanım:
 
@@ -118,18 +173,24 @@ src/functions/   algoritma çekirdekleri (saf; yalnızca sayı dizileri üzerind
 src/atomic/      atom sınıfları: manifest + selection + process (ExactSearchAtom ortak sınıf)
 src/molecules/   ExactMatch.js (molekül), costModel.js (tahmin + NNLS), coefficients.json/.js
 src/registry.js  kayıt defteri: yeni atom eklemek molekülü değiştirmez
+src/contracts.js rol arayüzleri: Describable, Searcher, SelectionProvider, WorkflowComponent
 src/shape.js     veri şekli: n, σ, σe, k, mMin, mMax, mMean (64 × 256 karakterlik örneklem)
 src/adapters/    kaynak dosya → FASTA.Entry uyarlayıcısı
-src/workflows/   iş akışı motoru (engine), atölye kataloğu, hazır paketler, atom yarışı, CodeScan
+src/workflows/   iş akışı motoru (engine), katalog, geçmiş (history), denetim (lint), diyagram,
+                 çalıştırma kaydı (provenance), hazır paketler, atom yarışı, CodeScan
+src/scan/        tarama kuralları (kimlik, önem, CWE), süzgeçler, parmak izi, maskeleme, SARIF
 bin/ios.js       komut satırı
-web/             Kod Bilimi Atölyesi (saf HTML/CSS/JS; ../src modüllerini doğrudan içe aktarır)
+web/             Kod Bilimi Atölyesi: app.js (giriş), state.js, actions.js + actions/ (denetleyici),
+                 views/ (görünümler), lib/ (DOM'suz yardımcılar), keyboard.js, runner/worker/core
 site/            proje sitesi (scripts/site-uret.js ile üretilir)
 bench/           veri üretici, zaman ölçümü, kod korpusu, sonuçlar (results/)
 tests/unit/      birim testleri (npm test)
 tests/benchmarks/ kalibrasyon, doğrulama, ölçütler, şekiller
-tests/data/      gerçek veri: lambda faj genomu, 126 E. coli K-12 proteini
-docs/            rapor, sunum, UML, sapmalar, mutasyon, anlatım, kontrol listesi, ekran görüntüleri
+tests/data/      gerçek veri (lambda faj genomu, 126 E. coli K-12 proteini); kurallar/ işaretli örnekler
+docs/            rapor, sunum, UML, kalite sonuçları, benzer projeler, sapmalar, mutasyon, anlatım
 scripts/         sunucu, örnek veri, paket karşılaştırması, site/UML üretimi, denetimler, PDF
+types/           tür denetimi için genel bildirimler (çalışan koda girmez)
+.github/         CI iş akışları, CodeQL, kendi taramamız, Dependabot, konu ve PR şablonları
 ```
 
 ## Depo ve geçmiş
@@ -146,14 +207,23 @@ git archive --format=zip -o kod-bilimi-atolyesi.zip HEAD
 
 Yayın adresi: **<https://baki-b.github.io/YZM327-Odev-3/>** (kökteki `index.html` siteye yönlendirir).
 
-`.github/workflows/sayfalar.yml`, `main` dalına her gönderimde Node 22 ile `npm test` çalıştırır; testler geçmezse yayımlamaz. Geçerse depoyu olduğu gibi siteye koyar ve yayınlar; Actions sekmesinden elle de başlatılabilir. Site, atölye, sunum ve rapor statik dosyalardır ve göreli yollarla çalışır; derleme adımı yoktur. `.github/workflows/testler.yml` her gönderimde ve pull request'te testleri çalıştırır.
+`.github/workflows/sayfalar.yml`, `main` dalına her gönderimde Node 22 ile `npm test` çalıştırır; testler geçmezse yayımlamaz. Geçerse depoyu olduğu gibi siteye koyar ve yayınlar; Actions sekmesinden elle de başlatılabilir. Site, atölye, sunum ve rapor statik dosyalardır ve göreli yollarla çalışır; derleme adımı yoktur.
+
+Diğer iş akışları (`.github/workflows/`):
+
+| İş akışı | Ne zaman | Ne yapar |
+|---|---|---|
+| `testler.yml` | her gönderim ve pull request | birim testleri (Node 22 ve 24), paket eşitliği, kapsama eşiği, tür denetimi, tarayıcıda arayüz + bağlantı + erişilebilirlik denetimi, belgelerdeki sayıların denetimi |
+| `codeql.yml` | `main`, pull request, haftalık | CodeQL statik güvenlik analizi |
+| `tarama.yml` | `main`, pull request | kendi tarayıcımızla depo taraması: gizli bilgi kapısı + SARIF'in GitHub kod tarama ekranına yüklenmesi |
+| `dependabot.yml` | haftalık | Actions sürümlerinin güncellenmesi |
 
 Pages ilk kez açılırken iş akışı Pages'i kendisi etkinleştirmeyi dener. Bu başarısız olursa bir kez elle yapın: depo **Settings → Pages → Build and deployment → Source: "GitHub Actions"**, ardından **Actions → GitHub Pages → Run workflow**.
 
 ## Veri kaynakları
 
 - **Lambda faj genomu:** NC_001416.1, 48 502 baz. `tests/data/lambda_NC_001416.fa` (bowtie2 deposundaki örnek dosya, NCBI kaydının kopyası).
-- **E. coli K-12 proteinleri:** 126 UniProtKB/Swiss-Prot kaydı (OX=83333). `tests/data/ecoli_k12_126_proteins.fasta`; her kaydın kaynağı `.kaynak.tsv` dosyasında.
+- **E. coli K-12 proteinleri:** 126 UniProtKB/Swiss-Prot kaydı (OX=83333; UniProt verileri CC BY 4.0). `tests/data/ecoli_k12_126_proteins.fasta`; her kaydın kaynağı `.kaynak.tsv` dosyasında.
 - **Kaynak kod korpusu:** bu deponun Agora projesi (`forum/`, `testler/`, `tarayici/`, `olcum/`, `laboratuvar/`) → `bench/corpus/kod.txt`.
 - **Atölye örnekleri** (`web/data/`, `npm run ornekler`): Agora `forum/` klasörü (114 dosya), bench/data.js log üreticisinden örnek log (+ 3 elle yazılmış örnek Traceback bloğu), açıkça **sahte** gizli bilgi örnekleri (gerçek anahtar yok; AKIA ile başlayan değer AWS belgelerindeki resmî örnek anahtardır).
 

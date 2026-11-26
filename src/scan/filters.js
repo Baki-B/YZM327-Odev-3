@@ -43,7 +43,7 @@ const isWordChar = (c) => c !== undefined && c !== '' && WORD.test(c);
 
 /**
  * Eşleşme tam sözcük mü? Desenin harf ya da rakamla başlayan (biten) ucunda, metinde önce
- * (sonra) bir harf, rakam ya da alt çizgi olmamalı. Desen "eval(" gibi noktalama ile
+ * (sonra) bir harf, rakam ya da alt çizgi olmamalı. Desen "eval(" gibi noktalama ile  ios:ignore
  * bitiyorsa o uçta sınır aranmaz (düzenli ifadelerdeki \b gibi).
  */
 export function isWholeWord(text, position, length) {

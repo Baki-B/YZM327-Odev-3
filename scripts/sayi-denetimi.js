@@ -1,7 +1,8 @@
 // Sayı denetimi: belgelerde geçen her sayı bir kaynak dosyada bulunmalı.
 // Kaynaklar: bench/results/*.md ve *.json (ölçümler), docs/mutasyon.md (mutasyon denetimi),
-// hazır paketlerin beklenen sayıları (src/workflows/packages.js) ve bu betiğin çalıştırdığı
-// `node --test` sayıları. Bunlarda bulunmayan sayılar yalnızca aşağıdaki SABİTLER listesinde
+// docs/kalite/ (denetim betiklerinin çıktıları: kapsama, tür, arayüz, bağlantı, erişilebilirlik,
+// GitHub araştırması), hazır paketlerin beklenen sayıları (src/workflows/packages.js) ve bu
+// betiğin çalıştırdığı `node --test` sayıları. Bunlarda bulunmayan sayılar yalnızca aşağıdaki SABİTLER listesinde
 // gerekçesiyle yazılıysa kabul edilir (ödev metnindeki sabitler, yıllar, kod sabitleri...).
 // Bir sayı, kaynaktaki bir değerin aynı ondalık basamağa yuvarlanmış hâliyle (ya da yüzde
 // olarak 100 katıyla) eşleşirse "bulundu" sayılır.
@@ -37,6 +38,15 @@ for (const f of readdirSync(new URL('bench/results/', VIZE))) {
   fromText(text);
 }
 fromText(read('docs/mutasyon.md'));
+// docs/kalite: JSON'larda yalnızca sayı alanları (açıklama metinlerindeki sayılar değil); .md
+// özetleri metin olarak. tur-denetimi-oncesi.txt ham derleyici çıktısıdır (satır:sütun
+// numaraları denetimi gevşetirdi); sayısı tur-denetimi.json'da "before" alanında.
+const kalite = {};
+for (const f of readdirSync(new URL('docs/kalite/', VIZE))) {
+  const text = read(`docs/kalite/${f}`);
+  if (f.endsWith('.json')) walk((kalite[f.slice(0, -5)] = JSON.parse(text)));
+  else if (f.endsWith('.md')) fromText(text);
+}
 for (const p of PACKAGES) walk(p.expected), walk(Object.values(p.expected).reduce((a, b) => a + b, 0));
 const testCounts = {};
 for (const f of readdirSync(new URL('tests/unit/', VIZE)).filter((x) => x.endsWith('.test.js'))) {
@@ -59,11 +69,14 @@ const SABITLER = {
   // kod sabitleri
   '64': 'örneklem: 64 parça / ızgara m = 64', '256': 'örneklem: 256 karakter', '16384': '64 × 256', '262144': 'v3 örneklem sınırı 64 × 4096', '4096': 'v3 parça boyu',
   '16': 'q-gram özeti 16 bit / 16 özel durum / 16 Python anahtar sözcüğü', '2': 'Allmer kuralı ve genel', '3': 'genel', '5': 'tekrar sayısı', '7': 'yedi yeni atom', '8': 'sekiz atom', '9': 'molekül testi: 9 strateji',
-  '12': 'mutasyon sayısı', '18': 'Kahn / bileşen', '120': 'vaka sayısı', '180': 'kalibrasyon vakası', '360': 'rastgele vaka',
-  '8327': 'yerel sunucu bağlantı noktası', '390': 'telefon genişliği (px)', '1280': 'masaüstü genişliği (px)', '1060': 'site genişliği',
+  '12': 'ilk mutasyon turunun hata sayısı (KARARLAR geçmişi)', '18': 'Kahn / bileşen', '120': 'vaka sayısı', '180': 'kalibrasyon vakası', '360': 'rastgele vaka',
+  '8327': 'yerel sunucu bağlantı noktası', '390': 'telefon genişliği (px)', '1280': 'masaüstü genişliği (px)',
+  '1060': 'site genişliği / eski web/app.js satır sayısı (git show 5078f1b:web/app.js | wc -l)',
+  '450': 'arayüz dosyası satır sınırı (web.test.js)', '400': 'özellik tabanlı test: tohum başına 400 işlem (history.test.js)',
+  '24': 'Node 24 (CI matrisi)', '2.1': 'WCAG 2.1 / Contributor Covenant 2.1', '20261125': 'özellik tabanlı test tohumu',
   '48502': 'lambda genomu uzunluğu (NCBI kaydı)', '126': 'E. coli protein sayısı', '34004': 'E. coli proteinlerinin toplam uzunluğu', '001416': 'NC_001416.1', '001416.1': 'NC_001416.1',
   '415': 'lambda: ilk GATC konumu (ios run çıktısı)', '881771': 'kod.txt uzunluğu (atölye karar kaydı)', '19.661': 'kod.txt σe (atölye karar kaydı)', '111': 'kod.txt σ', '880': 'kod.txt ~880 KB', '8597': '882 + 7715',
-  '114': 'agora.json dosya sayısı (scripts/ornekler.js çıktısı)', '29': 'arayüz denetimi: 29 denetim', '2.10': 'işlemci 2,10 GHz', '2.30': 'işlemci 2,30 GHz', '23.4': 'Node v22.23.4', '6.18': 'Linux 6.18',
+  '114': 'agora.json dosya sayısı (scripts/ornekler.js çıktısı)', '29': 'arayüz denetiminin eski denetim sayısı (KARARLAR geçmişi)', '2.10': 'işlemci 2,10 GHz', '2.30': 'işlemci 2,30 GHz', '23.4': 'Node v22.23.4', '6.18': 'Linux 6.18',
   '0.775': 'lambda explain tahmini (bm4DNADS)', '0.799': 'lambda explain tahmini (Horspool)', '0.812': 'lambda explain tahmini (Boyer-Moore)', '3.994': 'lambda explain σe',
   '233.9': 'kalibrasyon ızgarası süresi (calibrate çıktısı)', '3.31': 'ortak eşleşme maliyeti 3,31·10⁻⁷', '1440': '180 × 8',
   '12000': 'doğrulama n alt sınırı', '900000': 'doğrulama n üst sınırı', '30': 'karışık uzunluk oranı %30', '0.951': 'D molekül yükü medyanı',
@@ -74,6 +87,7 @@ const SABITLER = {
 const strip = (html) => html.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ');
 const DOCS = [
   ['docs/rapor/rapor.html', true], ['README.md', false], ['docs/sunum.md', false], ['docs/kontrol.md', false], ['docs/anlatim.md', false], ['KARARLAR.md', false],
+  ['CHANGELOG.md', false], ['CONTRIBUTING.md', false], ['SECURITY.md', false], ['docs/benzer-projeler.md', false], ['docs/uml/README.md', false],
   ['docs/sunum/index.html', true], ...readdirSync(new URL('site/', VIZE)).filter((f) => f.endsWith('.html')).map((f) => [`site/${f}`, true]),
 ];
 let bad = 0;
@@ -82,7 +96,7 @@ for (const [file, html] of DOCS) {
   let text = read(file);
   if (html) text = strip(text);
   // kod blokları, dosya adları, tohumlar ve komutlar sayı sayılmaz
-  text = text.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`]*`/g, ' ').replace(/[\w./-]*\.(?:js|json|md|html|svg|png|pdf|fa|fasta|tsv|puml|txt|log)\b/g, ' ')
+  text = text.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`]*`/g, ' ').replace(/\bv?\d+\.\d+\.\d+\b/g, ' ').replace(/\bCWE-\d+/g, ' ').replace(/[\w./-]*\.(?:js|json|md|html|svg|png|pdf|fa|fasta|tsv|puml|txt|log)\b/g, ' ')
     .replace(/https?:\S+/g, ' ').replace(/\b[vV]\d\b/g, ' ').replace(/\b(?:Ek|Şekil|Bölüm|bölüm|sayfa|Sıralı diyagram|Sınıf diyagramı)\s+\d+/g, ' ')
     .replace(/\b(?:İG|İOG|H|D|S|W)\d\b/g, ' ').replace(/(\d)\/(\d)/g, '$1 ; $2');
   const misses = [];
@@ -112,9 +126,27 @@ for (const [file, html] of DOCS) {
   const tr = (x, d) => x.toFixed(d).replace('.', ',');
   const rapor = strip(read('docs/rapor/rapor.html'));
   const readme = read('README.md');
+  const kap = kalite.kapsama.totals;
+  const tur = kalite['tur-denetimi'];
+  const ui = kalite['arayuz-denetimi'];
+  const bag = kalite['baglanti-denetimi'];
+  const a11y = kalite.erisilebilirlik;
+  const a11yAll = Object.values(a11y.byImpact).reduce((a, b) => a + b, 0);
+  const a11yBefore = Number(read('docs/kalite/erisilebilirlik-oncesi.md').match(/engelleyici[^\d]*(\d+)/)?.[1]);
   const claims = [
     ['rapor: bm4DNAHMbs mutasyonunda düşen test', rapor, `Mutasyonla sınandı: ${failCount(4)} test başarısız`],
-    ['rapor: yakalanan mutasyon', rapor, `${caught}'si de yakalandı`],
+    // Türkçe ek sayıya göre değişir (12'si, 25'i): ek ne olursa olsun sayı doğru olmalı.
+    ['rapor: yakalanan mutasyon', rapor, new RegExp(`\\b${caught}'(?:i|ı|u|ü|si|sı|su|sü) de yakalandı`)],
+    ['rapor: yerleştirilen mutasyon', rapor, `koda ${mutRows.length} küçük hata yerleştirdi`],
+    ['rapor: kapsama', rapor, `kapsama satır %${tr(kap.lines.pct, 1)} / dal %${tr(kap.branches.pct, 1)}`],
+    ['README: kapsama', readme, `kapsama satır %${tr(kap.lines.pct, 1)} / dal %${tr(kap.branches.pct, 1)} / işlev %${tr(kap.functions.pct, 1)}`],
+    ['rapor: tür denetimi', rapor, `${tur.errors} hata (ilk ölçümde ${tur.before})`],
+    ['README: tür denetimi', readme, `${tur.errors} hata (ilk ölçümde ${tur.before})`],
+    ['rapor: arayüz denetimi', rapor, `${ui.passed}/${ui.total}`],
+    ['README: arayüz denetimi', readme, `${ui.passed}/${ui.total}`],
+    ['rapor: bağlantı denetimi', rapor, `${bag.pages} sayfa, ${bag.links} bağlantı, ${bag.broken} kırık`],
+    ['rapor: erişilebilirlik', rapor, `${a11y.pages} taramada ${a11yAll} ihlal (ilk ölçümde ${a11yBefore} engelleyici)`],
+    ['README: erişilebilirlik', readme, `${a11yAll} ihlal (ilk ölçümde ${a11yBefore})`],
     ['rapor: npm test toplamı', rapor, `${total}/${total} geçiyor`],
     ['README: test toplamı', readme, `${total} birim testi`],
     ['rapor: D seçilen geo. ort.', rapor, `geometrik ortalaması <b>${tr(D['ExactMatch (auto)'].geomeanSlowdown, 3)}</b>`.replace(/<\/?b>/g, '')],
@@ -126,7 +158,7 @@ for (const [file, html] of DOCS) {
   ];
   for (const [name, text, needle] of claims) {
     const norm2 = (t) => t.replace(/\s+/g, ' ');
-    const ok = norm2(text).includes(norm2(needle));
+    const ok = needle instanceof RegExp ? needle.test(norm2(text)) : norm2(text).includes(norm2(needle));
     if (!ok) bad++;
     console.log(`${ok ? 'tutarlı ' : 'TUTARSIZ'} ${name}: "${needle}"`);
   }

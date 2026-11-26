@@ -1,0 +1,27 @@
+@startuml 3d_sirali_geri_al
+!include _stil.iuml
+title Sıralı diyagram 4: geri al (Ctrl+Z)
+actor Kullanıcı as U
+participant "keyboard.js" as KB
+participant "actions/edit.js" as ACT
+participant History as H
+participant Command as C
+participant bus as B
+participant "views/*" as V
+autonumber
+U -> KB : Ctrl+Z (yazı alanında değilken)
+KB -> ACT : undo()
+ACT -> H : undo()
+H -> C : cmd.undo(doc)
+C -> C : iş akışı önceki durumuna döner
+H --> ACT : geri alınan komut (label, meta)
+alt iş akışının tamamı değişti (paket, içe aktarma, temizleme)
+  ACT -> ACT : açık paket meta'dan geri gelir; çalıştırma sonucu sıfırlanır
+  ACT -> B : emit("yuklendi")
+else tek değişiklik
+  ACT -> ACT : changed(): denetim (lint) yenilenir, otomatik kayıt planlanır
+  ACT -> B : emit("degisti")
+end
+B -> V : abonelere iletir
+V --> U : tuval, panel ve rozet yeniden çizilir; "Geri alındı: Kutu silme"
+@enduml

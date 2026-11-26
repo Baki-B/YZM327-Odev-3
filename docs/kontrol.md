@@ -35,7 +35,7 @@
 | 4.3 Karşılaştırma: her zaman X, Allmer kuralı (+ molekül uçtan uca) | yapıldı | `bench/results/validation-d.md`, `validation-e.md` |
 | 4.4 Ölçütler (en hızlı oranı, %10, geo. ort., en kötü, toplam oran) | yapıldı | aynı dosya |
 | Ölçüm kuralları: ısınma, ≥ 3 tekrar medyan, makine bilgisi | ısınma + 5 tekrar, dönüşümlü | `bench/timing.js`; makine bilgisi sonuç dosyalarında |
-| 5. Rapor ≤ 6 sayfa + ekler, 8 bölüm, şekil (m × k haritası), yanlış seçim analizi | ana metin 5 sayfa + ekler (gereksinimler, SOLID, test stratejisi, 7 UML diyagramı) | `docs/rapor/Rapor.pdf` |
+| 5. Rapor ≤ 6 sayfa + ekler, 8 bölüm, şekil (m × k haritası), yanlış seçim analizi | ana metin + ekler (gereksinimler, SOLID ve desenler, test stratejisi, kalite kapıları, benzer projeler, gelecek iş, 10 UML diyagramı) | `docs/rapor/Rapor.pdf` |
 
 ## Teslim edilecekler (bölüm 7)
 
@@ -47,10 +47,23 @@
 | Rapor PDF | yapıldı | `docs/rapor/Rapor.pdf` |
 | Sunum | 10 slayt + konuşma notları; canlı demo atölyede | `docs/sunum/index.html`, `docs/sunum.md`, `docs/anlatim.md` |
 | Site | yapıldı (sayılar sonuç dosyalarından üretilir) | `site/`, `scripts/site-uret.js` |
-| Arayüz (Kod Bilimi Atölyesi) | yapıldı; 29/29 tarayıcı denetimi | `web/`, `scripts/arayuz-denetimi.js` |
-| UML diyagramları | 7 diyagram (kullanım durumu, 2 sınıf, 3 sıralı, paket) | `docs/uml/` |
+| Arayüz (Kod Bilimi Atölyesi) | yapıldı; 50/50 tarayıcı denetimi | `web/`, `scripts/arayuz-denetimi.js` |
+| UML diyagramları | 10 diyagram (kullanım durumu, 4 sınıf, 4 sıralı, paket) | `docs/uml/` |
 | Depo yapısı (src/functions, src/atomic, src/molecules/ExactMatch.js, src/registry.js, src/shape.js, bin/ios.js, bench/, tests/unit/, tests/benchmarks/) | yapıldı | README "Depo yapısı" |
-| `npm test` temiz kopyada, bağımlılıksız | 360/360 | temiz klonda denendi |
+| `npm test` temiz kopyada, bağımlılıksız | 436/436 | temiz klonda ve CI'da (Node 22 ve 24) |
+
+## Yazılım mühendisliği uygulamaları (ek)
+
+| Uygulama | Durum | Nerede |
+|---|---|---|
+| SOLID: tek sorumluluk, açık/kapalı, yerine geçebilme, arayüz ayrımı, bağımlılığın tersine çevrilmesi | yapıldı; her biri testle gösterildi | rapor Ek C.2, `site/kalite.html` |
+| Tasarım desenleri: Template Method, Strategy, Registry, Adapter, Command, Composite, Observer, Facade | yapıldı | rapor Ek C.2, UML Şekil 4–7 |
+| Gereksinimler ve izlenebilirlik | 9 işlevsel + 7 işlevsel olmayan gereksinim, her biri teste bağlı | rapor Ek C.1 |
+| Sürekli entegrasyon ve kalite kapıları | testler (Node 22 ve 24), kapsama eşiği, tür denetimi, arayüz, erişilebilirlik, bağlantı ve sayı denetimi, CodeQL, kendi taramamız | `.github/workflows/`, `docs/kalite/` |
+| Güvenlik | CSP, XSS denemesi testte, gizli bilgi maskeleme, tehdit modeli | `SECURITY.md` |
+| Erişilebilirlik | WCAG 2.1 AA, 0 ihlal | `docs/kalite/erisilebilirlik.md` |
+| Depo düzeni | LICENSE, CHANGELOG, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, CITATION.cff, şablonlar, Dependabot | depo kökü, `.github/` |
+| Benzer projelerin incelenmesi | 71 depo; alınan ve alınmayan fikirler gerekçesiyle | `docs/benzer-projeler.md` |
 
 ## Bonus (bölüm 9)
 
@@ -75,8 +88,26 @@
 - Köşeli parantezli alanları doldurun: ders kodu ve adı, öğretim elemanı, üye adları, numaralar, katkılar (README, `docs/rapor/rapor.html`, `scripts/site-uret.js` içindeki ekip sayfası ve slaytlar; sonra `node scripts/site-uret.js` ve `npm run report`).
 - GitHub Pages: `.github/workflows/sayfalar.yml` `main`'e her gönderimde yayınlar → <https://baki-b.github.io/YZM327-Odev-3/>. İlk çalıştırmada etkinleştirme başarısız olursa README "GitHub Pages'te yayınlama" bölümündeki tek ayar.
 - Teslim yapısı: tamamlandı; proje bu depoda, kök düzeniyle.
+- Depo açıklaması ve konuları (GitHub'da **About** → dişli simgesi): açıklama, web sitesi adresi (<https://baki-b.github.io/YZM327-Odev-3/>) ve konular (ör. `string-matching`, `workflow-editor`, `static-analysis`, `sarif`). Bu ayar yalnızca depo sahibince yapılabilir.
 
-## Son denetim (11 Kasım 2026)
+## Son denetim (26 Kasım 2026)
+
+Güçlendirme turundan sonra bütün denetimler yeniden çalıştırıldı (sayılar komut çıktılarından ve
+`docs/kalite/*.json` dosyalarından):
+
+| Denetim | Komut | Sonuç |
+|---|---|---|
+| Birim testleri | `npm test` | 436/436 geçti |
+| Test kapsaması | `npm run kapsama` | satır %99,4 (4 502 / 4 528), dal %90,4 (1 342 / 1 484), işlev %97,4 (480 / 493); eşikler %95 / %85 / %95 |
+| Statik tür denetimi | `npm run tur-denetimi` | 0 hata (ilk ölçümde 138) |
+| Mutasyon denetimi | `npm run mutation` | 25/25 yakalandı (ilk turda 24/25; kaçan mutasyon için test güçlendirildi) |
+| Arayüz denetimi (gerçek Chromium) | `node scripts/arayuz-denetimi.js` | 50/50 |
+| Kırık bağlantı | `node scripts/baglanti-denetimi.js` | 18 sayfa, 206 bağlantı, 0 kırık |
+| Erişilebilirlik (WCAG 2.1 AA) | `node scripts/erisilebilirlik-denetimi.js` | 20 taramada 0 ihlal (ilk ölçümde 25 engelleyici) |
+| Belgelerdeki sayılar | `node scripts/sayi-denetimi.js` | kaynaksız sayı yok; hedefli iddiaların hepsi tutarlı |
+| Rapor | `npm run report` | ana metin 6 sayfa (sınır 6) |
+
+## Önceki denetim (11 Kasım 2026)
 
 Teslim öncesi bütün iş yeniden denetlendi. Sonuçlar:
 

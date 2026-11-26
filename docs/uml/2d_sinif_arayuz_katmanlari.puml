@@ -1,0 +1,66 @@
+@startuml 2d_sinif_arayuz_katmanlari
+!include _stil.iuml
+title Sınıf diyagramı (4/4): atölye arayüzü — Observer ve Facade desenleri
+class "app.js" as APP <<giriş>> {
+  init*() çağırır
+  ilk iş akışını yükler
+}
+class "keyboard.js" as KB <<olay bağlama>> {
+  bind(): düğmeler, sekmeler, kısayollar
+}
+class "views/*" as VIEWS <<görünüm (abone)>> {
+  canvas, props, results, palette, dialogs
+  + init*() : bus.on(olay, çiz)
+  + render*()
+}
+class "actions.js" as FACADE <<Facade (cephe)>> {
+  export * from actions/…
+}
+class "actions/core.js" as CORE {
+  changed(), applyCommand()
+  select(), setTab()
+}
+class "actions/edit.js" as EDIT {
+  kutu, bağlantı, ayar
+  undo(), redo(), pano
+}
+class "actions/io.js" as IO {
+  paket, içe / dışa aktarma
+  bağlantı, otomatik kayıt
+}
+class "actions/run.js" as RUN {
+  run(), race(), explain()
+  Mermaid, kayıt
+}
+class bus <<Observer (olay yolu)>> {
+  + on(olay, fn) : kapat
+  + emit(olay, veri)
+}
+class "state.js" as ST <<store>> {
+  + doc { wf }
+  + history : History
+  + state : seçim, sonuç, …
+}
+package "src/workflows «DOM'suz çekirdek»" as SRC
+class "runner.js" as RN <<Web Worker>>
+APP ..> VIEWS
+APP ..> KB : başlatır
+KB ..> FACADE
+VIEWS ..> FACADE : eylem çağırır
+VIEWS ..> bus : abone olur (on)
+VIEWS ..> ST : okur
+FACADE ..> CORE
+FACADE ..> EDIT : export *
+FACADE ..> IO
+FACADE ..> RUN
+CORE ..> bus : yayımlar
+IO ..> ST : değiştirir
+IO ..> SRC : komut, motor
+RUN ..> RN
+RN ..> SRC
+ST ..> SRC : History
+note bottom of SRC
+  Denetleyici görünümleri içe aktarmaz; görünümler birbirini değil
+  olay yolunu dinler (tests/unit/web.test.js denetler).
+end note
+@enduml

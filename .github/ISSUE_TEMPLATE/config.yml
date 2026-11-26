@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Proje sitesi ve atölye
+    url: https://baki-b.github.io/YZM327-Odev-3/
+    about: Atölyeyi tarayıcıda deneyin, raporu ve sunumu okuyun.
+  - name: Güvenlik açığı bildirimi
+    url: https://github.com/Baki-B/YZM327-Odev-3/security/policy
+    about: Güvenlik açıklarını açık konu (issue) olarak değil, bu sayfadaki yoldan bildirin.

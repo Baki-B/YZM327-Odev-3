@@ -43,11 +43,11 @@ ${body}
   return name;
 }
 
-/** Çizgi; kind: inherit (içi boş üçgen), dep (kesikli açık ok), assoc (düz açık ok), aggr / comp (baklava başta), plain. */
+/** Çizgi; kind: inherit (içi boş üçgen), realize (kesikli + içi boş üçgen: arayüzü gerçekleştirir), dep (kesikli açık ok), assoc (düz açık ok), aggr / comp (baklava başta), plain. */
 function edge(points, { kind = 'assoc', label = '', lx = null, ly = null, startLabel = '', endLabel = '' } = {}) {
   const d = 'M ' + points.map((p) => p.join(' ')).join(' L ');
-  const dashed = kind === 'dep' || kind === 'include';
-  const end = kind === 'inherit' ? 'tri' : kind === 'plain' || kind === 'aggr' || kind === 'comp' ? null : 'open';
+  const dashed = kind === 'dep' || kind === 'include' || kind === 'realize';
+  const end = kind === 'inherit' || kind === 'realize' ? 'tri' : kind === 'plain' || kind === 'aggr' || kind === 'comp' ? null : 'open';
   const start = kind === 'aggr' ? 'dia' : kind === 'comp' ? 'diaf' : null;
   let s = `<path d="${d}" fill="none" stroke="${C.line}" stroke-width="1.3"${dashed ? ' stroke-dasharray="6 4"' : ''}${end ? ` marker-end="url(#${end})"` : ''}${start ? ` marker-start="url(#${start})"` : ''}/>`;
   if (label) {
@@ -192,7 +192,7 @@ function sequence(name, title, width, parts, steps) {
     ['yaris', 400, 362, 'Atomları yarıştır'],
     ['genom', 400, 425, 'Genomda desen ara'],
   ];
-  const R = [['durdur', 670, 120, 'Bulgu varsa\nderlemeyi durdur'], ['sec', 670, 330, 'En hızlı atomu seç']];
+  const R = [['durdur', 670, 120, 'Bulgu varsa\nderlemeyi durdur'], ['sarif', 670, 210, 'Bulguları kod\ntaramasına yükle (SARIF)'], ['sec', 670, 330, 'En hızlı atomu seç'], ['ci', 670, 420, 'Atölye iş akışını\nCI\'da çalıştır']];
   const U = {};
   for (const [id, cx, cy, l] of L) { U[id] = [cx, cy, 128, 27]; b += usecase(cx, cy, 128, 27, l); }
   for (const [id, cx, cy, l] of R) { U[id] = [cx, cy, 108, 27]; b += usecase(cx, cy, 108, 27, l); }
@@ -202,7 +202,7 @@ function sequence(name, title, width, parts, steps) {
   b += actor(905, 150, 'Sürekli\nentegrasyon (CI)');
   for (const id of ['paket', 'kur', 'tara', 'karar', 'yaris']) b += link(128, 185, id);
   for (const id of ['karar', 'genom']) b += link(128, 378, id);
-  b += link(885, 135, 'durdur');
+  for (const id of ['durdur', 'sarif', 'ci']) b += link(885, 135, id);
   const between = (a, c, kind, label) => {
     const [ax, ay, arx, ary] = U[a], [cx, cy, crx, cry] = U[c];
     const p1 = ellipsePoint(ax, ay, arx, ary, cx, cy), p2 = ellipsePoint(cx, cy, crx, cry, ax, ay);
@@ -247,7 +247,7 @@ function sequence(name, title, width, parts, steps) {
   b += text(fn.right + 6, 556, 'çekirdeği çağırır', { size: 11.5, fill: C.ink2 });
   b += note(762, 600, 224, ['+5 atom daha: Boyer-Moore,', 'Shift-Or, KMP, bm4DNADS,', 'bm4DNAHMbs (aynı kancalar).', 'Yeni atom = yeni sınıf +', 'registry.register(); molekül', 'kodu değişmez (Açık/Kapalı).']);
   b += note(760, 48, 226, ['Template Method: process()', 'iskeleti üst sınıfta; parametre', 'denetimi, ignoreCase, alfabe', 'küçültme, sıralama ortak.', 'Alt sınıf yalnızca prepare()', 've scanText() yazar.']);
-  svg('2a_sinif_atom_molekul', 1000, 720, 'Sınıf diyagramı (1/2): atomlar, molekül ve kayıt defteri (Template Method + Strategy + Registry)', b);
+  svg('2a_sinif_atom_molekul', 1000, 720, 'Sınıf diyagramı (1/4): atomlar, molekül ve kayıt defteri (Template Method + Strategy + Registry)', b);
 }
 
 // ================================================================== 2b. sınıf: iş akışı motoru ve atölye
@@ -262,7 +262,7 @@ function sequence(name, title, width, parts, steps) {
   const eng = classBox({ x: 560, y: 48, w: 290, name: 'engine', stereo: 'modül, DOM\'suz', ops: ['addNode(), removeNode()', 'canConnect() : { ok, reason }', 'connect(), removeEdge()', 'topologicalOrder()  «Kahn»', 'validateWorkflow() : sorun[]', 'runWorkflow(wf, katalog, ctx)', 'serialize / deserializeWorkflow()', 'explainWorkflow() : Türkçe metin'] });
   const cat = classBox({ x: 600, y: 300, w: 250, name: 'catalog', stereo: 'modül', ops: ['createCatalog(registry)', '  : Map<type, Component>'] });
   const ext = classBox({ x: 912, y: 300, w: 150, name: 'Registry, ExactMatch', stereo: 'Şekil 2a', attrs: [] });
-  const ui = classBox({ x: 880, y: 48, w: 170, name: 'web/app.js', stereo: 'arayüz', ops: ['çizim, sürükle-bırak', 'özellikler paneli'] });
+  const ui = classBox({ x: 880, y: 48, w: 170, name: 'web/ (atölye)', stereo: 'arayüz', ops: ['state, actions, views', '(Şekil 2d)'] });
   const wk = classBox({ x: 880, y: 175, w: 170, name: 'web/worker.js', stereo: 'Web Worker', ops: ['runSerialized()', 'raceNode()'] });
   for (const g of [wf, node, edg, comp, port, tur, eng, cat, ext, ui, wk]) b += g.svg;
   b += edge([[wf.cx - 40, wf.bottom], [wf.cx - 40, node.top]], { kind: 'comp', label: 'kutular', lx: wf.cx - 34, ly: (wf.bottom + node.top) / 2, endLabel: '*' });
@@ -279,7 +279,76 @@ function sequence(name, title, width, parts, steps) {
   b += edge([[wk.left, wk.top + 30], [eng.right, wk.top + 30]], { kind: 'dep' });
   b += edge([[ui.cx, ui.bottom], [wk.cx, wk.top]], { kind: 'dep', label: 'postMessage', lx: ui.cx + 8, ly: (ui.bottom + wk.top) / 2 + 4 });
   b += note(800, 470, 250, ['Tür denetimi: bağlantı yalnızca', 'aynı UcTuru arasında; tek girişli', 'uca ikinci bağlantı ve döngü', 'reddedilir, nedeni Türkçe cümle.', 'Motor DOM\'a, dosyaya, ağa', 'dokunmaz: Node testleri ve', 'Web Worker aynı kodu çalıştırır.']);
-  svg('2b_sinif_is_akisi', 1080, 640, 'Sınıf diyagramı (2/2): iş akışı motoru, katalog ve atölye', b);
+  svg('2b_sinif_is_akisi', 1080, 640, 'Sınıf diyagramı (2/4): iş akışı motoru, katalog ve atölye', b);
+}
+
+
+// ================================================================== 2c. sınıf: komut geçmişi (Command + Composite)
+{
+  let b = '';
+  const act = classBox({ x: 24, y: 48, w: 232, name: 'actions/edit.js', stereo: 'denetleyici (istemci)', ops: ['addComponent(), connectPorts()', 'deleteSelection(), setParam()', 'undo(), redo()', 'pasteFragment()'] });
+  const hist = classBox({ x: 370, y: 48, w: 270, name: 'History', stereo: 'çağıran (invoker)', attrs: ['- undo : Command[*]', '- redo : Command[*]', '- sealed : bool', '+ limit : sayı'], ops: ['+ execute(cmd)', '+ record(cmd)', '+ undo() : Command', '+ redo() : Command', '+ seal()', '+ canUndo, canRedo : bool'] });
+  const doc = classBox({ x: 700, y: 48, w: 170, name: 'Doc', stereo: 'belge', attrs: ['+ wf : Workflow'] });
+  const eng = classBox({ x: 920, y: 48, w: 190, name: 'engine', stereo: 'alıcı (receiver)', ops: ['addNode(), connect()', 'removeEdge()'] });
+  const cmd = classBox({ x: 330, y: 330, w: 270, name: 'Command', stereo: 'interface', attrs: ['+ label : dizgi', '+ key? : dizgi'], ops: ['+ do(doc)', '+ undo(doc)', '+ merge?(next) : Command'] });
+  const macro = classBox({ x: 690, y: 330, w: 250, name: 'MacroCommand', stereo: 'Composite', attrs: ['- commands : Command[*]'], ops: ['+ do(doc): sırayla', '+ undo(doc): ters sırayla', '  (biri hata verirse geri alır)'] });
+  const W = 176;
+  const xs = [16, 200, 384, 568, 752, 936];
+  const subs = [
+    classBox({ x: xs[0], y: 540, w: W, name: 'AddNodeCommand', ops: ['do: addNode()', 'undo: kutuyu çıkar'] }),
+    classBox({ x: xs[1], y: 540, w: W, name: 'RemoveNodeCommand', attrs: ['- saved: kutu, sıra,', '  bağlantılar'] }),
+    classBox({ x: xs[2], y: 540, w: W, name: 'ConnectCommand', ops: ['do: connect()', 'undo: removeEdge()'] }),
+    classBox({ x: xs[3], y: 540, w: W, name: 'MoveNodeCommand', attrs: ['key = "tasi:<id>"'], ops: ['+ merge(next)'] }),
+    classBox({ x: xs[4], y: 540, w: W, name: 'SetParamCommand', attrs: ['key = "ayar:<id>:<k>"'], ops: ['+ merge(next)'] }),
+    classBox({ x: xs[5], y: 540, w: W, name: 'ReplaceWorkflowCmd', attrs: ['- before, after', '+ meta : açık paket'] }),
+  ];
+  for (const g of [act, hist, doc, eng, cmd, macro, ...subs]) b += g.svg;
+  b += edge([[act.right, 100], [hist.left, 100]], { kind: 'assoc', label: 'execute(cmd)', lx: act.right + 10, ly: 94 });
+  b += edge([[hist.cx, hist.bottom + 15], [hist.cx, cmd.top]], { kind: 'aggr', label: 'yığınlar', lx: hist.cx + 10, ly: (hist.bottom + cmd.top) / 2 + 4, endLabel: '*' });
+  b += edge([[hist.right, 90], [doc.left, 90]], { kind: 'assoc', label: 'doc' });
+  const busY = 510;
+  b += `<path d="M ${subs[0].cx} ${busY} L ${subs.at(-1).cx} ${busY}" stroke="${C.line}" stroke-width="1.3" stroke-dasharray="6 4" fill="none"/>`;
+  for (const s of subs) b += `<path d="M ${s.cx} ${s.top} L ${s.cx} ${busY}" stroke="${C.line}" stroke-width="1.3" stroke-dasharray="6 4" fill="none"/>`;
+  b += edge([[cmd.cx, busY], [cmd.cx, cmd.bottom]], { kind: 'realize' });
+  b += edge([[macro.left, macro.top + 26], [cmd.right, macro.top + 26]], { kind: 'realize' });
+  b += edge([[macro.left - 15, macro.bottom - 26], [cmd.right, macro.bottom - 26]], { kind: 'aggr', label: 'commands', lx: cmd.right + 10, ly: macro.bottom - 32, endLabel: '*' });
+  b += edge([[cmd.right, cmd.top + 12], [650, cmd.top + 12], [650, 300], [eng.cx, 300], [eng.cx, eng.bottom]], { kind: 'dep', label: 'do / undo motorun işlevleriyle', lx: 660, ly: 294 });
+  b += note(16, 670, 1100, ['Aynı anahtarlı (key) ardışık komutlar tek adımda birleşir (yazma, ok tuşuyla taşıma); seal() birleştirmeyi keser. Paket açma ve temizleme de bir komuttur.', 'Özellik tabanlı test: 4 tohum × 400 rastgele işlem; her adımda iş akışı bir durum yığını modeliyle karşılaştırılır (tests/unit/history.test.js).']);
+  svg('2c_sinif_komut_gecmisi', 1130, 730, 'Sınıf diyagramı (3/4): geri al / yinele — Command ve Composite desenleri', b);
+}
+
+// ================================================================== 2d. sınıf: atölye arayüz katmanları (Observer + Facade)
+{
+  let b = '';
+  const app = classBox({ x: 24, y: 48, w: 200, name: 'app.js', stereo: 'giriş', ops: ['init*() çağırır', 'ilk iş akışını yükler'] });
+  const kb = classBox({ x: 24, y: 200, w: 200, name: 'keyboard.js', stereo: 'olay bağlama', ops: ['bind(): düğmeler,', 'sekmeler, kısayollar'] });
+  const views = classBox({ x: 270, y: 48, w: 250, name: 'views/*', stereo: 'görünüm (abone)', attrs: ['canvas, props, results,', 'palette, dialogs'], ops: ['+ init*(): bus.on(olay, çiz)', '+ render*()'] });
+  const facade = classBox({ x: 620, y: 48, w: 240, name: 'actions.js', stereo: 'Facade (cephe)', ops: ['export * from actions/…'] });
+  const core = classBox({ x: 600, y: 200, w: 190, name: 'actions/core.js', ops: ['changed(), applyCommand()', 'select(), setTab()'] });
+  const edit = classBox({ x: 806, y: 200, w: 190, name: 'actions/edit.js', ops: ['kutu, bağlantı, ayar', 'undo(), redo(), pano'] });
+  const io = classBox({ x: 600, y: 320, w: 190, name: 'actions/io.js', ops: ['paket, içe / dışa aktarma', 'bağlantı, otomatik kayıt'] });
+  const run = classBox({ x: 806, y: 320, w: 190, name: 'actions/run.js', ops: ['run(), race(), explain()', 'Mermaid, kayıt'] });
+  const bus = classBox({ x: 270, y: 240, w: 250, name: 'bus', stereo: 'Observer (olay yolu)', ops: ['+ on(olay, fn) : kapat', '+ emit(olay, veri)'] });
+  const st = classBox({ x: 270, y: 420, w: 250, name: 'state.js', stereo: 'store', attrs: ['+ doc { wf }', '+ history : History', '+ state: seçim, sonuç, …'] });
+  const src = classBox({ x: 600, y: 450, w: 396, name: 'src/workflows', stereo: "DOM'suz çekirdek", ops: ['engine, history, lint, diagram, provenance', 'catalog, packages, CodeScan'] });
+  const rn = classBox({ x: 1030, y: 320, w: 110, name: 'runner.js', stereo: 'Web Worker', ops: ['worker.js', 'core.js'] });
+  for (const g of [app, kb, views, facade, core, edit, io, run, bus, st, src, rn]) b += g.svg;
+  b += edge([[app.right, 70], [views.left, 70]], { kind: 'dep' });
+  b += edge([[app.cx, app.bottom], [app.cx, kb.top]], { kind: 'dep', label: 'başlatır', lx: app.cx + 6, ly: (app.bottom + kb.top) / 2 + 4 });
+  b += edge([[kb.right, 215], [560, 215], [560, 90], [facade.left, 90]], { kind: 'dep' });
+  b += edge([[views.right, 66], [facade.left, 66]], { kind: 'dep', label: 'eylem çağırır', lx: views.right + 8, ly: 60 });
+  b += edge([[views.cx, views.bottom], [views.cx, bus.top]], { kind: 'dep', label: 'abone olur (on)', lx: views.cx + 6, ly: bus.top - 8 });
+  b += edge([[views.left, 150], [250, 150], [250, st.cy], [st.left, st.cy]], { kind: 'dep', label: 'okur', lx: 220, ly: 300 });
+  b += edge([[680, facade.bottom], [680, core.top]], { kind: 'dep' });
+  b += edge([[840, facade.bottom], [840, edit.top]], { kind: 'dep', label: 'export *', lx: 846, ly: (facade.bottom + edit.top) / 2 + 4 });
+  b += edge([[core.left, 262], [bus.right, 262]], { kind: 'dep', label: 'yayımlar', lx: 528, ly: 256 });
+  b += edge([[io.left, 380], [560, 380], [560, 440], [st.right, 440]], { kind: 'dep', label: 'değiştirir', lx: 566, ly: 415 });
+  b += edge([[io.cx, io.bottom], [io.cx, src.top]], { kind: 'dep', label: 'komut, motor', lx: io.cx + 6, ly: (io.bottom + src.top) / 2 + 4 });
+  b += edge([[run.right, 360], [rn.left, 360]], { kind: 'dep' });
+  b += edge([[rn.cx, rn.bottom], [rn.cx, src.cy], [src.right, src.cy]], { kind: 'dep' });
+  b += edge([[st.right, src.cy], [src.left, src.cy]], { kind: 'dep', label: 'History', lx: 528, ly: src.cy - 6 });
+  b += note(24, 560, 1116, ['Denetleyici görünümleri içe aktarmaz; görünümler birbirini değil olay yolunu dinler (tests/unit/web.test.js denetler).', 'web/ altındaki her dosya 450 satırın altında; app.js yalnızca modülleri bağlar.']);
+  svg('2d_sinif_arayuz_katmanlari', 1160, 625, 'Sınıf diyagramı (4/4): atölye arayüzü — Observer ve Facade desenleri', b);
 }
 
 // ================================================================== 3a. sıralı: molekülün kararı
@@ -372,12 +441,39 @@ sequence('3c_sirali_baglanti', 'Sıralı diyagram 3: iki ucu bağlama ve uyumsuz
   { end: true },
 ]);
 
+// ================================================================== 3d. sıralı: geri al
+sequence('3d_sirali_geri_al', 'Sıralı diyagram 4: geri al (Ctrl+Z)', 1080, [
+  { id: 'u', label: 'Kullanıcı', x: 60, kind: 'actor' },
+  { id: 'kb', label: 'keyboard.js', x: 200 },
+  { id: 'act', label: 'actions/edit.js', x: 360 },
+  { id: 'hist', label: 'History', x: 530 },
+  { id: 'cmd', label: 'Command', x: 670 },
+  { id: 'bus', label: 'bus', x: 810 },
+  { id: 'vw', label: 'views/*', x: 970 },
+], [
+  { from: 'u', to: 'kb', label: 'Ctrl+Z (yazı alanında değilken)' },
+  { from: 'kb', to: 'act', label: 'undo()' },
+  { from: 'act', to: 'hist', label: 'undo()' },
+  { from: 'hist', to: 'cmd', label: 'cmd.undo(doc)' },
+  { from: 'cmd', to: 'cmd', label: 'iş akışı önceki durumuna döner', self: true },
+  { from: 'hist', to: 'act', label: 'geri alınan komut (label, meta)', ret: true },
+  { frame: 'alt', guard: 'iş akışının tamamı değişti (paket, içe aktarma, temizleme)', x0: 300, x1: 1050 },
+  { from: 'act', to: 'act', label: 'açık paket meta\'dan geri gelir; çalıştırma sonucu sıfırlanır', self: true },
+  { from: 'act', to: 'bus', label: 'emit("yuklendi")' },
+  { else: 'tek değişiklik' },
+  { from: 'act', to: 'act', label: 'changed(): denetim (lint) yenilenir, otomatik kayıt planlanır', self: true },
+  { from: 'act', to: 'bus', label: 'emit("degisti")' },
+  { end: true },
+  { from: 'bus', to: 'vw', label: 'abonelere iletir' },
+  { from: 'vw', to: 'u', label: 'tuval, panel ve rozet yeniden çizilir; "Geri alındı: Kutu silme"', ret: true },
+]);
+
 // ================================================================== 4. katmanlar (paket / bileşen diyagramı)
 {
   let b = '';
-  const row1 = [folder(24, 50, 250, 110, 'bin/ios.js', ['run, explain, scan, list'], { stereo: 'komut satırı' }), folder(300, 50, 300, 110, 'web/', ['app.js, runner.js', 'worker.js, core.js'], { stereo: 'atölye (tarayıcı)' }), folder(626, 50, 340, 110, 'tests/ + scripts/', ['node:test, kalibrasyon, doğrulama', 'site / UML / denetim betikleri'], { stereo: 'doğrulama' })];
-  const row2 = [folder(24, 220, 360, 120, 'src/workflows', ['engine, catalog, packages, race', 'CodeScan, presets'], { stereo: 'iş akışı' }), folder(410, 220, 250, 120, 'src/adapters + fasta', ['sourceToEntry, lineStarts', 'parseFasta'], { stereo: 'uyarlayıcı' })];
-  const row3 = [folder(24, 400, 360, 120, 'src/molecules', ['ExactMatch, costModel', 'coefficients(.js/.json)'], { stereo: 'molekül' }), folder(410, 400, 250, 120, 'src/registry.js', ['Registry, BUILTIN'], { stereo: 'kayıt defteri' }), folder(686, 400, 280, 120, 'src/shape.js', ['computeShape (64 × 256)'], { stereo: 'veri şekli' })];
+  const row1 = [folder(24, 50, 250, 110, 'bin/ios.js', ['run, explain, scan, list'], { stereo: 'komut satırı' }), folder(300, 50, 300, 110, 'web/', ['state, actions/, views/, lib/', 'keyboard, runner, worker'], { stereo: 'atölye (tarayıcı)' }), folder(626, 50, 340, 110, 'tests/ + scripts/', ['node:test, kalibrasyon, doğrulama', 'arayüz / erişilebilirlik / kapsama'], { stereo: 'doğrulama' })];
+  const row2 = [folder(24, 220, 360, 120, 'src/workflows + src/scan', ['engine, catalog, history, lint, diagram', 'provenance, CodeScan · rules, report'], { stereo: 'iş akışı ve tarama' }), folder(410, 220, 250, 120, 'src/adapters + fasta', ['sourceToEntry, lineStarts', 'parseFasta'], { stereo: 'uyarlayıcı' })];
+  const row3 = [folder(24, 400, 360, 120, 'src/molecules', ['ExactMatch, costModel', 'coefficients(.js/.json)'], { stereo: 'molekül' }), folder(410, 400, 250, 120, 'registry + contracts', ['Registry, BUILTIN', 'rol arayüzleri (ISP)'], { stereo: 'kayıt defteri' }), folder(686, 400, 280, 120, 'src/shape.js', ['computeShape (64 × 256)'], { stereo: 'veri şekli' })];
   const row4 = [folder(24, 580, 460, 120, 'src/atomic', ['ExactSearchAtom + 8 aday atom', '+ NaiveSearch (oracle)'], { stereo: 'atomlar' }), folder(510, 580, 456, 120, 'src/functions', ['horspool, wuManber, ahoCorasick, …', 'alphabet, hits, expect'], { stereo: 'saf çekirdekler' })];
   for (const f of [...row1, ...row2, ...row3, ...row4]) b += f.svg;
   const dn = (a, bx, label) => edge([[a.cx + (bx ?? 0), a.bottom], [a.cx + (bx ?? 0), a.bottom + 58]], { kind: 'dep', label, lx: a.cx + (bx ?? 0) + 8, ly: a.bottom + 34 });
@@ -395,13 +491,13 @@ sequence('3c_sirali_baglanti', 'Sıralı diyagram 3: iki ucu bağlama ve uyumsuz
   svg('4_katmanlar', 990, 720, 'Paket (katman) diyagramı: modüller ve bağımlılık yönü', b);
 }
 
-console.log('docs/uml/svg/: 7 diyagram yazıldı');
+console.log('docs/uml/svg/: 10 diyagram yazıldı');
 
 // ------------------------------------------------------------------ isteğe bağlı: tek PDF
 if (process.argv.includes('--pdf')) {
   const require = createRequire(import.meta.url);
   const { chromium } = require('playwright');
-  const files = ['1_kullanim_durumu', '2a_sinif_atom_molekul', '2b_sinif_is_akisi', '3a_sirali_molekul_karari', '3b_sirali_atolye_calistirma', '3c_sirali_baglanti', '4_katmanlar'];
+  const files = ['1_kullanim_durumu', '2a_sinif_atom_molekul', '2b_sinif_is_akisi', '2c_sinif_komut_gecmisi', '2d_sinif_arayuz_katmanlari', '3a_sirali_molekul_karari', '3b_sirali_atolye_calistirma', '3c_sirali_baglanti', '3d_sirali_geri_al', '4_katmanlar'];
   const pages = files.map((f) => `<section><div class="c">${readFileSync(new URL(`${f}.svg`, OUT), 'utf8').replace(/width="\d+" height="\d+"/, 'width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')}</div></section>`).join('');
   const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><style>@page{size:A4 landscape;margin:10mm}body{margin:0}section{height:188mm;page-break-after:always;display:flex}section .c{flex:1}svg{display:block}</style></head><body>${pages}</body></html>`;
   const browser = await chromium.launch();

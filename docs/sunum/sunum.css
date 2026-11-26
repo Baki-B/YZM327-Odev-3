@@ -1,0 +1,30 @@
+  :root { --ink: #1d1c1f; --ink2: #55535a; --line: #e4e1e6; --soft: #f6f5f8; --accent: #127c86; --accent-soft: #e2f3f4; --head: #3b1239; --warn-soft: #fff5dd; --warn: #8a5a00; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #26092a; font-family: "Inter", "Segoe UI", system-ui, Arial, sans-serif; color: var(--ink); }
+.deck { height: 100%; display: grid; place-items: center; }
+section { display: none; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; background: #fff; padding: 3.6% 5.5%; position: relative; overflow: hidden; font-size: min(2.2vw, 3.9vh); line-height: 1.4; }
+section.on { display: block; }
+section::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1.1%; background: var(--head); }
+h1 { font-size: 2.5em; margin: 18% 0 .3em; letter-spacing: -.02em; color: var(--head); }
+h2 { font-size: 1.55em; margin: 0 0 .6em; color: var(--head); letter-spacing: -.01em; }
+h3 { font-size: 1em; margin: .2em 0; color: var(--accent); }
+.big { font-size: 1.15em; max-width: 85%; }
+.muted { color: var(--ink2); font-size: .8em; }
+ul, ol { margin: .2em 0; padding-left: 1.2em; } li { margin: .25em 0; }
+code { font-family: "JetBrains Mono", Consolas, monospace; font-size: .85em; background: var(--soft); padding: 0 .2em; border-radius: 3px; }
+.two { display: grid; grid-template-columns: 1.25fr 1fr; gap: 4%; align-items: start; }
+.two ol, .two ul { font-size: .9em; }
+.two img { width: 100%; border: 1px solid var(--line); border-radius: 8px; }
+.table-wrap { margin: .3em 0 .5em; }
+table { border-collapse: collapse; width: 100%; font-size: .78em; }
+th, td { text-align: left; padding: .28em .5em; border-bottom: 1px solid var(--line); }
+th { color: var(--ink2); font-weight: 600; } td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.hl td { background: var(--accent-soft); font-weight: 700; } tr.e2e td { background: var(--soft); }
+.ph { background: var(--warn-soft); color: var(--warn); padding: 0 .2em; border-radius: 3px; }
+.num { position: absolute; right: 2.5%; bottom: 3%; font-size: .6em; color: var(--ink2); }
+.help { position: fixed; left: 10px; bottom: 8px; color: #d9c6d8; font-size: 12px; }
+@media print {
+  @page { size: 297mm 167mm; margin: 0; }
+  html, body { background: #fff; height: auto; } .deck { display: block; } .help { display: none; }
+  section { display: block !important; width: 297mm; height: 167mm; aspect-ratio: auto; font-size: 15pt; page-break-after: always; break-after: page; }
+}

@@ -1,0 +1,38 @@
+# Kendi taramamız ("dogfooding"): projenin kendi tarayıcısı (ios scan) bu depoyu tarar.
+#   1. Gizli bilgi kapısı: depoda (bilerek sahte örnekler dışında) parola / anahtar varsa CI kalır.
+#   2. SARIF: gizli bilgi ve riskli API bulguları GitHub kod tarama ekranına yüklenir
+#      (Security → Code scanning, kategori "ios-scan").
+# Yok sayılan yollar ve nedenleri: .github/ios-tarama.ignore
+name: Kendi taramamız (ios scan)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Gizli bilgi kapısı (bulgu varsa çıkış kodu 1)
+        run: node bin/ios.js scan --preset secrets --ignore-file .github/ios-tarama.ignore --fail .
+      - name: SARIF üret (gizli bilgi + riskli API)
+        if: always()
+        run: node bin/ios.js scan --preset secrets,banned-api --ignore-file .github/ios-tarama.ignore --format sarif . > ios-scan.sarif
+      - name: SARIF'i GitHub kod taramasına yükle
+        if: always() && github.event_name != 'pull_request'
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ios-scan.sarif
+          category: ios-scan

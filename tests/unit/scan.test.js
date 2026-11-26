@@ -117,7 +117,11 @@ describe('raporlama: parmak izi, maskeleme, SARIF', () => {
     const a = fp('x = 1  # TODO bir\ny = 2  # TODO bir\n');
     const b = fp('\n\n# yeni başlık\nx = 1  # TODO bir\ny = 2  # TODO bir\n');
     assert.deepEqual(a, b);
-    assert.notEqual(a[0], a[1], 'aynı metinli iki satır sıra numarasıyla ayrılır');
+    assert.notEqual(a[0], a[1], 'farklı metinli iki satır farklı parmak izi alır');
+    // Mutasyon denetiminin bulduğu boşluk: metni birebir aynı iki satır yalnızca sıra numarasıyla ayrılır.
+    const same = fp('# TODO bir\n# TODO bir\n# TODO bir\n');
+    assert.equal(new Set(same).size, 3, 'aynı metinli üç satır üç ayrı parmak izi');
+    assert.deepEqual(fp('\n# TODO bir\n# TODO bir\n# TODO bir\n'), same, 'kayınca da aynı kalır');
   });
   test('SARIF 2.1.0: kurallar, düzeyler, konum, URI kodlama, CWE etiketi, parmak izi', () => {
     const findings = [...new CodeScan({ patterns: [...PRESETS.secrets.patterns], ignoreCase: true, details: true }).run([{ path: 'alt klasör/ayar.py', text: 'API_KEY = "abc"\n' }])];
@@ -240,7 +244,7 @@ describe('ios scan: yeni seçenekler', () => {
     writeFileSync(join(dir, '.iosignore'), '# dış kod\nvendor/\n');
     const r = ios(['scan', '--preset', 'todo', '.'], dir);
     assert.equal(r.out.trimEnd().split('\n').length, 1);
-    assert.match(r.err, /1 yol \.iosignore ile atlandı/);
+    assert.match(r.err, /1 yol yok sayma dosyasıyla atlandı/);
     assert.equal(ios(['scan', '--preset', 'todo', '--no-ignore-file', '.'], dir).out.trimEnd().split('\n').length, 2);
     writeFileSync(join(dir, 'baska.ignore'), 'src/\n');
     assert.equal(ios(['scan', '--preset', 'todo', '--ignore-file', 'baska.ignore', '.'], dir).out.trimEnd().split('\n').length, 1);

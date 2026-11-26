@@ -13,7 +13,7 @@
 // Kullanım (proje kökünden): node scripts/arayuz-denetimi.js
 import { createRequire } from 'node:module';
 import { spawn, execSync } from 'node:child_process';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { PACKAGES } from '../src/workflows/packages.js';
 import { agoraKlasoru } from './agora-ac.js';
@@ -344,6 +344,15 @@ try {
   await cspPage.close();
   check('CSP: sayfaya sonradan sokulan satır içi betik çalışmaz', csp.meta && csp.ran === null, JSON.stringify(csp));
 
+  // ------------------------------------------------------------ 2i. sunum: CSP altında ok tuşlarıyla ilerler
+  const deck = await newPage({ width: 1280, height: 720 });
+  await deck.goto(`${BASE}/docs/sunum/index.html`, { waitUntil: 'networkidle' });
+  await deck.keyboard.press('ArrowRight');
+  await deck.keyboard.press('ArrowRight');
+  const slide = await deck.evaluate(() => ({ hash: location.hash, on: [...document.querySelectorAll('section')].findIndex((s) => s.classList.contains('on')), csp: Boolean(document.querySelector('meta[http-equiv="Content-Security-Policy"]')) }));
+  check('sunum: CSP altında ok tuşlarıyla ilerler (betik ayrı dosyada)', slide.hash === '#3' && slide.on === 2 && slide.csp, JSON.stringify(slide));
+  await deck.close();
+
   // ------------------------------------------------------------ 3. telefon (390 px)
   const mob = await newPage({ width: 390, height: 844 }, { deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   await mob.goto(`${BASE}/web/#paket=gizli-bilgi`, { waitUntil: 'networkidle' });
@@ -367,5 +376,7 @@ try {
 }
 check('konsolda hata / uyarı yok', consoleErrors.length === 0, consoleErrors.slice(0, 5).join(' | '));
 const failed = results.filter((r) => !r.ok);
+mkdirSync(new URL('../docs/kalite/', import.meta.url), { recursive: true });
+writeFileSync(new URL('../docs/kalite/arayuz-denetimi.json', import.meta.url), JSON.stringify({ total: results.length, passed: results.length - failed.length, checks: results.map(({ name, ok }) => ({ name, ok })) }, null, 2) + '\n');
 console.log(`\n${results.length - failed.length}/${results.length} denetim geçti.`);
 process.exitCode = failed.length ? 1 : 0;

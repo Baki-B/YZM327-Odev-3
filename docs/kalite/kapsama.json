@@ -1,0 +1,395 @@
+{
+  "node": "v22.23.4",
+  "include": [
+    "src/**",
+    "bin/**",
+    "web/lib/**"
+  ],
+  "thresholds": {
+    "lines": 95,
+    "branches": 85,
+    "functions": 95
+  },
+  "tests": {
+    "pass": 436,
+    "fail": 0
+  },
+  "totals": {
+    "lines": {
+      "hit": 4502,
+      "all": 4528,
+      "pct": 99.4
+    },
+    "branches": {
+      "hit": 1342,
+      "all": 1484,
+      "pct": 90.4
+    },
+    "functions": {
+      "hit": 480,
+      "all": 493,
+      "pct": 97.4
+    }
+  },
+  "files": 51,
+  "perFile": [
+    {
+      "file": "src/molecules/costModel.js",
+      "lines": 92.5,
+      "branches": 87.1,
+      "functions": 100,
+      "uncoveredLines": 8
+    },
+    {
+      "file": "web/lib/storage.js",
+      "lines": 93.3,
+      "branches": 100,
+      "functions": 88.9,
+      "uncoveredLines": 3
+    },
+    {
+      "file": "src/atomic/ExactSearchAtom.js",
+      "lines": 94.4,
+      "branches": 94.1,
+      "functions": 87.5,
+      "uncoveredLines": 6
+    },
+    {
+      "file": "src/functions/alphabet.js",
+      "lines": 95.1,
+      "branches": 94.1,
+      "functions": 100,
+      "uncoveredLines": 3
+    },
+    {
+      "file": "src/workflows/packages.js",
+      "lines": 98.7,
+      "branches": 100,
+      "functions": 93.8,
+      "uncoveredLines": 2
+    },
+    {
+      "file": "bin/ios.js",
+      "lines": 99.4,
+      "branches": 86,
+      "functions": 96.7,
+      "uncoveredLines": 2
+    },
+    {
+      "file": "src/workflows/catalog.js",
+      "lines": 99.5,
+      "branches": 80.2,
+      "functions": 91.4,
+      "uncoveredLines": 2
+    },
+    {
+      "file": "src/adapters/sourceToEntry.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/AhoCorasickSearch.js",
+      "lines": 100,
+      "branches": 85.7,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/Bm4DnaDsSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/Bm4DnaHmbsSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/BoyerMooreSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/features.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/HorspoolSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/KmpSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/NaiveSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/ShiftOrSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/atomic/WuManberSearch.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/contracts.js",
+      "lines": 100,
+      "branches": 89.1,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/fasta.js",
+      "lines": 100,
+      "branches": 94.1,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/ahoCorasick.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/bm4dnaDs.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/bm4dnaHmbs.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/boyerMoore.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/expect.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/hits.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/horspool.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/kmp.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/shiftOr.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/functions/wuManber.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/molecules/coefficients.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/molecules/ExactMatch.js",
+      "lines": 100,
+      "branches": 97.8,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/registry.js",
+      "lines": 100,
+      "branches": 96.2,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/scan/filters.js",
+      "lines": 100,
+      "branches": 98.2,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/scan/report.js",
+      "lines": 100,
+      "branches": 82.7,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/scan/rules.js",
+      "lines": 100,
+      "branches": 96.2,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/shape.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/version.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/CodeScan.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/diagram.js",
+      "lines": 100,
+      "branches": 66.7,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/engine.js",
+      "lines": 100,
+      "branches": 85.3,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/history.js",
+      "lines": 100,
+      "branches": 89.6,
+      "functions": 96.9,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/lint.js",
+      "lines": 100,
+      "branches": 94.9,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/presets.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/provenance.js",
+      "lines": 100,
+      "branches": 82.6,
+      "functions": 87.5,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/race.js",
+      "lines": 100,
+      "branches": 70,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "src/workflows/samplesNode.js",
+      "lines": 100,
+      "branches": 80,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "web/lib/bus.js",
+      "lines": 100,
+      "branches": 91.7,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "web/lib/format.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "web/lib/geometry.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    },
+    {
+      "file": "web/lib/shortcuts.js",
+      "lines": 100,
+      "branches": 100,
+      "functions": 100,
+      "uncoveredLines": 0
+    }
+  ],
+  "ok": true
+}

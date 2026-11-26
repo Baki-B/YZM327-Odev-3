@@ -44,7 +44,7 @@ class engine <<modül, DOM'suz>> {
 class catalog <<modül>> {
   createCatalog(registry) : Map<type, Component>
 }
-class "web/app.js" as UI <<arayüz>>
+class "web/ (atölye: state, actions, views; Şekil 2d)" as UI <<arayüz>>
 class "web/worker.js" as W <<Web Worker>>
 Workflow *-- "*" Node : kutular
 Workflow *-- "*" Edge : bağlantılar

@@ -14,6 +14,8 @@ rectangle "Kod Bilimi Atölyesi + ios komut satırı" {
   usecase "Genomda desen ara" as GN
   usecase "En hızlı atomu seç" as S
   usecase "Bulgu varsa\nderlemeyi durdur" as D
+  usecase "Bulguları kod\ntaramasına yükle (SARIF)" as SF
+  usecase "Atölye iş akışını\nCI'da çalıştır" as WR
 }
 G -- P
 G -- K
@@ -23,6 +25,8 @@ G -- Y
 B -- E
 B -- GN
 CI -- D
+CI -- SF
+CI -- WR
 T ..> S : <<include>>
 GN ..> S : <<include>>
 D ..> T : <<extend>>

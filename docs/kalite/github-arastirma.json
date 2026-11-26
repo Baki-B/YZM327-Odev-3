@@ -1,0 +1,719 @@
+{
+ "meta": {
+  "kaynak": "GitHub arama API (gh api -X GET search/repositories, sort=stars)",
+  "tarih": "2026-11-25",
+  "depo_sayisi": 71
+ },
+ "depolar": [
+  {
+   "full_name": "xyflow/xyflow",
+   "stars": 39154,
+   "language": "TypeScript",
+   "description": "React Flow | Svelte Flow | Vue Flow - Powerful open source libraries for building node-based UIs with React (https://reactflow.dev), Svelte (https://svelteflow.dev) and Vue (https://vueflow.dev). Ready out-of-the-box and infinitely customizable.",
+   "html_url": "https://github.com/xyflow/xyflow",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "xyflow/awesome-node-based-uis",
+   "stars": 3710,
+   "language": null,
+   "description": "A curated list with resources about node-based UIs",
+   "html_url": "https://github.com/xyflow/awesome-node-based-uis",
+   "license": "CC0-1.0",
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "xyflow/strudel-flow",
+   "stars": 258,
+   "language": "TypeScript",
+   "description": "A visual music sequencer built with React Flow and Strudel.",
+   "html_url": "https://github.com/xyflow/strudel-flow",
+   "license": "AGPL-3.0",
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "xyflow/react-flow-example-apps",
+   "stars": 217,
+   "language": "TypeScript",
+   "description": "Example React Flow apps for Create React App, Next.js and Remix.",
+   "html_url": "https://github.com/xyflow/react-flow-example-apps",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "xyflow/pro-platform",
+   "stars": 129,
+   "language": "TypeScript",
+   "description": "The legacy subscriber platform for React Flow Pro. Not maintained anymore since the platform is now integrated into our websites.",
+   "html_url": "https://github.com/xyflow/pro-platform",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "xyflow/react-flow-mindmap-app",
+   "stars": 126,
+   "language": "TypeScript",
+   "description": "A quick and organized mind map app built with React Flow. Follow the tutorial to learn how to build it yourself.",
+   "html_url": "https://github.com/xyflow/react-flow-mindmap-app",
+   "license": null,
+   "kategori": "is-akisi",
+   "sorgu": "xyflow in:name"
+  },
+  {
+   "full_name": "Comfy-Org/ComfyUI",
+   "stars": 148591,
+   "language": "Python",
+   "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world.",
+   "html_url": "https://github.com/Comfy-Org/ComfyUI",
+   "license": "GPL-3.0",
+   "kategori": "is-akisi",
+   "sorgu": "ComfyUI in:name stars:>50000"
+  },
+  {
+   "full_name": "RaspberryPiFoundation/blockly",
+   "stars": 13621,
+   "language": "TypeScript",
+   "description": "The web-based visual programming editor.",
+   "html_url": "https://github.com/RaspberryPiFoundation/blockly",
+   "license": "Apache-2.0",
+   "kategori": "is-akisi",
+   "sorgu": "blockly in:name stars:>5000"
+  },
+  {
+   "full_name": "langflow-ai/langflow",
+   "stars": 156938,
+   "language": "Python",
+   "description": "Langflow is a powerful tool for building and deploying AI-powered agents and workflows.",
+   "html_url": "https://github.com/langflow-ai/langflow",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "langflow in:name stars:>10000"
+  },
+  {
+   "full_name": "nextflow-io/nextflow",
+   "stars": 3535,
+   "language": "Groovy",
+   "description": "A workflow language for data-driven computational pipelines",
+   "html_url": "https://github.com/nextflow-io/nextflow",
+   "license": "Apache-2.0",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "galaxyproject/galaxy",
+   "stars": 1902,
+   "language": "Python",
+   "description": "Data intensive science for everyone.",
+   "html_url": "https://github.com/galaxyproject/galaxy",
+   "license": "NOASSERTION",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "scipipe/scipipe",
+   "stars": 1113,
+   "language": "Go",
+   "description": "Robust, flexible and resource-efficient pipelines using Go and the commandline",
+   "html_url": "https://github.com/scipipe/scipipe",
+   "license": "MIT",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "insitro/redun",
+   "stars": 610,
+   "language": "Python",
+   "description": "Yet another redundant workflow engine",
+   "html_url": "https://github.com/insitro/redun",
+   "license": "Apache-2.0",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "arvados/arvados",
+   "stars": 422,
+   "language": "Go",
+   "description": "An open source platform for managing and analyzing biomedical big data",
+   "html_url": "https://github.com/arvados/arvados",
+   "license": "NOASSERTION",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "joergen7/cuneiform",
+   "stars": 254,
+   "language": "Erlang",
+   "description": "Cuneiform distributed programming language",
+   "html_url": "https://github.com/joergen7/cuneiform",
+   "license": "Apache-2.0",
+   "kategori": "biyoinformatik",
+   "sorgu": "topic:workflow-engine topic:bioinformatics"
+  },
+  {
+   "full_name": "galaxyproject/galaxy-hub",
+   "stars": 138,
+   "language": "TeX",
+   "description": "Galaxy Community Hub",
+   "html_url": "https://github.com/galaxyproject/galaxy-hub",
+   "license": "NOASSERTION",
+   "kategori": "biyoinformatik",
+   "sorgu": "galaxyproject/galaxy in:name"
+  },
+  {
+   "full_name": "snakemake/snakemake",
+   "stars": 2908,
+   "language": "Python",
+   "description": "This is the development home of the workflow management system Snakemake. For general information, see",
+   "html_url": "https://github.com/snakemake/snakemake",
+   "license": "MIT",
+   "kategori": "biyoinformatik",
+   "sorgu": "snakemake in:name stars:>2000"
+  },
+  {
+   "full_name": "edoardottt/cariddi",
+   "stars": 3860,
+   "language": "Go",
+   "description": "Take a list of domains, crawl urls and scan for endpoints, secrets, api keys, file extensions, tokens and more",
+   "html_url": "https://github.com/edoardottt/cariddi",
+   "license": "GPL-3.0",
+   "kategori": "gizli-bilgi",
+   "sorgu": "topic:secret-scanning stars:>1000"
+  },
+  {
+   "full_name": "mongodb/kingfisher",
+   "stars": 1322,
+   "language": "Rust",
+   "description": "Detect secrets. Validate them live. Map blast radius. Revoke fast. Run the CLI or embed in Rust, Python, or Node.js.",
+   "html_url": "https://github.com/mongodb/kingfisher",
+   "license": "Apache-2.0",
+   "kategori": "gizli-bilgi",
+   "sorgu": "topic:secret-scanning stars:>1000"
+  },
+  {
+   "full_name": "openqodex/openqodex",
+   "stars": 1216,
+   "language": "TypeScript",
+   "description": "Open source AI code review for coding agents. A separate reviewer checks every change your agent writes before you push, in Claude Code, Codex, Cursor and Cline. No account or key of its own.",
+   "html_url": "https://github.com/openqodex/openqodex",
+   "license": "Apache-2.0",
+   "kategori": "gizli-bilgi",
+   "sorgu": "topic:secret-scanning stars:>1000"
+  },
+  {
+   "full_name": "semgrep/semgrep",
+   "stars": 17940,
+   "language": "C",
+   "description": "Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",
+   "html_url": "https://github.com/semgrep/semgrep",
+   "license": "LGPL-2.1",
+   "kategori": "sast",
+   "sorgu": "semgrep in:name stars:>5000"
+  },
+  {
+   "full_name": "analysis-tools-dev/static-analysis",
+   "stars": 14924,
+   "language": "Rust",
+   "description": "⚙️ A curated list of static analysis (SAST) tools and linters for all programming languages, config files, build tools, and more. The focus is on tools which improve code quality.",
+   "html_url": "https://github.com/analysis-tools-dev/static-analysis",
+   "license": "MIT",
+   "kategori": "sast",
+   "sorgu": "topic:sast stars:>3000"
+  },
+  {
+   "full_name": "lintsinghua/DeepAudit",
+   "stars": 7356,
+   "language": "Python",
+   "description": "DeepAudit：人人拥有的 AI 黑客战队，让漏洞挖掘触手可及。小白一键部署运行，自主协作审计 + 自动化沙箱 PoC 验证。支持 Ollama 私有部署 ，一键生成报告。支持中转站。​让安全不再昂贵，让审计不再复杂。",
+   "html_url": "https://github.com/lintsinghua/DeepAudit",
+   "license": "AGPL-3.0",
+   "kategori": "sast",
+   "sorgu": "topic:sast stars:>3000"
+  },
+  {
+   "full_name": "tenable/terrascan",
+   "stars": 5212,
+   "language": "Go",
+   "description": "Detect compliance and security violations across Infrastructure as Code to mitigate risk before provisioning cloud native infrastructure.",
+   "html_url": "https://github.com/tenable/terrascan",
+   "license": "Apache-2.0",
+   "kategori": "sast",
+   "sorgu": "topic:sast stars:>3000"
+  },
+  {
+   "full_name": "betterleaks/betterleaks",
+   "stars": 3117,
+   "language": "Go",
+   "description": "Find leaked secrets everywhere.",
+   "html_url": "https://github.com/betterleaks/betterleaks",
+   "license": "MIT",
+   "kategori": "sast",
+   "sorgu": "topic:sast stars:>3000"
+  },
+  {
+   "full_name": "zinja-coder/jadx-ai-mcp",
+   "stars": 3037,
+   "language": "Java",
+   "description": "Plugin for JADX to integrate MCP server",
+   "html_url": "https://github.com/zinja-coder/jadx-ai-mcp",
+   "license": "Apache-2.0",
+   "kategori": "sast",
+   "sorgu": "topic:sast stars:>3000"
+  },
+  {
+   "full_name": "BurntSushi/ripgrep",
+   "stars": 70332,
+   "language": "Rust",
+   "description": "ripgrep recursively searches directories for a regex pattern while respecting your gitignore",
+   "html_url": "https://github.com/BurntSushi/ripgrep",
+   "license": "Unlicense",
+   "kategori": "arama",
+   "sorgu": "ripgrep in:name stars:>10000"
+  },
+  {
+   "full_name": "BurntSushi/aho-corasick",
+   "stars": 1311,
+   "language": "Rust",
+   "description": "A fast implementation of Aho-Corasick in Rust.",
+   "html_url": "https://github.com/BurntSushi/aho-corasick",
+   "license": "Unlicense",
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "WojciechMula/pyahocorasick",
+   "stars": 1137,
+   "language": "C",
+   "description": "Python module (C extension and plain python) implementing Aho-Corasick algorithm",
+   "html_url": "https://github.com/WojciechMula/pyahocorasick",
+   "license": "BSD-3-Clause",
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "hankcs/AhoCorasickDoubleArrayTrie",
+   "stars": 1019,
+   "language": "Java",
+   "description": "An extremely fast implementation of Aho Corasick algorithm based on Double Array Trie.",
+   "html_url": "https://github.com/hankcs/AhoCorasickDoubleArrayTrie",
+   "license": null,
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "robert-bor/aho-corasick",
+   "stars": 995,
+   "language": "Java",
+   "description": "Java implementation of the Aho-Corasick algorithm for efficient string matching",
+   "html_url": "https://github.com/robert-bor/aho-corasick",
+   "license": "Apache-2.0",
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "cloudflare/ahocorasick",
+   "stars": 729,
+   "language": "Go",
+   "description": "A Golang implementation of the Aho-Corasick string matching algorithm",
+   "html_url": "https://github.com/cloudflare/ahocorasick",
+   "license": "BSD-3-Clause",
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "pgsty/acdat",
+   "stars": 663,
+   "language": "C",
+   "description": "Aho-Corasick Automaton with Double Array Trie (Multi-pattern substitute in go)",
+   "html_url": "https://github.com/pgsty/acdat",
+   "license": "Apache-2.0",
+   "kategori": "desen",
+   "sorgu": "aho-corasick in:name,description stars:>500"
+  },
+  {
+   "full_name": "intel/hyperscan",
+   "stars": 5521,
+   "language": "C++",
+   "description": "High-performance regular expression matching library",
+   "html_url": "https://github.com/intel/hyperscan",
+   "license": "NOASSERTION",
+   "kategori": "desen",
+   "sorgu": "hyperscan in:name stars:>1000"
+  },
+  {
+   "full_name": "vi3k6i5/flashtext",
+   "stars": 5713,
+   "language": "Python",
+   "description": "Extract Keywords from sentence or Replace keywords in sentences.",
+   "html_url": "https://github.com/vi3k6i5/flashtext",
+   "license": "MIT",
+   "kategori": "desen",
+   "sorgu": "flashtext in:name stars:>1000"
+  },
+  {
+   "full_name": "folke/todo-comments.nvim",
+   "stars": 4227,
+   "language": "Lua",
+   "description": "✅  Highlight, list and search todo comments in your projects",
+   "html_url": "https://github.com/folke/todo-comments.nvim",
+   "license": "Apache-2.0",
+   "kategori": "todo",
+   "sorgu": "todo comments in:description stars:>500"
+  },
+  {
+   "full_name": "pgilad/leasot",
+   "stars": 815,
+   "language": "TypeScript",
+   "description": "Parse and output TODOs and FIXMEs from comments in your files",
+   "html_url": "https://github.com/pgilad/leasot",
+   "license": "MIT",
+   "kategori": "todo",
+   "sorgu": "todo comments in:description stars:>500"
+  },
+  {
+   "full_name": "alstr/todo-to-issue-action",
+   "stars": 800,
+   "language": "Python",
+   "description": "Action that converts TODO comments to GitHub issues on push.",
+   "html_url": "https://github.com/alstr/todo-to-issue-action",
+   "license": "MIT",
+   "kategori": "todo",
+   "sorgu": "todo comments in:description stars:>500"
+  },
+  {
+   "full_name": "azat-io/todoctor",
+   "stars": 525,
+   "language": "Rust",
+   "description": "🐍 CLI tool to analyze and report TODO comments in JavaScript and TypeScript Git repositories",
+   "html_url": "https://github.com/azat-io/todoctor",
+   "license": "MIT",
+   "kategori": "todo",
+   "sorgu": "todo comments in:description stars:>500"
+  },
+  {
+   "full_name": "gitleaks/gitleaks",
+   "stars": 31339,
+   "language": "Go",
+   "description": "Find secrets with Gitleaks 🔑",
+   "html_url": "https://github.com/gitleaks/gitleaks",
+   "license": "MIT",
+   "kategori": "gizli-bilgi",
+   "sorgu": "gitleaks in:name stars:>5000"
+  },
+  {
+   "full_name": "trufflesecurity/trufflehog",
+   "stars": 29655,
+   "language": "Go",
+   "description": "Find, verify, and analyze leaked credentials",
+   "html_url": "https://github.com/trufflesecurity/trufflehog",
+   "license": "AGPL-3.0",
+   "kategori": "gizli-bilgi",
+   "sorgu": "trufflehog in:name stars:>5000"
+  },
+  {
+   "full_name": "Yelp/detect-secrets",
+   "stars": 4682,
+   "language": "Python",
+   "description": "An enterprise friendly way of detecting and preventing secrets in code.",
+   "html_url": "https://github.com/Yelp/detect-secrets",
+   "license": "Apache-2.0",
+   "kategori": "gizli-bilgi",
+   "sorgu": "detect-secrets in:name stars:>2000"
+  },
+  {
+   "full_name": "github/codeql",
+   "stars": 10412,
+   "language": "CodeQL",
+   "description": "CodeQL: the libraries and queries that power security researchers around the world, as well as code scanning in GitHub Advanced Security",
+   "html_url": "https://github.com/github/codeql",
+   "license": "MIT",
+   "kategori": "sast",
+   "sorgu": "codeql in:name stars:>5000"
+  },
+  {
+   "full_name": "eslint/eslint",
+   "stars": 27652,
+   "language": "JavaScript",
+   "description": "Find and fix problems in your JavaScript code.",
+   "html_url": "https://github.com/eslint/eslint",
+   "license": "MIT",
+   "kategori": "sast",
+   "sorgu": "eslint in:name stars:>20000"
+  },
+  {
+   "full_name": "n8n-io/n8n",
+   "stars": 212114,
+   "language": "TypeScript",
+   "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+   "html_url": "https://github.com/n8n-io/n8n",
+   "license": "NOASSERTION",
+   "kategori": "is-akisi",
+   "sorgu": "n8n in:name stars:>100000"
+  },
+  {
+   "full_name": "jerosoler/Drawflow",
+   "stars": 6174,
+   "language": "JavaScript",
+   "description": "Simple flow library 🖥️🖱️",
+   "html_url": "https://github.com/jerosoler/Drawflow",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "drawflow in:name stars:>3000"
+  },
+  {
+   "full_name": "biolab/orange3",
+   "stars": 5768,
+   "language": "Python",
+   "description": "🍊 :bar_chart: :bulb: Orange: Interactive data analysis",
+   "html_url": "https://github.com/biolab/orange3",
+   "license": "NOASSERTION",
+   "kategori": "biyoinformatik",
+   "sorgu": "orange3 in:name stars:>3000"
+  },
+  {
+   "full_name": "xdrop/fuzzywuzzy",
+   "stars": 869,
+   "language": "Java",
+   "description": "Java fuzzy string matching implementation of the well known Python's fuzzywuzzy algorithm. Fuzzy search for Java",
+   "html_url": "https://github.com/xdrop/fuzzywuzzy",
+   "license": "GPL-2.0",
+   "kategori": "desen",
+   "sorgu": "string matching algorithms in:description stars:>300"
+  },
+  {
+   "full_name": "JakeBayer/FuzzySharp",
+   "stars": 798,
+   "language": "C#",
+   "description": "C# .NET fuzzy string matching implementation of Seat Geek's well known python FuzzyWuzzy algorithm. ",
+   "html_url": "https://github.com/JakeBayer/FuzzySharp",
+   "license": "MIT",
+   "kategori": "desen",
+   "sorgu": "string matching algorithms in:description stars:>300"
+  },
+  {
+   "full_name": "kucherenko/jscpd",
+   "stars": 6618,
+   "language": "Rust",
+   "description": "Copy/paste detector for source code. 220+ languages, Rust engine, SARIF/HTML/badge reporters, GitHub Action, MCP server for AI agents.",
+   "html_url": "https://github.com/kucherenko/jscpd",
+   "license": "MIT",
+   "kategori": "sarif",
+   "sorgu": "sarif in:name,description stars:>500"
+  },
+  {
+   "full_name": "asamassekou10/ship-safe",
+   "stars": 872,
+   "language": "JavaScript",
+   "description": "The independent security agent for AI-written software. Finds issues, investigates whether they are real, and shows you the evidence. Deterministic core, no API key needed, JSON and SARIF output.",
+   "html_url": "https://github.com/asamassekou10/ship-safe",
+   "license": "MIT",
+   "kategori": "sarif",
+   "sorgu": "sarif in:name,description stars:>500"
+  },
+  {
+   "full_name": "secfoo-com/secfoo",
+   "stars": 638,
+   "language": "Python",
+   "description": "AI security review CLI: SAST, secret scanning, SCA, threat modeling and architecture review with Claude Code, Copilot, Codex, Gemini, Cursor or an API key. Reads your design docs, Confluence and Jira through MCP. SARIF output for CI.",
+   "html_url": "https://github.com/secfoo-com/secfoo",
+   "license": "MIT",
+   "kategori": "sarif",
+   "sorgu": "sarif in:name,description stars:>500"
+  },
+  {
+   "full_name": "chainloop-dev/chainloop",
+   "stars": 617,
+   "language": "Go",
+   "description": "Agentic SDLC infrastructure. Define guardrails. Collect signals. Enforce continuously. Signed records of what your AI coding agents and CI/CD pipelines did, checked against policies as code, with the loop closed in CI/CD. AI sessions, SBOMs, VEX, SARIF and SLSA provenance, built on Sigstore and in-toto. Apache 2.0.",
+   "html_url": "https://github.com/chainloop-dev/chainloop",
+   "license": "Apache-2.0",
+   "kategori": "sarif",
+   "sorgu": "sarif in:name,description stars:>500"
+  },
+  {
+   "full_name": "joemccann/dillinger",
+   "stars": 8301,
+   "language": "TypeScript",
+   "description": "The last Markdown editor, ever.",
+   "html_url": "https://github.com/joemccann/dillinger",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "jagenjo/litegraph.js",
+   "stars": 8191,
+   "language": "JavaScript",
+   "description": "A graph node engine and editor written in Javascript similar to PD or UDK Blueprints, comes with its own editor in HTML5 Canvas2D. The engine can run client side or server side using Node. It allows to export graphs as JSONs to be included in applications independently.",
+   "html_url": "https://github.com/jagenjo/litegraph.js",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "ONLYOFFICE/DocumentServer",
+   "stars": 7167,
+   "language": "Shell",
+   "description": "ONLYOFFICE Docs is a free collaborative online office suite comprising viewers and editors for texts, spreadsheets and presentations, forms and PDF, fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.",
+   "html_url": "https://github.com/ONLYOFFICE/DocumentServer",
+   "license": "AGPL-3.0",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "thedmd/imgui-node-editor",
+   "stars": 4557,
+   "language": "C++",
+   "description": "Node Editor built using Dear ImGui",
+   "html_url": "https://github.com/thedmd/imgui-node-editor",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "Siccity/xNode",
+   "stars": 3750,
+   "language": "C#",
+   "description": "Unity Node Editor: Lets you view and edit node graphs inside Unity",
+   "html_url": "https://github.com/Siccity/xNode",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "paceholder/nodeeditor",
+   "stars": 3729,
+   "language": "C++",
+   "description": "Qt Node Editor. Dataflow programming framework",
+   "html_url": "https://github.com/paceholder/nodeeditor",
+   "license": "BSD-3-Clause",
+   "kategori": "is-akisi",
+   "sorgu": "node editor in:name,description,topics stars:>3000"
+  },
+  {
+   "full_name": "harry0703/MoneyPrinterTurbo",
+   "stars": 145669,
+   "language": "Python",
+   "description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+   "html_url": "https://github.com/harry0703/MoneyPrinterTurbo",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "paperclipai/paperclip",
+   "stars": 117002,
+   "language": "TypeScript",
+   "description": "The open-source app everyone uses to manage agents at work",
+   "html_url": "https://github.com/paperclipai/paperclip",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "ComposioHQ/awesome-claude-skills",
+   "stars": 80297,
+   "language": "Python",
+   "description": "A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows",
+   "html_url": "https://github.com/ComposioHQ/awesome-claude-skills",
+   "license": null,
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "FlowiseAI/Flowise",
+   "stars": 55595,
+   "language": "TypeScript",
+   "description": "Build AI Agents, Visually",
+   "html_url": "https://github.com/FlowiseAI/Flowise",
+   "license": "NOASSERTION",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "HKUDS/nanobot",
+   "stars": 50322,
+   "language": "Python",
+   "description": "Your lightweight open-source personal agent.",
+   "html_url": "https://github.com/HKUDS/nanobot",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "ToolJet/ToolJet",
+   "stars": 41302,
+   "language": "HTML",
+   "description": "Open-source foundation of ToolJet AI - the enterprise app generation platform for internal tools, dashboards, business applications, workflows and AI agents. Build visually, from a prompt, or from Claude Code, Codex and Cursor over MCP 🚀",
+   "html_url": "https://github.com/ToolJet/ToolJet",
+   "license": "AGPL-3.0",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "freestylefly/awesome-gpt-image-2",
+   "stars": 36132,
+   "language": "JavaScript",
+   "description": "Prompt as Code | GPT Image 2 / 2.5 提示词与案例库，530+ 个案例、20+ 套工业级模板与可复用 Skills，新增 2.5 同提示词对比专区，附完整提示词与生成记录，持续更新。",
+   "html_url": "https://github.com/freestylefly/awesome-gpt-image-2",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:workflow-automation stars:>10000"
+  },
+  {
+   "full_name": "node-red/node-red",
+   "stars": 23878,
+   "language": "JavaScript",
+   "description": "Low-code programming for event-driven applications",
+   "html_url": "https://github.com/node-red/node-red",
+   "license": "Apache-2.0",
+   "kategori": "is-akisi",
+   "sorgu": "topic:visual-programming stars:>2000"
+  },
+  {
+   "full_name": "rocketride-org/rocketride-server",
+   "stars": 19983,
+   "language": "Python",
+   "description": "RocketRide is an open source AI meta-harness with the only enterprise-grade runtime built on C++. Build, test and publish durable agents that scale in production.",
+   "html_url": "https://github.com/rocketride-org/rocketride-server",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:visual-programming stars:>2000"
+  },
+  {
+   "full_name": "retejs/rete",
+   "stars": 12323,
+   "language": "TypeScript",
+   "description": "JavaScript framework for visual programming",
+   "html_url": "https://github.com/retejs/rete",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:visual-programming stars:>2000"
+  },
+  {
+   "full_name": "PetoiCamp/OpenCat-Quadruped-Robot",
+   "stars": 5588,
+   "language": "C++",
+   "description": "An open source quadruped robot pet framework for developing Boston Dynamics-style four-legged robots that are perfect for STEM, coding & robotics education, IoT robotics applications, AI-enhanced robotics application services, research, and DIY robotics kit development. ",
+   "html_url": "https://github.com/PetoiCamp/OpenCat-Quadruped-Robot",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:visual-programming stars:>2000"
+  },
+  {
+   "full_name": "samuelmtimbo/unit",
+   "stars": 4924,
+   "language": "TypeScript",
+   "description": "Next Generation Visual Programming System",
+   "html_url": "https://github.com/samuelmtimbo/unit",
+   "license": "MIT",
+   "kategori": "is-akisi",
+   "sorgu": "topic:visual-programming stars:>2000"
+  }
+ ]
+}

@@ -4,8 +4,12 @@
   "description": "Akıllı tam desen eşleştirme: IoS atomları ve seçici bir molekül (sequence.pattern-match.exact)",
   "type": "module",
   "private": true,
-  "engines": { "node": ">=22" },
-  "bin": { "ios": "bin/ios.js" },
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ios": "bin/ios.js"
+  },
   "scripts": {
     "test": "node --test \"tests/unit/**/*.test.js\"",
     "calibrate": "node --expose-gc tests/benchmarks/calibrate.js",
@@ -16,7 +20,9 @@
     "web": "node scripts/sunucu.js",
     "paketler": "node scripts/paketler.js",
     "karar-yuku": "node --expose-gc scripts/karar-yuku.js",
-    "ornekler": "node scripts/ornekler.js"
+    "ornekler": "node scripts/ornekler.js",
+    "kapsama": "node scripts/kapsama.js",
+    "tur-denetimi": "node scripts/tur-denetimi.js"
   },
   "license": "MIT"
 }

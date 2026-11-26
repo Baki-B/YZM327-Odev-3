@@ -33,14 +33,15 @@ export function renderPalette() {
       ...items.map((c) => h('button', {
         type: 'button', class: 'pal-item', draggable: 'true', 'data-type': c.type,
         title: `${c.help ?? ''}\nGiriş: ${c.inputs.map((p) => p.type).join(', ') || '—'} · Çıkış: ${c.outputs.map((p) => p.type).join(', ') || '—'}`,
-        'aria-label': `${c.title} ekle (${c.category})`,
+        // Ekran okuyucu adı görünen yazıyla (ad + rozet) başlar, sonra ne yapılacağını söyler (WCAG 2.5.3).
+        'aria-label': `${[c.title, c.badge ?? c.subtitle ?? (c.outputs[0]?.type ?? '')].filter(Boolean).join(' ')}: tuvale ekle (${c.category})`,
         onclick: () => { act.addComponent(c.type); if (isMobile()) openSide(false); },
         ondragstart: (e) => {
           e.dataTransfer.setData('application/x-kba-type', c.type);
           e.dataTransfer.setData('text/plain', c.type);
           e.dataTransfer.effectAllowed = 'copy';
         },
-      }, h('span', { class: 'ico', 'aria-hidden': 'true', text: c.icon ?? '•' }), h('span', { class: 't', text: c.title }), h('span', { class: 'b', text: c.badge ?? c.subtitle ?? (c.outputs[0]?.type ?? '') }))));
+      }, h('span', { class: 'ico', 'aria-hidden': 'true', text: c.icon ?? '•' }), h('span', { class: 't', text: c.title }), ' ', h('span', { class: 'b', text: c.badge ?? c.subtitle ?? (c.outputs[0]?.type ?? '') }))));
     box.append(det);
   }
   $('ara-bos').hidden = shown > 0;

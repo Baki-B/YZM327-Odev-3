@@ -371,7 +371,7 @@ export function createCatalog(registry = defaultRegistry) {
     },
   });
   add({
-    type: 'cikti.ozet', category: 'ÇIKTILAR', title: 'Özet sayaçlar', icon: 'Σ',
+    type: 'cikti.ozet', category: 'ÇIKTILAR', title: 'Özet sayaçlar', icon: '∑',
     help: 'Toplam bulgu, desene ve dosyaya göre sayılar.',
     inputs: findingIn, outputs: [], params: [],
     describe: () => 'toplam bulguyu, desene ve dosyaya göre sayıları çıkarır.',

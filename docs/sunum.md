@@ -37,6 +37,7 @@ Yedek: atölye açılmazsa aynı kararı terminalde gösterin (aşağıdaki "Yed
 4. **Atomları yarıştır.** "Aynı girdide sekiz atomu tarayıcıda ölçüyor, tahminle yan yana koyuyor. Bu ölçüm gösterim amaçlı; rapordaki sayılar Node ölçümleri."
 5. (Zaman kalırsa) **# gizli-bilgi-sızıntısı** → çalıştır: rozet kırmızı "kapı kaldı". "Sürekli entegrasyonda derlemeyi durduran kural: `ios scan --fail`." **Açıkla** düğmesi iş akışını Türkçe cümlelerle anlatır.
 6. Bir kutuyu yanlış yere bağlamayı deneyin (ör. "Örnek veri" çıkışı → ExactMatch "kayıtlar" girişi): "Tür uyuşmuyor; araya uyarlayıcı koyun" uyarısı.
+7. (Zaman kalırsa) Bir kutuyu seçip **Delete**, sonra **Ctrl+Z**: kutu bağlantılarıyla geri gelir ("Geri alındı: Kutu silme"). Boş bir çıktı kutusu ekleyin: **Denetim** sekmesi "girişi bağlı değil" der, kutunun çerçevesi kırmızı olur.
 
 ### Yanlış seçim (anlatılacak örnek)
 
@@ -95,7 +96,7 @@ node bin/ios.js scan --preset banned-api ornek-agora/forum
 8. **Atomlarda hazır `indexOf` kullanmadığınızı nasıl biliyoruz?**
    `forbidden.test.js` kaynak dosyaları tarıyor: indexOf, includes, RegExp, `.test(`, console, Node modülü, saat, rastgelelik. Taramanın kötü örnekleri gerçekten yakaladığını da ayrı bir test gösteriyor.
 9. **Testleriniz gerçekten hata yakalıyor mu?**
-   Mutasyon denetimi: koda 12 küçük hata yerleştirdik (kaymayı bir artırmak, `<` yerine `<=` vb.). 12'si de yakalandı (`docs/mutasyon.md`).
+   Mutasyon denetimi: koda 25 küçük hata yerleştirdik (kaymayı bir artırmak, `<` yerine `<=`, geri al yığınını unutmak vb.). İlk turda biri yakalanmadı; sebep testteydi, güçlendirdik ve hepsi yakalandı (`docs/mutasyon.md`, ilk tur: `docs/kalite/mutasyon-ilk-tur.md`).
 10. **Atölye algoritmaları kopyalıyor mu?**
     Hayır. `web/` doğrudan `../src/` altındaki kayıt defterini, molekülü ve uyarlayıcıları içe aktarıyor. İş akışı motoru (`src/workflows/engine.js`) DOM'suz ve `node:test` ile test ediliyor. Altı hazır paketin her birinde atölyenin bulgu sayısı komut satırınınkiyle aynı (`npm run paketler`, `scripts/arayuz-denetimi.js`).
 11. **Uyumsuz bağlantı nasıl engelleniyor?**
@@ -104,3 +105,9 @@ node bin/ios.js scan --preset banned-api ornek-agora/forum
     Sözleşme böyle istiyor; akış boyunca tek atom kullanılıyor. Kod taramasında ilk dosya küçükse seçim kötü olabilir; raporda sınır olarak yazılı.
 13. **Yeni bir atomu nasıl eklersiniz?**
     `src/atomic/` altına `ExactSearchAtom`'dan türeyen bir sınıf yazılır ve `registry.js`'teki listeye eklenir, sonra `npm run calibrate`. Atölyede de kendiliğinden bir kutu olarak görünür; bunu `engine.test.js`'teki sahte atom testi gösteriyor.
+14. **SOLID ilkeleri nerede?**
+    Tek sorumluluk: arayüz eskiden 1 060 satırlık tek dosyaydı; durum, denetleyici, görünümler ve olay yolu olarak bölündü (bir test her dosyanın 450 satırın altında kaldığını denetliyor). Açık/Kapalı: yeni atom için molekül ve atölye değişmiyor. Yerine geçebilme: her atom aynı sözleşme testlerinden geçiyor. Arayüz ayrımı: `src/contracts.js` rolleri; seçim bilgisi isteğe bağlı. Bağımlılığın tersine çevrilmesi: kayıt defteri, katalog ve örnek veri yükleyicisi dışarıdan veriliyor. Ayrıntı rapor Ek C.2 ve sitedeki Kalite sayfası.
+15. **Kod kalitesini nasıl güvenceye aldınız?**
+    Her gönderimde GitHub Actions: testler (Node 22 ve 24), kapsama eşiği, TypeScript denetleyicisiyle tür denetimi, gerçek tarayıcıda arayüz denetimi, WCAG 2.1 AA erişilebilirlik denetimi, kırık bağlantı ve kaynaksız sayı denetimi, CodeQL güvenlik analizi ve kendi tarayıcımızla depo taraması.
+16. **Benzer projelerden ne aldınız?**
+    GitHub'da en çok yıldız alan projeleri inceledik: n8n'den geri al / yinele ve iş akışını komut satırından çalıştırma, gitleaks ve semgrep'ten satır içi bastırma, taban çizgisi, kural kimliği ve SARIF, Snakemake'ten diyagram ve lint. Neyi neden almadığımız da yazılı (`docs/benzer-projeler.md`).

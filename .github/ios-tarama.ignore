@@ -1,0 +1,19 @@
+# Kendi taramamız (.github/workflows/tarama.yml) için yok sayılan yollar.
+# Buradakiler bilerek desen ya da açıkça SAHTE gizli bilgi örneği taşır; gerçek kodda bulunan
+# her eşleşme ise ya düzeltilir ya da gerekçesiyle "ios:ignore" yorumuyla işaretlenir.
+# Kural tanımları: desenlerin ve kuralların kendisi
+src/workflows/presets.js
+src/scan/rules.js
+# Hazır paketlerin açıklamaları desen adlarını anlatır
+src/workflows/packages.js
+# Testler ve kural örnek dosyaları (sahte değerler)
+tests/
+# Atölyenin örnek verisi (sahte gizli bilgiler, Agora kodu) ve ondan açılan geçici klasör
+web/data/
+ornek-agora/
+# Agora kaynaklarından derlenmiş ölçüm korpusu
+bench/corpus/
+# Belgeler ve üretilmiş site sayfaları desenlerin adlarını anlatır
+docs/
+site/
+*.md
