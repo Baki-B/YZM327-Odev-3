@@ -11,23 +11,23 @@
     "functions": 95
   },
   "tests": {
-    "pass": 491,
+    "pass": 496,
     "fail": 0
   },
   "totals": {
     "lines": {
-      "hit": 5098,
-      "all": 5122,
+      "hit": 5146,
+      "all": 5170,
       "pct": 99.5
     },
     "branches": {
-      "hit": 1662,
-      "all": 1817,
-      "pct": 91.5
+      "hit": 1677,
+      "all": 1838,
+      "pct": 91.2
     },
     "functions": {
-      "hit": 580,
-      "all": 592,
+      "hit": 585,
+      "all": 597,
       "pct": 98
     }
   },
@@ -64,15 +64,15 @@
     {
       "file": "bin/ios.js",
       "lines": 99.4,
-      "branches": 86,
+      "branches": 83,
       "functions": 96.7,
       "uncoveredLines": 2
     },
     {
       "file": "src/workflows/catalog.js",
-      "lines": 99.5,
-      "branches": 84.2,
-      "functions": 91.4,
+      "lines": 99.6,
+      "branches": 83.1,
+      "functions": 91.5,
       "uncoveredLines": 2
     },
     {
@@ -260,7 +260,7 @@
     {
       "file": "src/scan/filters.js",
       "lines": 100,
-      "branches": 98.2,
+      "branches": 98.5,
       "functions": 100,
       "uncoveredLines": 0
     },

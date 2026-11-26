@@ -126,6 +126,10 @@ const MUTATIONS = [
     file: "src/stream.js", what: "Akış kipinde örtüşme bir karakter eksik (sınırdaki eşleşme kaçar)",
     from: "const keep = Math.max(0, ...patterns.map((p) => p.length)) - 1;", to: "const keep = Math.max(0, ...patterns.map((p) => p.length)) - 2;",
   },
+  {
+    file: "src/scan/filters.js", what: "En uzun eşleşme süzgeci aynı konumda ilk eşleşmeyi seçer (en uzunu değil)",
+    from: "    for (const x of group) if (x.length > best.length) best = x;", to: "    for (const x of group) if (false) best = x;",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

@@ -2,7 +2,7 @@
 
 Koda bilerek küçük hatalar yerleştirildi; her biri projenin geçici bir kopyasında tek başına uygulanıp bütün birim testleri çalıştırıldı. Bir mutasyon, en az bir test başarısız olursa ya da testler sonsuz döngü yüzünden bitmezse "yakalandı" sayılır.
 
-Değiştirilmemiş kopyada: 491 test geçti, 0 başarısız. Sonuç: **32 mutasyonun 32 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
+Değiştirilmemiş kopyada: 496 test geçti, 0 başarısız. Sonuç: **33 mutasyonun 33 tanesi yakalandı.** Komut: `npm run mutation` (2026-11-26).
 
 | # | Dosya | Yerleştirilen hata | Değişiklik | Yakalandı mı | Nasıl |
 |---:|---|---|---|---|---|
@@ -12,10 +12,10 @@ Değiştirilmemiş kopyada: 491 test geçti, 0 başarısız. Sonuç: **32 mutasy
 | 4 | `src/functions/bm4dnaHmbs.js` | bm4DNAHMbs desende olmayan q-gram için m kadar kayar (ödevin ipucu hatası) | `const dflt = m - q + 1;` → `const dflt = m;` | evet | 35 test başarısız |
 | 5 | `src/functions/shiftOr.js` | Shift-Or (m > 32) son pencereyi atlar | `const limit = n - m + w;` → `const limit = n - m + w - 1;` | evet | 3 test başarısız |
 | 6 | `src/functions/wuManber.js` | Wu-Manber çakışmada en küçük kaymayı değil sonuncuyu tutar | `if (sft < shift[h]) shift[h] = sft;` → `shift[h] = sft;` | evet | 13 test başarısız |
-| 7 | `src/functions/ahoCorasick.js` | Aho-Corasick sözlük bağlarını kurmaz (iç içe desenler kaçar) | `dict[s] = word[f] !== -1 ? f : dict[f];` → `dict[s] = -1;` | evet | 19 test başarısız |
-| 8 | `src/functions/hits.js` | Sonuçlar sıralanmaz | `const keys = this.keys.subarray(0, this.count).sort();` → `const keys = this.keys.subarray(0, this.count);` | evet | 85 test başarısız |
+| 7 | `src/functions/ahoCorasick.js` | Aho-Corasick sözlük bağlarını kurmaz (iç içe desenler kaçar) | `dict[s] = word[f] !== -1 ? f : dict[f];` → `dict[s] = -1;` | evet | 21 test başarısız |
+| 8 | `src/functions/hits.js` | Sonuçlar sıralanmaz | `const keys = this.keys.subarray(0, this.count).sort();` → `const keys = this.keys.subarray(0, this.count);` | evet | 87 test başarısız |
 | 9 | `src/functions/alphabet.js` | ignoreCase ASCII sınırı bir fazla ({ → [) | `return code >= 97 && code <= 122 ? code - 32 : code;` → `return code >= 97 && code <= 123 ? code - 32 : code;` | evet | 1 test başarısız |
-| 10 | `src/atomic/ExactSearchAtom.js` | Metinden uzun bir desen varsa hiç aranmaz (minLen yerine maxLen) | `if (n > 0 && this.minLen <= n) {` → `if (n > 0 && this.maxLen <= n) {` | evet | 13 test başarısız |
+| 10 | `src/atomic/ExactSearchAtom.js` | Metinden uzun bir desen varsa hiç aranmaz (minLen yerine maxLen) | `if (n > 0 && this.minLen <= n) {` → `if (n > 0 && this.maxLen <= n) {` | evet | 14 test başarısız |
 | 11 | `src/functions/boyerMoore.js` | Boyer-Moore tam eşleşmeden sonra iyi sonek kayması yerine m kayar (örtüşen eşleşme kaçar) | `s += good[0];` → `s += m;` | evet | 20 test başarısız |
 | 12 | `src/molecules/ExactMatch.js` | Molekül en pahalı atomu seçer (sıralama ters) | `ranked.sort((a, b) => a.seconds - b.seconds);` → `ranked.sort((a, b) => b.seconds - a.seconds);` | evet | 5 test başarısız |
 | 13 | `src/workflows/history.js` | Geri alınan komut yinele yığınına konmaz | `    this.#redo.push(cmd);` → `    // this.#redo.push(cmd);` | evet | 7 test başarısız |
@@ -34,7 +34,8 @@ Değiştirilmemiş kopyada: 491 test geçti, 0 başarısız. Sonuç: **32 mutasy
 | 26 | `src/workflows/engine.js` | Önbellek anahtarı ayarları içermez (ayar değişse de eski sonuç kullanılır) | `return sha256Hex(JSON.stringify([node.type, node.params ?? {}, inputs]));` → `return sha256Hex(JSON.stringify([node.type, inputs]));` | evet | 4 test başarısız |
 | 27 | `web/lib/layout.js` | Otomatik yerleşimde girdisi olmayan kutu kullanıcısının yanına çekilmez | `if (!parents.get(n.id).length && kids.length) layer.set(` → `if (false) layer.set(` | evet | 3 test başarısız |
 | 28 | `src/stream.js` | Akış kipinde örtüşme bir karakter eksik (sınırdaki eşleşme kaçar) | `const keep = Math.max(0, ...patterns.map((p) => p.length)) - 1;` → `const keep = Math.max(0, ...patterns.map((p) => p.length)) - 2;` | evet | 3 test başarısız |
-| 29 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
-| 30 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
-| 31 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
-| 32 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |
+| 29 | `src/scan/filters.js` | En uzun eşleşme süzgeci aynı konumda ilk eşleşmeyi seçer (en uzunu değil) | `    for (const x of group) if (x.length > best.length) best = x;` → `    for (const x of group) if (false) best = x;` | evet | 4 test başarısız |
+| 30 | `web/lib/view-models.js` | Kapı kaldığında durum rozeti bunu söylemez | `const gate = Object.values(run.nodes).some((r) => r.info?.gate === 'kaldı');` → `const gate = false;` | evet | 2 test başarısız |
+| 31 | `web/lib/view-models.js` | Atom yarışı tablosu ölçülen süreye göre sıralanmaz | `const rows = [...rc.rows].sort((a, b) => a.ms - b.ms);` → `const rows = [...rc.rows];` | evet | 1 test başarısız |
+| 32 | `web/lib/view-models.js` | Klavyeyle bağlama türü uymayan girişleri de önerir | `if (canConnect(wf, catalog, { node: node.id, port: out.name }, { node: other.id, port: inp.name }).ok) {` → `if (true) {` | evet | 1 test başarısız |
+| 33 | `web/lib/dom.js` | Metin textContent yerine innerHTML ile yazılır (XSS açığı) | `else if (k === 'text') el.textContent = v;` → `else if (k === 'text') el.innerHTML = v;` | evet | 3 test başarısız |

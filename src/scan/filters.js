@@ -105,3 +105,35 @@ export function compileIgnore(text) {
     },
   };
 }
+
+/**
+ * En uzun eşleşme süzgeci (aho-corasick kütüphanesindeki "leftmost-longest" anlamı): her kayıtta
+ * soldan başlanır; aynı konumda başlayan eşleşmelerden en uzunu alınır (eşitse listede önce
+ * gelen), onunla örtüşen sonraki eşleşmeler atlanır. İç içe desenlerde ("pass", "password")
+ * tek bulgu kalır. Girdi kayıt içinde konuma göre sıralı olmalı (atomların çıktısı öyledir).
+ * @template {{ position: number, length: number }} T
+ * @param {Iterable<T>} items
+ * @param {(x: T) => string} keyOf  kayıt (dosya) anahtarı
+ * @returns {Generator<T>}
+ */
+export function* leftmostLongest(items, keyOf) {
+  const end = new Map();
+  let group = [];
+  function* pick() {
+    let best = group[0];
+    for (const x of group) if (x.length > best.length) best = x;
+    const key = keyOf(best);
+    if (best.position >= (end.get(key) ?? 0)) {
+      end.set(key, best.position + best.length);
+      yield best;
+    }
+  }
+  for (const x of items) {
+    if (group.length && (keyOf(x) !== keyOf(group[0]) || x.position !== group[0].position)) {
+      yield* pick();
+      group = [];
+    }
+    group.push(x);
+  }
+  if (group.length) yield* pick();
+}

@@ -32,6 +32,7 @@ const USAGE = `Kullanım:
       --format text|json|sarif   çıktı biçimi (varsayılan text; --json ve --sarif kısaltmaları)
       --fail                     bulgu varsa çıkış kodu 1 (sürekli entegrasyon kapısı)
       --word                     yalnızca tam sözcük eşleşmeleri
+      --longest                  iç içe desenlerde yalnızca soldaki en uzun eşleşme (pass / password)
       --no-inline-ignore         "ios:ignore" yorumlarını yok say (bastırılmış satırları da raporla)
       --ignore-file <yol>        yok sayılacak yollar (varsayılan: ./.iosignore varsa o)
       --no-ignore-file           .iosignore dosyasını okuma
@@ -50,7 +51,7 @@ class UsageError extends Error {}
 function parseArgs(argv) {
   const opts = {
     patterns: [], ignoreCase: false, strategy: 'auto', format: null, fail: false, presets: [], quiet: false,
-    word: false, inlineIgnore: true, ignoreFile: null, useIgnoreFile: true, baseline: null, redact: true, help: false,
+    word: false, longest: false, inlineIgnore: true, ignoreFile: null, useIgnoreFile: true, baseline: null, redact: true, help: false,
   };
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
@@ -69,6 +70,7 @@ function parseArgs(argv) {
     else if (a === '--format' || a === '-f') opts.format = value();
     else if (a === '--fail') opts.fail = true;
     else if (a === '--word' || a === '-w') opts.word = true;
+    else if (a === '--longest') opts.longest = true;
     else if (a === '--no-inline-ignore') opts.inlineIgnore = false;
     else if (a === '--ignore-file') opts.ignoreFile = value();
     else if (a === '--no-ignore-file') opts.useIgnoreFile = false;
@@ -202,7 +204,7 @@ function cmdScan(targets, opts) {
   const scans = [];
   let findings = [];
   for (const [ignoreCase, patterns] of groups) {
-    const scan = new CodeScan({ patterns, ignoreCase, strategy: opts.strategy, inlineIgnore: opts.inlineIgnore, word: opts.word, details, redact: opts.redact });
+    const scan = new CodeScan({ patterns, ignoreCase, strategy: opts.strategy, inlineIgnore: opts.inlineIgnore, word: opts.word, longest: opts.longest, details, redact: opts.redact });
     for (const f of scan.run(sources)) findings.push(f);
     scans.push(scan);
   }

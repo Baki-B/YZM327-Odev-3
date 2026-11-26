@@ -15,7 +15,7 @@ import { ExactMatch } from '../molecules/ExactMatch.js';
 import { parseFasta } from '../fasta.js';
 import { sourceToEntry, lineStarts, toLineColumn } from '../adapters/sourceToEntry.js';
 import { PRESETS } from './presets.js';
-import { isSuppressed, isWholeWord, lineAt } from '../scan/filters.js';
+import { isSuppressed, isWholeWord, leftmostLongest, lineAt } from '../scan/filters.js';
 import { ruleForPattern, rulesOfFindings } from '../scan/rules.js';
 import { addFingerprints, maskAfter, snippetOf, toSarif, TOOL } from '../scan/report.js';
 
@@ -95,9 +95,9 @@ function previewOf(text, starts, line, position, length, secret = false) {
  * details: true iken CodeScan'in details seçeneğiyle aynı ek alanları (kural, önem, maskeli
  * satır özeti, parmak izi) da ekler.
  * @param {{ matches: Array<{ header: string, pattern: string, position: number, length: number }>, entries: Array<{ header: string, seq: string }> }} value
- * @param {{ inlineIgnore?: boolean, word?: boolean, details?: boolean }} [options]
+ * @param {{ inlineIgnore?: boolean, word?: boolean, longest?: boolean, details?: boolean }} [options]
  */
-function matchesToFindings(value, { inlineIgnore = true, word = false, details = false } = {}) {
+function matchesToFindings(value, { inlineIgnore = true, word = false, longest = false, details = false } = {}) {
   const index = new Map();
   for (const e of value.entries) {
     if (!index.has(e.header)) index.set(e.header, { text: e.seq, starts: null, file: e.header.replace(/^>/, '') });
@@ -120,11 +120,12 @@ function matchesToFindings(value, { inlineIgnore = true, word = false, details =
     finding.preview = previewOf(f.text, f.starts, line, m.position, m.length, rule.secret);
     findings.push(finding);
   }
+  const kept = longest ? [...leftmostLongest(findings, (x) => x.file)] : findings;
   if (details) {
-    addFingerprints(/** @type {any} */ (findings));
-    for (const x of findings) delete x.lineText;
+    addFingerprints(/** @type {any} */ (kept));
+    for (const x of kept) delete x.lineText;
   }
-  return { findings, files: index.size, suppressed, notWholeWord };
+  return { findings: kept, files: index.size, suppressed, notWholeWord, notLongest: findings.length - kept.length };
 }
 
 /** Bir bulgunun JSON satırı: `ios scan --json` ile aynı beş alan, aynı sıra. */
@@ -279,14 +280,16 @@ export function createCatalog(registry = defaultRegistry) {
     params: [
       { key: 'inlineIgnore', label: '"ios:ignore" yorumlu satırları atla', kind: 'bool', default: true },
       { key: 'word', label: 'Yalnızca tam sözcük eşleşmeleri', kind: 'bool', default: false },
+      { key: 'longest', label: 'İç içe desenlerde yalnızca en uzun eşleşme', kind: 'bool', default: false },
     ],
-    describe: (p) => `her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir${p.inlineIgnore === false ? '' : '; "ios:ignore" yorumlu satırları atlar'}${p.word ? '; yalnızca tam sözcükleri tutar' : ''}.`,
+    describe: (p) => `her eşleşmenin konumunu dosya:satır:sütun biçimine çevirir${p.inlineIgnore === false ? '' : '; "ios:ignore" yorumlu satırları atlar'}${p.word ? '; yalnızca tam sözcükleri tutar' : ''}${p.longest ? '; iç içe desenlerde yalnızca en uzun eşleşmeyi tutar' : ''}.`,
     run(inputs, p, ctx) {
-      const value = matchesToFindings(inputs.matches, { inlineIgnore: p.inlineIgnore !== false, word: Boolean(p.word), details: true });
+      const value = matchesToFindings(inputs.matches, { inlineIgnore: p.inlineIgnore !== false, word: Boolean(p.word), longest: Boolean(p.longest), details: true });
       ctx.info.count = value.findings.length;
       ctx.info.suppressed = value.suppressed;
       ctx.info.notWholeWord = value.notWholeWord;
-      const extra = [value.suppressed ? `${value.suppressed} bastırıldı` : '', value.notWholeWord ? `${value.notWholeWord} tam sözcük değil` : ''].filter(Boolean).join(', ');
+      ctx.info.notLongest = value.notLongest;
+      const extra = [value.suppressed ? `${value.suppressed} bastırıldı` : '', value.notWholeWord ? `${value.notWholeWord} tam sözcük değil` : '', value.notLongest ? `${value.notLongest} daha uzun eşleşmenin içinde` : ''].filter(Boolean).join(', ');
       ctx.info.summary = `${value.findings.length} bulgu${extra ? ` (${extra})` : ''}.`;
       return { findings: value };
     },
