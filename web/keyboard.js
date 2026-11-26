@@ -50,6 +50,7 @@ export function bind() {
   $('yaklas').addEventListener('click', () => setZoom(state.zoom + 0.1));
   $('uzaklas').addEventListener('click', () => setZoom(state.zoom - 0.1));
   $('sigdir').addEventListener('click', fit);
+  $('duzenle').addEventListener('click', () => { act.autoLayout(); fit(); });
   $('temizle').addEventListener('click', () => act.clearCanvas());
   $('geri-al').addEventListener('click', () => act.undo());
   $('yinele').addEventListener('click', () => act.redo());

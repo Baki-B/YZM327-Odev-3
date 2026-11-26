@@ -21,7 +21,7 @@ Durum: **alındı** (bu sürümde var) · **zaten vardı** · **gelecek iş** (r
 | xyflow/xyflow | 39 154 | bağlantı doğrulama kancası, klavye erişilebilirliği, mini harita | türlü uçlar ve nedenli red, klavyeyle ekleme / bağlama / taşıma, WCAG 2.1 AA denetimi | alındı (mini harita: gelecek iş) |
 | node-red/node-red | 23 878 | kutunun altında çalışma durumu, panodan içe / dışa aktarma, bilgi kenar çubuğu | kutu alt bilgisinde durum ve süre, pano, özellikler panelinde yardım ve manifest | zaten vardı + pano alındı |
 | RaspberryPiFoundation/blockly | 13 621 | tür denetimli bağlantılar, kategorili araç kutusu | uç türleri (Source.File, FASTA.Entry...), kategorili palet | zaten vardı |
-| retejs/rete | 12 323 | eklentiyle geçmiş (geri al / yinele), otomatik yerleşim | geçmiş çekirdeğe alındı (DOM'suz, test edilir) | alındı (otomatik yerleşim: gelecek iş) |
+| retejs/rete | 12 323 | eklentiyle geçmiş (geri al / yinele), otomatik yerleşim | geçmiş çekirdeğe alındı (DOM'suz, test edilir); otomatik yerleşim ("Düzenle", katmanlı çizim) | alındı |
 | jagenjo/litegraph.js | 8 191 | düğüm arama, grafiği JSON'a çevirme | palette arama, serializeWorkflow | zaten vardı |
 | jerosoler/Drawflow | 6 174 | JSON içe / dışa aktarma, yalnızca görüntüleme kipi | içe / dışa aktarma | zaten vardı (görüntüleme kipi: alınmadı, gerek yok) |
 | biolab/orange3 | 5 768 | türlü sinyallerle bağlanan araçlar, çalışmanın raporu | türlü uçlar; çalıştırma kaydı ve "Açıkla" | alındı |

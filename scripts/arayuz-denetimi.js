@@ -110,6 +110,24 @@ try {
       const none = await cachedOf();
       check('önbellek: "Önbelleği boşalt"tan sonra bütün kutular çalışır', none.length === 0, `${none.length} kutu önbellekten`);
     }
+    if (p.id === 'tek-desen') {
+      // Otomatik yerleşim: bir kutu klavyeyle kaydırılır, "Düzenle" bütün kabloları soldan sağa
+      // dizer; tek Ctrl+Z bütün taşımaları geri alır.
+      const posOf = () => page.evaluate(() => JSON.stringify(window.__atolye.state.wf.nodes.map((n) => [n.id, n.x, n.y])));
+      await page.click('.node[data-id="tek_molekul"] .node-head');
+      await page.keyboard.press('Shift+ArrowDown');
+      const before = await posOf();
+      await page.click('#duzenle');
+      const leftToRight = await page.evaluate(() => {
+        const { wf } = window.__atolye.state;
+        const at = (id) => wf.nodes.find((n) => n.id === id);
+        return wf.edges.every((e) => at(e.from.node).x < at(e.to.node).x);
+      });
+      const after = await posOf();
+      await page.keyboard.press('Control+z');
+      const undone = await posOf();
+      check('Düzenle: kablolar soldan sağa; tek Ctrl+Z eski yerleşime döner', leftToRight && after !== before && undone === before, `soldan sağa ${leftToRight}, geri alındı ${undone === before}`);
+    }
     if (p.id === 'biyoloji') {
       await page.click('.node[data-id="molekul"] .node-head');
       await page.click('#yaristir');

@@ -118,6 +118,10 @@ const MUTATIONS = [
     file: "src/workflows/engine.js", what: "Önbellek anahtarı ayarları içermez (ayar değişse de eski sonuç kullanılır)",
     from: "return sha256Hex(JSON.stringify([node.type, node.params ?? {}, inputs]));", to: "return sha256Hex(JSON.stringify([node.type, inputs]));",
   },
+  {
+    file: "web/lib/layout.js", what: "Otomatik yerleşimde girdisi olmayan kutu kullanıcısının yanına çekilmez",
+    from: "if (!parents.get(n.id).length && kids.length) layer.set(", to: "if (false) layer.set(",
+  },
   // Arayüz katmanı: görünüm modelleri ve öğe kurma (tests/unit/view-models.test.js, dom.test.js)
   {
     file: "web/lib/view-models.js", what: "Kapı kaldığında durum rozeti bunu söylemez",

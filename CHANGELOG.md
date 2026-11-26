@@ -25,6 +25,8 @@ geçmişindedir.
 - **Önbellek** (atölye): ayarı ve girdisi değişmeyen kutu yeniden çalışmaz; anahtar kutunun türü,
   ayarları ve girişlerine bağlı kutuların anahtarlarının SHA-256 özeti. "Önbelleği boşalt" düğmesi;
   çalıştırma kaydı önbellekten gelen kutuyu işaretler. Komut satırı önbelleksiz çalışır.
+- **Otomatik yerleşim** (atölye, "Düzenle"): katmanlı çizim (en uzun yol, barycenter sıralaması,
+  kesişen kablo sayısıyla seçim); bütün taşımalar tek adımda geri alınır.
 - **Görünüm modelleri** (`web/lib/view-models.js`): arayüzün ekrana yazdığı metin, sıra ve oranlar
   DOM'suz işlevlerde, birim testli; öğe kurma yardımcıları elle yazılmış sahte bir DOM'la sınanır.
 - **Rol arayüzleri** (`src/contracts.js`): Describable, Searcher, SelectionProvider, WorkflowComponent.
@@ -41,8 +43,8 @@ geçmişindedir.
 - Kayıt defteri ve katalog sözleşmeyi rol denetimiyle uygular; eksik üye adıyla söylenir.
 - Site ve sunum sayfalarında İçerik Güvenliği Politikası (CSP); sunumun betiği ayrı dosyada.
 - Mutasyon denetimi 12 hatadan 25 hataya genişledi (geçmiş, tarama, denetim modülleri); ilk turda
-  kaçan parmak izi mutasyonu için test güçlendirildi. Sonra arayüz katmanından 4, önbellekten 1 hata
-  eklendi (toplam 30; biri metni `innerHTML` ile yazarak XSS açığı açar).
+  kaçan parmak izi mutasyonu için test güçlendirildi. Sonra arayüz katmanından 4, önbellekten ve otomatik
+  yerleşimden birer hata eklendi (toplam 31; biri metni `innerHTML` ile yazarak XSS açığı açar).
 - Mutasyon denetimi CI'da her gönderimde çalışır; yakalanmayan hata varsa iş kalır. Testler ayrı
   bir süreç grubunda başlar ve tur bitince grubun tamamı durdurulur.
 

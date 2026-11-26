@@ -5,6 +5,7 @@ import { catalog, doc, history, state, compOf, nodeById, sameEdge } from '../sta
 import { bus } from '../lib/bus.js';
 import { $, toast } from '../lib/dom.js';
 import { freeSpot } from '../lib/geometry.js';
+import { edgeCrossings, layeredLayout } from '../lib/layout.js';
 import { canConnect, FORMAT } from '../../src/workflows/engine.js';
 import {
   addNodeCommand, connectCommand, fragmentOf, macroCommand, moveNodeCommand, pasteCommand, removeEdgeCommand,
@@ -37,6 +38,29 @@ export function moveNodeBy(id, dx, dy) {
   bus.emit('tasindi', { id });
   bus.emit('gecmis');
   autosave();
+}
+
+/** Otomatik yerleşim: kutular katmanlara göre dizilir; bütün taşımalar tek adımda geri alınır. */
+export function autoLayout() {
+  if (!doc.wf.nodes.length) return;
+  let pos;
+  try {
+    pos = layeredLayout(doc.wf, compOf);
+  } catch (err) {
+    toast(err.message, 'err');
+    return;
+  }
+  const before = edgeCrossings(doc.wf, compOf);
+  const moves = doc.wf.nodes
+    .filter((n) => pos.get(n.id).x !== n.x || pos.get(n.id).y !== n.y)
+    .map((n) => moveNodeCommand(n.id, { x: n.x, y: n.y }, pos.get(n.id)));
+  if (!moves.length) {
+    toast('Kutular zaten katmanlara göre yerleşik.');
+    return;
+  }
+  if (applyCommand(macroCommand('Otomatik yerleşim', moves), { structure: false })) {
+    toast(`Otomatik yerleşim: ${moves.length} kutu taşındı; kesişen kablo ${before} → ${edgeCrossings(doc.wf, compOf)}. Geri almak için Ctrl+Z.`);
+  }
 }
 
 /** Fareyle sürükleme: kutu sürüklenirken canlı taşınır, bırakınca tek komut olarak kaydedilir. */

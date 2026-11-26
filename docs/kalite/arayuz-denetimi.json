@@ -1,6 +1,6 @@
 {
-  "total": 53,
-  "passed": 53,
+  "total": 54,
+  "passed": 54,
   "checks": [
     {
       "name": "paket teknik-borc: atölye = komut satırı",
@@ -36,6 +36,10 @@
     },
     {
       "name": "paket tek-desen: atölye = komut satırı",
+      "ok": true
+    },
+    {
+      "name": "Düzenle: kablolar soldan sağa; tek Ctrl+Z eski yerleşime döner",
       "ok": true
     },
     {
