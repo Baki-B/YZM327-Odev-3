@@ -7,7 +7,7 @@
 //
 // Süzgeç isteğe bağlıdır (ios scan --min-entropy <bit>, atölyede "Eşleşme → Bulgu" ayarı) ve yalnızca
 // gizli bilgi kurallarına uygulanır. Değer bulunamayan bulgu (ör. düz yazıda "password" sözcüğü,
-// "BEGIN RSA PRIVATE KEY" başlığı) kalır: karar verilemeyen bulgu gizlenmez. Bedeli: düşük
+// "BEGIN RSA PRIVATE KEY" başlığı) kalır: karar verilemeyen bulgu gizlenmez. Bedeli: düşük  ios:ignore (desen adı anlatılıyor)
 // entropili gerçek parolalar ("hunter2") da atılır; eşik bu yüzden kullanıcıya bırakılır.
 
 import { isWordChar } from './filters.js';
@@ -42,8 +42,8 @@ function readValue(text, i) {
 
 /**
  * Gizli bilgi bulgusunun değeri:
- *   - desen "=" ya da ":" ile bitiyorsa (password=, token=) hemen ardından gelen dizgi;
- *   - desen bir sözcüğün başıysa (AKIA…) o sözcüğün tamamı;
+ *   - desen "=" ya da ":" ile bitiyorsa (password=, token=) hemen ardından gelen dizgi;  ios:ignore
+ *   - desen bir sözcüğün başıysa (AKIA…) o sözcüğün tamamı;  ios:ignore
  *   - değilse aynı satırda desenden sonraki ilk "=" ya da ":" işaretinin ardındaki dizgi
  *     (=, ==, =>, :=, boşluk ve açılış tırnağı atlanır; JSON ve YAML da olur).
  * Satırda atama yoksa null döner (değer yok, karar verilemez). Atama var ama değer boşsa "".
