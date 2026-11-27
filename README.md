@@ -15,11 +15,12 @@ Vize projesi (grup çalışması). Bir metinde (genom, protein, kaynak kod, log)
 
 ## Öne çıkanlar
 
+- **Sunum modu** (atölyede "Sunum modu" düğmesi ya da [`web/?sunum=1`](https://baki-b.github.io/YZM327-Odev-3/web/?sunum=1)): atölyeyi adım adım tanıtır. Paket açma, kendi dosyanı ekleme ("Dosya yükle" kutusu ve dosya seçme alanı), bağlama, çalıştırma, molekülün kararı ve sonuçlar sırayla aydınlatılır; her adımda "Paketi aç", "Kutuyu ekle", "Çalıştır" gibi düğmeler işi canlı yapar. ← / → ile ilerlenir, Esc ile çıkılır.
 - **Atölye** (tarayıcıda, kurulumsuz): türlü uçlarla iş akışı kurma; uyumsuz bağlantı nedeniyle reddedilir. **Geri al / yinele** (Command deseni; paket açma dahil), **önbellek** (değişmeyen kutu yeniden çalışmaz; bir ayar değişince yalnızca o kutu ve ondan sonrakiler), **otomatik yerleşim** ("Düzenle": katmanlı çizim, kesişen kabloları azaltır, tek adımda geri alınır), **mini harita** (▦: bütün tuval ve görünen alan, tıklanan yere gider), kopyala-yapıştır-çoğalt, **canlı denetim** (bağlanmamış ya da sonucu kullanılmayan kutu), otomatik kayıt, kısayol penceresi, Mermaid diyagramı ve **çalıştırma kaydı** (bileşen sürümleri, girdilerin SHA-256 özetleri, kararlar) indirme.
 - **`ios scan`**: birden çok hazır küme, **SARIF** çıktısı (GitHub kod tarama ekranı), kural kimliği / önem / CWE, satır içi bastırma (`ios:ignore`), `.iosignore`, **taban çizgisi** (yalnızca yeni bulgular), tam sözcük, **en uzun eşleşme** (`--longest`: iç içe desenlerde `pass` / `password` tek bulgu), **`.gitignore`** (ripgrep gibi: kökteki ve alt klasörlerdeki dosyalar, `!` olumsuzlaması; `--no-gitignore`), **entropi süzgeci** (`--min-entropy 3`: değeri `changeme`, `os.environ`, `XXXX-XXXX` gibi rastgele görünmeyen gizli bilgi bulgularını atar; detect-secrets), gizli bilgi değerlerini maskeleme. Atölyedeki "SARIF indir" kutusu birebir aynı dosyayı üretir.
 - **Akış kipi** (`src/stream.js`): çok büyük bir metin parça parça aranır; önceki parçanın son (m − 1) karakteri sonrakinin başına eklendiği için sınırdaki eşleşme kaçmaz, her eşleşme tam bir kez ve bütün metni aramakla aynı sırada gelir (özellik tabanlı testle her atom ve molekülde gösterildi).
 - **`ios workflow run | lint | diagram`**: atölyede kurulan iş akışı CI'da tarayıcısız çalışır; kapı kalırsa çıkış kodu 1.
-- **Kalite kapıları** (her gönderimde GitHub Actions): 506 birim testi (Node 22 ve 24), kapsama satır %99,6 / dal %91,7 / işlev %98,0 statik tür denetimi 0 hata (ilk ölçümde 138; rol arayüzleri derleme anında da denetlenir, 11 olumsuz kontrol), gerçek tarayıcıda 56/56 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
+- **Kalite kapıları** (her gönderimde GitHub Actions): 512 birim testi (Node 22 ve 24), kapsama satır %99,6 / dal %91,9 / işlev %97,9 statik tür denetimi 0 hata (ilk ölçümde 138; rol arayüzleri derleme anında da denetlenir, 11 olumsuz kontrol), gerçek tarayıcıda 60/60 arayüz denetimi, WCAG 2.1 AA erişilebilirlik 0 ihlal (ilk ölçümde 25), mutasyon denetimi, CodeQL ve kendi tarayıcımızla depo taraması. Ayrıntı: [site/kalite.html](site/kalite.html), [docs/kalite/](docs/kalite/).
 - **Benzer projeler**: GitHub'da en çok yıldız alan iş akışı düzenleyicileri, bilimsel iş akışı yöneticileri ve kod tarayıcıları incelendi; alınan ve alınmayan fikirler gerekçesiyle: [docs/benzer-projeler.md](docs/benzer-projeler.md).
 
 Örnek: "gizli bilgi sızıntısı" paketi (`node bin/ios.js workflow diagram is-akisi.json` çıktısı; GitHub bu diyagramı çizer):
@@ -101,7 +102,7 @@ Hazır paketler: teknik borç avı, gizli bilgi sızıntısı (+ CI kapısı), y
 
 | Komut | Ne yapar |
 |---|---|
-| `npm test` | 506 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, geri al / yinele (özellik tabanlı), denetim, tarama kuralları ve SARIF, roller, görünüm modelleri ve sahte DOM'la öğe kurma, hazır paketler, komut satırı, yasaklı işlev taraması |
+| `npm test` | 512 birim testi: sözleşme, özel durumlar, oracle karşılaştırması, molekül, iş akışı motoru, geri al / yinele (özellik tabanlı), denetim, tarama kuralları ve SARIF, roller, görünüm modelleri ve sahte DOM'la öğe kurma, hazır paketler, komut satırı, yasaklı işlev taraması |
 | `npm run kapsama` | Test kapsaması (Node'un yerleşik ölçümü; eşik: satır %95, dal %85, işlev %95) → `docs/kalite/kapsama.md` |
 | `npm run tur-denetimi` | Statik tür denetimi (`tsc --checkJs`; TypeScript geçici kurulur: `npm install --no-save --no-package-lock typescript@6.0.3 @types/node@22`) |
 | `npm run calibrate` | Kalibrasyon ızgarasını ölçer (180 vaka × 8 atom), katsayıları `src/molecules/coefficients.json` ve `.js`'e yazar (bu makinede 233,9 s) |
@@ -246,9 +247,9 @@ Benzer projelerden alınmayıp sonraya bırakılanlar ([docs/benzer-projeler.md]
 
 | Üye | Numara | Katkı |
 |---|---|---|
-| Abdülbaki Bayır | [numara] | [...] |
-| Seyyid Abdulbaki Bozkurt | [numara] | [...] |
-| Alparslan Tuğra Şahin | [numara] | [...] |
+| Abdülbaki Bayır | [numara] | Proje yönetimi ve mimari; molekül ve maliyet modeli (ExactMatch, kalibrasyon); CI ve kalite kapıları; rapor |
+| Seyyid Abdulbaki Bozkurt | [numara] | Arama algoritmaları (atomlar); sözleşme ve referans (oracle) testleri; ios komut satırı ve kod tarama |
+| Alparslan Tuğra Şahin | [numara] | Kod Bilimi Atölyesi arayüzü; geri al / yinele; erişilebilirlik ve arayüz denetimi; site, UML ve sunum |
 
 Ders: YZM327 · Öğretim elemanı: Savaş TAKAN
 

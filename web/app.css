@@ -321,3 +321,17 @@ table.kisayol td:first-child { white-space: nowrap; }
 }
 @media print { .side, .topbar, .canvas-tools { display: none; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* Sunum modu (adım adım rehber): sayfa karartılır, anlatılan öğe çerçeveyle aydınlatılır; tıklamalar
+   sayfaya geçer (dosya seçme alanı kullanılabilir), yalnızca açılır kutu tıklamayı kendisi alır. */
+.tour { position: fixed; inset: 0; z-index: 150; pointer-events: none; }
+.tour.dim { background: rgba(10, 5, 15, .45); }
+.tour-hole { position: fixed; border-radius: var(--r); box-shadow: 0 0 0 200vmax rgba(10, 5, 15, .45); outline: 3px solid var(--accent); transition: left .2s ease, top .2s ease, width .2s ease, height .2s ease; }
+.tour-pop { position: fixed; left: 8px; top: 8px; pointer-events: auto; width: min(380px, calc(100vw - 16px)); background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 10px 40px rgba(0, 0, 0, .3); padding: 10px 14px 14px; }
+.tour-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tour-step { margin: 0; font-size: 12px; font-weight: 600; color: var(--accent); }
+.tour-pop h2 { margin: 4px 0 6px; font-size: 17px; }
+#sunum-metin { margin: 0 0 12px; font-size: 14px; line-height: 1.5; color: var(--ink2); }
+.tour-btns { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .tour-hole { transition: none; } }
+@media print { .tour { display: none; } }

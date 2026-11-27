@@ -1,6 +1,6 @@
 {
-  "total": 56,
-  "passed": 56,
+  "total": 60,
+  "passed": 60,
   "checks": [
     {
       "name": "paket teknik-borc: atölye = komut satırı",
@@ -204,6 +204,22 @@
     },
     {
       "name": "sunum: CSP altında ok tuşlarıyla ilerler (betik ayrı dosyada)",
+      "ok": true
+    },
+    {
+      "name": "sunum modu: ?sunum=1 ile açılır; her adımda açılır kutu ekranın içinde, klavye odağı rehberde; → ile sona gelince kapanır",
+      "ok": true
+    },
+    {
+      "name": "sunum modu: paketi açar, \"Dosya yükle\" kutusunu ekleyip seçer, dosya seçme alanını aydınlatır",
+      "ok": true
+    },
+    {
+      "name": "sunum modu: boş dosya kutusu kaldırılıp iş akışı çalışır; molekül kutusu seçilir",
+      "ok": true
+    },
+    {
+      "name": "sunum modu: düğmeyle yeniden açılır; Esc yalnızca rehberi kapatır (seçim korunur)",
       "ok": true
     },
     {

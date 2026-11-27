@@ -15,18 +15,18 @@
 <h1>Kalite güvencesi</h1>
 <p class="lead">Her gönderimde GitHub Actions'ta çalışan kalite kapıları (quality gates). Aşağıdaki sayılar denetim betiklerinin yazdığı <code>docs/kalite/*.json</code> dosyalarından üretildi.</p>
 <div class="kpis">
-<div class="kpi"><b>506</b><span>birim testi (Node 22 ve 24)</span></div>
-<div class="kpi"><b>%99,6</b><span>satır kapsaması (dal %91,7)</span></div>
+<div class="kpi"><b>512</b><span>birim testi (Node 22 ve 24)</span></div>
+<div class="kpi"><b>%99,6</b><span>satır kapsaması (dal %91,9)</span></div>
 <div class="kpi"><b>0</b><span>tür hatası (ilk ölçümde 138)</span></div>
 <div class="kpi"><b>0</b><span>erişilebilirlik ihlali (ilk ölçümde 25)</span></div>
 </div>
 <h2>Kapılar</h2>
 <div class="table-wrap"><table><thead><tr><th>Kapı</th><th>Araç</th><th>Sonuç</th><th>Ne yakalar</th></tr></thead><tbody>
-<tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>506 test, 0 başarısız</td><td>sözleşme, oracle, özellik tabanlı (rastgele) testler, kural örnek dosyaları</td></tr>
-<tr><td>Test kapsaması</td><td>Node yerleşik ölçümü</td><td>satır %99,6, dal %91,7, işlev %98,0 (eşik %95 / %85 / %95)</td><td>test edilmeyen kod</td></tr>
+<tr><td>Birim testleri</td><td><code>node:test</code>, Node 22 ve 24</td><td>512 test, 0 başarısız</td><td>sözleşme, oracle, özellik tabanlı (rastgele) testler, kural örnek dosyaları</td></tr>
+<tr><td>Test kapsaması</td><td>Node yerleşik ölçümü</td><td>satır %99,6, dal %91,9, işlev %97,9 (eşik %95 / %85 / %95)</td><td>test edilmeyen kod</td></tr>
 <tr><td>Statik tür denetimi</td><td>TypeScript 6.0.3 (<code>--checkJs</code>)</td><td>0 hata (ilk ölçümde 138); rol arayüzleri için 11 olumsuz kontrol</td><td>yanlış alan adı, eksik argüman, bozuk JSDoc, rolünü üstlenmeyen bileşen</td></tr>
 <tr><td>Mutasyon denetimi</td><td><code>npm run mutation</code></td><td>36 / 36 yakalandı</td><td>testin gerçekten hata yakalayıp yakalamadığı</td></tr>
-<tr><td>Arayüz denetimi</td><td>Playwright + Chromium</td><td>56 / 56</td><td>altı paket = komut satırı, geri al, XSS, CSP, 390 px</td></tr>
+<tr><td>Arayüz denetimi</td><td>Playwright + Chromium</td><td>60 / 60</td><td>altı paket = komut satırı, geri al, XSS, CSP, 390 px</td></tr>
 <tr><td>Erişilebilirlik</td><td>axe-core 4.14.1, WCAG 2.1 AA</td><td>20 taramada 0 engelleyici ihlal</td><td>karşıtlık, ekran okuyucu adları, klavye</td></tr>
 <tr><td>Bağlantılar</td><td>yerel sunucu</td><td>0 kırık</td><td>site, sunum ve atölyede kırık bağlantı</td></tr>
 <tr><td>Belgelerdeki sayılar</td><td><code>scripts/sayi-denetimi.js</code></td><td>kaynaksız sayı yok</td><td>uydurma ya da eski sayı</td></tr>

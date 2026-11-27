@@ -1,12 +1,12 @@
 # Test kapsaması
 
-`npm run kapsama` (Node v22.23.4, yerleşik ölçüm). Kapsam: `src/**`, `bin/**`, `web/lib/**`; 56 dosya.
+`npm run kapsama` (Node v22.23.4, yerleşik ölçüm). Kapsam: `src/**`, `bin/**`, `web/lib/**`; 57 dosya.
 
 | Ölçüt | Çalışan / toplam | Oran | Eşik |
 |---|---|---|---|
-| Satır | 5365 / 5389 | %99,6 | %95 |
-| Dal | 1766 / 1925 | %91,7 | %85 |
-| İşlev | 600 / 612 | %98 | %95 |
+| Satır | 5508 / 5532 | %99,6 | %95 |
+| Dal | 1798 / 1957 | %91,9 | %85 |
+| İşlev | 615 / 628 | %97,9 | %95 |
 
 En düşük satır kapsamalı on dosya:
 

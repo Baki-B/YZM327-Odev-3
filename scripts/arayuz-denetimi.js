@@ -7,7 +7,7 @@
 //   3. Geri al / yinele, çoğalt, kopyala-yapıştır, tuş tuş yazma, denetim sekmesi, kısayol penceresi,
 //      Mermaid ve çalıştırma kaydı indirme, otomatik kayıt, tuvale JSON bırakma, tam sözcük süzgeci
 //      (atölye = komut satırı), SARIF (atölye = komut satırı, gizli değer maskeli), XSS ve CSP.
-//   4. 1280 px ve 390 px'te yatay taşma yok; açık ve koyu tema.
+//   4. 1280 px ve 390 px'te yatay taşma yok; açık ve koyu tema; sunum modu (adım adım rehber).
 //   5. Bütün sayfalarda konsol hatası yok.
 // Ekran görüntüleri: docs/ekran/*.png
 // Kullanım (proje kökünden): node scripts/arayuz-denetimi.js
@@ -410,6 +410,52 @@ try {
   const slide = await deck.evaluate(() => ({ hash: location.hash, on: [...document.querySelectorAll('section')].findIndex((s) => s.classList.contains('on')), csp: Boolean(document.querySelector('meta[http-equiv="Content-Security-Policy"]')) }));
   check('sunum: CSP altında ok tuşlarıyla ilerler (betik ayrı dosyada)', slide.hash === '#3' && slide.on === 2 && slide.csp, JSON.stringify(slide));
   await deck.close();
+
+  // ------------------------------------------------------------ 2j. sunum modu (adım adım rehber)
+  const tp = await newPage({ width: 1280, height: 800 });
+  await tp.goto(`${BASE}/web/index.html?sunum=1`, { waitUntil: 'networkidle' });
+  const tourState = () => tp.evaluate(() => {
+    const pop = document.querySelector('.tour-pop');
+    const r = pop.getBoundingClientRect();
+    return {
+      open: !document.getElementById('sunum').hidden, step: document.getElementById('sunum-adim').textContent,
+      hole: !(/** @type {HTMLElement} */ (document.querySelector('.tour-hole'))).hidden, inView: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+      action: document.getElementById('sunum-eylem').hidden ? null : document.getElementById('sunum-eylem').textContent, focusIn: pop.contains(document.activeElement),
+    };
+  });
+  const steps = [];
+  const did = {};
+  for (let i = 0; i < 30; i++) {
+    const st = await tourState();
+    if (!st.open) break;
+    steps.push(st);
+    if (st.action) {
+      await tp.click('#sunum-eylem');
+      if (st.action === 'Çalıştır') await tp.waitForFunction(() => /^(bitti|hata)/.test(document.getElementById('durum').textContent), null, { timeout: 120000 });
+      await tp.waitForTimeout(150);
+      did[st.action] = await tp.evaluate(() => ({ nodes: window.__atolye.state.wf.nodes.map((n) => n.type), sel: window.__atolye.state.sel?.id ?? null, pkg: location.hash, durum: document.getElementById('durum').textContent }));
+    }
+    if (/Dosyaları seçin/.test(await tp.textContent('#sunum-baslik'))) did.fileInput = st.hole && await tp.evaluate(() => Boolean(document.querySelector('#props input[type="file"]')));
+    await tp.keyboard.press('ArrowRight');
+  }
+  const closedAtEnd = !(await tourState()).open;
+  check('sunum modu: ?sunum=1 ile açılır; her adımda açılır kutu ekranın içinde, klavye odağı rehberde; → ile sona gelince kapanır',
+    steps.length > 0 && steps.every((x) => x.inView && x.focusIn) && closedAtEnd, `${steps.length} adım; ekranda ${steps.filter((x) => x.inView).length}, odak ${steps.filter((x) => x.focusIn).length}; sonda kapandı ${closedAtEnd}`);
+  const pk = did['Paketi aç'];
+  const fb = did['Kutuyu ekle'];
+  check('sunum modu: paketi açar, "Dosya yükle" kutusunu ekleyip seçer, dosya seçme alanını aydınlatır',
+    pk?.pkg === '#paket=gizli-bilgi' && fb?.nodes.includes('kaynak.dosyalar') && /^n\d+$/.test(fb?.sel ?? '') && did.fileInput === true, JSON.stringify({ paket: pk?.pkg, kutu: fb?.nodes.includes('kaynak.dosyalar'), dosyaAlani: did.fileInput }));
+  const rn = did['Çalıştır'];
+  const ms = did['Kutuyu seç'];
+  check('sunum modu: boş dosya kutusu kaldırılıp iş akışı çalışır; molekül kutusu seçilir',
+    /^bitti/.test(rn?.durum ?? '') && !rn.nodes.includes('kaynak.dosyalar') && ms?.sel === 'molekul', `rozet "${rn?.durum}", seçili ${ms?.sel}`);
+  await tp.click('#sunum-ac');
+  const reopened = (await tourState()).open;
+  await tp.click('.node[data-id="molekul"] .node-head');
+  await tp.keyboard.press('Escape');
+  const afterEsc = await tp.evaluate(() => ({ open: !document.getElementById('sunum').hidden, sel: window.__atolye.state.sel?.id ?? null, focus: document.activeElement?.id }));
+  check('sunum modu: düğmeyle yeniden açılır; Esc yalnızca rehberi kapatır (seçim korunur)', reopened && !afterEsc.open && afterEsc.sel === 'molekul', JSON.stringify(afterEsc));
+  await tp.close();
 
   // ------------------------------------------------------------ 3. telefon (390 px)
   const mob = await newPage({ width: 390, height: 844 }, { deviceScaleFactor: 2, hasTouch: true, isMobile: true });

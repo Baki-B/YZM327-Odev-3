@@ -8,6 +8,9 @@ geçmişindedir.
 ## [1.0.0] — vize teslimi
 
 ### Eklendi
+- **Sunum modu** (`web/views/tour.js`, DOM'suz kısmı `web/lib/tour.js`): atölyeyi adım adım
+  tanıtan rehber; paket açma, dosya ekleme, bağlama, çalıştırma, molekülün kararı. Üst çubuktaki
+  düğmeyle ya da `web/?sunum=1` adresiyle açılır; sitenin ana sayfasında bağlantısı var.
 - **Geri al / yinele** (Command deseni, `src/workflows/history.js`): kutu ekleme, silme, taşıma,
   bağlama, ayar değiştirme, paket açma, içe aktarma, temizleme; Ctrl+Z, Ctrl+Shift+Z, düğmeler.
   Aynı ayara ardışık yazmalar ve ok tuşuyla adım adım taşıma tek adımda birleşir.
