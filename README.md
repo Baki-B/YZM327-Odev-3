@@ -246,7 +246,7 @@ Benzer projelerden alınmayıp sonraya bırakılanlar ([docs/benzer-projeler.md]
 
 | Üye | Numara | Katkı |
 |---|---|---|
-| Baki [soyad] | [numara] | [...] |
+| Abdülbaki Bayır | [numara] | [...] |
 | Seyyid Abdulbaki Bozkurt | [numara] | [...] |
 | Alparslan Tuğra Şahin | [numara] | [...] |
 

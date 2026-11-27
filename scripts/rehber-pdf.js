@@ -1,4 +1,4 @@
-// docs/sunum-rehberi/rehber.html → docs/Sunum-Rehberi.pdf (10 dakikalık sunum için rehber)
+// docs/sunum-rehberi/rehber.html → docs/Sunum-Rehberi.pdf (10 dakikalık sunum belgesi)
 // Ortamda kurulu Playwright + Chromium kullanılır (yalnızca bu betik için; npm test'in bağımlılığı değildir).
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +21,7 @@ await page.emulateMedia({ media: 'print' });
 const buf = await page.pdf({
   path: pdf, format: 'A4', printBackground: true, margin: { top: '13mm', bottom: '15mm', left: '14mm', right: '14mm' },
   displayHeaderFooter: true, headerTemplate: '<span></span>',
-  footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#777">Kod Bilimi Atölyesi · sunum rehberi · <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+  footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#777">Kod Bilimi Atölyesi · YZM327 sunum belgesi · <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
 });
 await browser.close();
 const pages = (buf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length;

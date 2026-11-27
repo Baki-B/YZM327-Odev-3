@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sunum Rehberi · Kod Bilimi Atölyesi</title>
+<title>Sunum Belgesi · Kod Bilimi Atölyesi</title>
 <style>
   :root { --ink: #151513; --ink2: #4a4945; --muted: #7d7c77; --rule: #dcdbd6; --soft: #f4f3ef; --accent: #2a78d6; --acc-soft: #e8f1fc; --ok: #2f8f5b; --ok-soft: #e7f4ec; --warn: #b06a12; --warn-soft: #fbf0e0; --vio: #6d4bb8; --vio-soft: #f0ebfa; }
   * { box-sizing: border-box; }
@@ -57,39 +57,39 @@
 
 <!-- =================================================================== KAPAK + AKIŞ -->
 <section>
-  <p class="small" style="color:var(--muted);margin-bottom:2pt">YZM327 · Vize projesi · Sunum rehberi</p>
+  <p class="small" style="color:var(--muted);margin-bottom:2pt">YZM327 · Vize projesi · Sunum belgesi</p>
   <h1>Kod Bilimi Atölyesi:<br>akıllı tam desen eşleştirme</h1>
-  <p class="lead">Bu belge 10 dakikalık sunumu taşımak için hazırlandı: önce ne söyleyeceğin, sonra projede hangi yazılım mühendisliği ilkesinin nerede ve hangi kanıtla uygulandığı, diyagramlarıyla.</p>
-  <p class="meta">Ders: YZM327 · Öğretim elemanı: Savaş TAKAN · Grup: Baki <span class="ph">[soyad]</span>, Seyyid Abdulbaki Bozkurt, Alparslan Tuğra Şahin<br>
+  <p class="lead">Projede uygulanan yazılım mühendisliği ilkeleri, tasarım desenleri, test stratejisi ve kalite güvencesi; her biri projedeki yeri, kanıtı ve diyagramıyla.</p>
+  <p class="meta">Ders: YZM327 · Öğretim elemanı: Savaş TAKAN · Grup: Abdülbaki Bayır, Seyyid Abdulbaki Bozkurt, Alparslan Tuğra Şahin<br>
   Kod: <b>github.com/Baki-B/YZM327-Odev-3</b> · Canlı site ve atölye: <b>baki-b.github.io/YZM327-Odev-3</b></p>
 
-  <h2>10 dakikalık akış</h2>
+  <h2>Sunum planı (10 dakika)</h2>
   <table>
-    <tr><th style="width:17mm">Dakika</th><th style="width:44mm">Konu</th><th>Tek cümleyle söyleyeceğin</th><th style="width:17mm">Sayfa</th></tr>
-    <tr><td class="min">0 – 1</td><td>Problem ve fikir</td><td>"Hiçbir arama algoritması her durumda en hızlı değil; girdiye bakıp doğrusunu kendisi seçen bir bileşen yazdık."</td><td>2</td></tr>
-    <tr><td class="min">1 – 2</td><td>Mimari</td><td>"Saf bir çekirdek (algoritmalar, molekül, iş akışı motoru) ve onu kullanan iki ince kabuk: tarayıcıdaki atölye ve komut satırı."</td><td>3</td></tr>
-    <tr><td class="min">2 – 4</td><td>SOLID ilkeleri</td><td>"Beş ilkenin her biri kodda bir yere karşılık geliyor ve her birini bir test kanıtlıyor."</td><td>4</td></tr>
-    <tr><td class="min">4 – 6</td><td>Tasarım desenleri</td><td>"Desenleri süs için değil, somut bir sorunu çözmek için kullandık: yeni atom, geri al, arayüzün güncellenmesi."</td><td>5 – 6</td></tr>
-    <tr><td class="min">6 – 8</td><td>Test ve kalite kapıları</td><td>"506 test var; testlerin gerçekten hata yakaladığını da ölçtük: koda koyduğumuz 36 hatanın 36'sı yakalandı."</td><td>7 – 8</td></tr>
-    <tr><td class="min">8 – 9</td><td>Sonuç ve sınırlar</td><td>"Çok desende seçici, en iyi tek atomdan iyi; tek desende değil, bunu açıkça yazdık."</td><td>2, 9</td></tr>
-    <tr><td class="min">9 – 10</td><td>Süreç ve kapanış</td><td>"Her karar gerekçesiyle kayıtlı, her sayı bir komut çıktısından; sorularınızı alalım."</td><td>9</td></tr>
+    <tr><th style="width:17mm">Dakika</th><th style="width:44mm">Konu</th><th>Ana fikir</th><th style="width:17mm">Sayfa</th></tr>
+    <tr><td class="min">0 – 1</td><td>Problem ve fikir</td><td>Hiçbir arama algoritması her durumda en hızlı değildir; molekül, girdiye bakarak uygun algoritmayı kendisi seçer.</td><td>2</td></tr>
+    <tr><td class="min">1 – 2</td><td>Mimari</td><td>Saf bir çekirdek (algoritmalar, molekül, iş akışı motoru) ve onu kullanan iki ince kabuk: tarayıcıdaki atölye ve komut satırı.</td><td>3</td></tr>
+    <tr><td class="min">2 – 4</td><td>SOLID ilkeleri</td><td>Beş ilkenin her biri kodda belirli bir yere karşılık gelir ve bir testle kanıtlanır.</td><td>4</td></tr>
+    <tr><td class="min">4 – 6</td><td>Tasarım desenleri</td><td>Desenler somut sorunları çözmek için kullanıldı: yeni atom ekleme, geri alma, arayüzün güncellenmesi.</td><td>5 – 6</td></tr>
+    <tr><td class="min">6 – 8</td><td>Test ve kalite kapıları</td><td>506 birim testi vardır; testlerin hata yakalama gücü de ölçüldü: koda konan 36 hatanın 36'sı yakalandı.</td><td>7 – 8</td></tr>
+    <tr><td class="min">8 – 9</td><td>Sonuç ve sınırlar</td><td>Çok desende molekül en iyi tek atomdan daha iyidir; tek desende değildir ve bu durum açıkça belirtildi.</td><td>2, 9</td></tr>
+    <tr><td class="min">9 – 10</td><td>Süreç ve kapanış</td><td>Her karar gerekçesiyle kayıtlıdır; her sayı bir komut çıktısına dayanır.</td><td>9</td></tr>
   </table>
-  <div class="say"><b>İpucu.</b> Süre kalırsa 1 dakikalık canlı gösterim: siteden <b>Atölye</b> → soldan <b>#&nbsp;gizli-bilgi-sızıntısı</b> → <b>Tarayıcıda çalıştır</b> → ExactMatch kutusuna tıkla: molekülün hangi atomu neden seçtiği görünür.</div>
-  <p class="small" style="color:var(--muted)">Bu belgedeki bütün sayılar projede çalıştırılan komutların çıktısından alındı ve <code>scripts/sayi-denetimi.js</code> ile denetlendi. Sarı köşeli parantezli alan grup tarafından doldurulacak.</p>
+  <div class="say"><b>Canlı gösterim</b> (isteğe bağlı, yaklaşık 1 dakika): Sitede <b>Atölye</b> açılır, soldan <b>#&nbsp;gizli-bilgi-sızıntısı</b> paketi seçilir ve <b>Tarayıcıda çalıştır</b> düğmesine basılır. ExactMatch kutusuna tıklandığında molekülün hangi atomu neden seçtiği görülür.</div>
+  <p class="small" style="color:var(--muted)">Bütün sayılar projede çalıştırılan komutların çıktısından alınmış ve <code>scripts/sayi-denetimi.js</code> ile denetlenmiştir.</p>
 </section>
 
 <!-- =================================================================== 1. PROJE BİR BAKIŞTA -->
 <section class="page">
   <h2>1. Proje bir bakışta</h2>
-  <p><b>Problem:</b> Bir metinde (genom, protein, kaynak kod, log) bir ya da birçok desenin geçtiği <b>bütün</b> yerleri bulmak. Onlarca algoritma var ama hiçbiri her durumda en hızlı değil: kısa desende iyi olan uzun desende, tek desende iyi olan çok desende geri kalıyor.</p>
-  <p><b>Çözüm:</b> Internet of Science (IoS) fikrini izleyen üç katman: <b>atom</b> (tek bir algoritma), <b>molekül</b> (aynı işi yapan atomlardan girdiye göre seçen bileşen), <b>iş akışı</b> (bileşenleri birbirine bağlayan düzen).</p>
+  <p><b>Problem:</b> Bir metinde (genom, protein dizisi, kaynak kod, günlük kaydı) bir ya da birden çok desenin geçtiği <b>bütün</b> yerleri bulmak. Bu iş için onlarca algoritma vardır ama hiçbiri her durumda en hızlı değildir: kısa desende iyi olan uzun desende, tek desende iyi olan çok desende geri kalır.</p>
+  <p><b>Çözüm:</b> Internet of Science (IoS) yaklaşımını izleyen üç katman: <b>atom</b> (tek bir algoritma), <b>molekül</b> (aynı işi yapan atomlar arasından girdiye göre seçim yapan bileşen) ve <b>iş akışı</b> (bileşenleri birbirine bağlayan düzen).</p>
   <figure>
     <svg viewBox="0 0 680 236" role="img" aria-label="Girdi molekülden geçer, molekül sekiz atomdan birini seçer, eşleşmeler iş akışında bulguya dönüşür">
       <defs><marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker></defs>
       <rect x="4" y="40" width="116" height="92" rx="8" fill="#f4f3ef" stroke="#bdbcb6"/>
       <text x="62" y="66" text-anchor="middle" font-size="13" font-weight="700">Girdi</text>
       <text x="62" y="86" text-anchor="middle" font-size="11">genom, protein,</text>
-      <text x="62" y="102" text-anchor="middle" font-size="11">kaynak kod, log</text>
+      <text x="62" y="102" text-anchor="middle" font-size="11">kaynak kod, günlük</text>
       <text x="62" y="120" text-anchor="middle" font-size="11">+ desenler</text>
       <line x1="120" y1="86" x2="144" y2="86" stroke="#4a4945" stroke-width="1.6" marker-end="url(#o1)"/>
       <rect x="146" y="18" width="236" height="136" rx="8" fill="#e8f1fc" stroke="#2a78d6" stroke-width="1.5"/>
@@ -120,47 +120,47 @@
     </svg>
     <figcaption>Şekil 1. Üç katman. Molekül atomların adını bilmez; kayıt defterindeki her atoma "bu girdide ne kadar sürersin?" diye sorar.</figcaption>
   </figure>
-  <h3>Sonuç (kalibrasyonda hiç kullanılmamış, birer kez ölçülen taze kümeler)</h3>
+  <h3>Sonuçlar (kalibrasyonda hiç kullanılmamış ve yalnızca bir kez ölçülen taze kümelerde)</h3>
   <table>
     <tr><th>Küme</th><th>Molekülün seçtiği atom</th><th>Karşılaştırma</th></tr>
-    <tr><td>Çok desen (D, 120 vaka)</td><td>%76,7 vakada en hızlı atom; ortalama yavaşlama <b>1,051</b> (en hızlıdan yaklaşık %5 yavaş), en kötü 2,00×</td><td>Hep Wu-Manber 1,131 · Allmer 2016 kuralı 2,543</td></tr>
-    <tr><td>Tek desen (E, 120 vaka)</td><td>Seçilen atomla 1,081; karar süresi dahil (uçtan uca) 1,300</td><td>Hep Horspool 1,198 · Allmer kuralı 1,192</td></tr>
+    <tr><td>Çok desen (D, 120 vaka)</td><td>Vakaların %76,7'sinde en hızlı atom; ortalama yavaşlama <b>1,051</b> (en hızlı atomdan yaklaşık %5 yavaş), en kötü durumda 2,00×</td><td>Her zaman Wu-Manber: 1,131 · Allmer 2016 kuralı: 2,543</td></tr>
+    <tr><td>Tek desen (E, 120 vaka)</td><td>Seçilen atomla 1,081; karar süresi dâhil (uçtan uca) 1,300</td><td>Her zaman Horspool: 1,198 · Allmer kuralı: 1,192</td></tr>
   </table>
   <figure style="width:64%;margin:6pt auto 6pt">
     <img src="../ekran/atolye-masaustu.png" alt="Kod Bilimi Atölyesi ekran görüntüsü: tuvalde bağlanmış kutular ve sonuç paneli" style="border:1px solid #dcdbd6;border-radius:4px">
-    <figcaption>Şekil 1b. Atölye (tarayıcıda, kurulumsuz): kutular türlü uçlarla bağlanır, uyumsuz bağlantı nedeniyle reddedilir.</figcaption>
+    <figcaption>Şekil 1b. Atölye tarayıcıda çalışır, kurulum gerektirmez. Kutular, türü belirli uçlarla bağlanır; uyumsuz bir bağlantı gerekçesiyle reddedilir.</figcaption>
   </figure>
-  <div class="say"><b>Söyle:</b> "Yavaşlama 1 olsaydı her vakada en hızlı atomu bulmuş olurduk. Çok desende 1,051 ile en iyi tek atomdan da, literatürdeki kuraldan da iyiyiz. Tek desende karar süresi aramaya göre büyük kalıyor; bunu sınır olarak yazdık."</div>
+  <div class="say"><b>Özet:</b> Yavaşlama değeri 1 olsaydı molekül her vakada en hızlı atomu bulmuş olurdu. Çok desende 1,051 değeriyle hem en iyi tek atomdan hem de literatürdeki kuraldan daha iyi sonuç alındı. Tek desende karar süresi aramaya göre büyük kalıyor; bu durum sınır olarak belirtildi.</div>
 </section>
 
 <!-- =================================================================== 2. MİMARİ -->
 <section class="page">
   <h2>2. Mimari: saf çekirdek, ince kabuk</h2>
-  <p>Algoritmalar, molekül ve iş akışı motoru <code>src/</code> altında; dosya, ağ ya da ekranla hiç uğraşmazlar (G/Ç yok). Dosya okuma <code>bin/ios.js</code>'te (komut satırı), ekran <code>web/</code>'de (atölye). Bu yüzden <b>aynı kod</b> Node'da, tarayıcıda ve Web Worker'da değiştirilmeden çalışır; atölye algoritmaları kopyalamaz.</p>
+  <p>Algoritmalar, molekül ve iş akışı motoru <code>src/</code> altındadır; dosya, ağ ya da ekranla hiç uğraşmazlar (G/Ç yoktur). Dosya okuma <code>bin/ios.js</code> içinde (komut satırı), ekran işlemleri ise <code>web/</code> altında (atölye) yapılır. Bu sayede <b>aynı kod</b> Node'da, tarayıcıda ve Web Worker'da değiştirilmeden çalışır; atölye algoritmaları kopyalamaz.</p>
   <figure>
     <img src="../uml/svg/4_katmanlar.svg" alt="Paket diyagramı: bağımlılıklar yalnızca aşağı doğru">
-    <figcaption>Şekil 2. Paket (katman) diyagramı. Oklar bağımlılık yönünü gösterir; bağımlılıklar yalnızca aşağı doğrudur, alt katman üst katmanı bilmez.</figcaption>
+    <figcaption>Şekil 2. Paket (katman) diyagramı. Oklar bağımlılık yönünü gösterir; bağımlılıklar yalnızca aşağı doğrudur ve alt katman üst katmanı bilmez.</figcaption>
   </figure>
   <h3>Gereksinimden teste izlenebilirlik (örnekler)</h3>
   <table class="small">
     <tr><th style="width:12mm">#</th><th>Gereksinim</th><th>Kanıt</th></tr>
-    <tr><td>İG1</td><td>Bir ya da çok desenin bütün geçişleri, örtüşenler dahil</td><td>117 sözleşme testi her atoma; 360 rastgele vakada referansla birebir</td></tr>
+    <tr><td>İG1</td><td>Bir ya da birden çok desenin, örtüşenler dâhil bütün geçişleri</td><td>117 sözleşme testi her atoma uygulanır; 360 rastgele vakada sonuçlar referansla birebir aynıdır</td></tr>
     <tr><td>İG3</td><td>Molekül değişmeden yeni atom eklenebilmeli</td><td>Sahte atom testleri (molekül ve atölye)</td></tr>
     <tr><td>İG7</td><td>Değişiklikler geri alınıp yinelenebilmeli</td><td>Özellik tabanlı test: 4 × 400 rastgele işlem</td></tr>
-    <tr><td>İOG1</td><td>Node 22+, npm paketi yok; atomlarda hazır arama işlevi yok</td><td>Yasaklı işlev taraması (<code>forbidden.test.js</code>)</td></tr>
-    <tr><td>İOG5</td><td>Paylaşılan iş akışı sayfaya kod sokamamalı</td><td>Arayüz denetiminde XSS ve CSP kontrolleri</td></tr>
+    <tr><td>İOG1</td><td>Node 22+, npm paketi kullanılmaz; atomlarda hazır arama işlevi kullanılmaz</td><td>Yasaklı işlev taraması (<code>forbidden.test.js</code>)</td></tr>
+    <tr><td>İOG5</td><td>Paylaşılan bir iş akışı sayfaya kod sokamamalı</td><td>Arayüz denetimindeki XSS ve CSP kontrolleri</td></tr>
   </table>
-  <p class="small">İG: işlevsel gereksinim (sistem <i>ne</i> yapar). İOG: işlevsel olmayan gereksinim (<i>nasıl</i> yapar: hız, güvenlik, erişilebilirlik). Tam tablo raporda (Ek C.1).</p>
+  <p class="small">İG: işlevsel gereksinim (sistemin <i>ne</i> yaptığı). İOG: işlevsel olmayan gereksinim (sistemin işi <i>nasıl</i> yaptığı: hız, güvenlik, erişilebilirlik). Tablonun tamamı raporun Ek C.1 bölümündedir.</p>
 </section>
 
 <!-- =================================================================== 3. SOLID -->
 <section class="page">
-  <h2>3. SOLID ilkeleri: nerede ve kanıtı ne?</h2>
-  <div class="say" style="margin-top:0"><b>Söyle:</b> "SOLID, kodu değiştirmesi kolay tutan beş ilkedir. En somut sonucu: yeni bir algoritma eklemek bir dosya yazmak ve listeye bir satır eklemek demek; molekül, atölye ve komut satırı hiç değişmiyor."</div>
+  <h2>3. SOLID ilkeleri: nerede uygulandı, kanıtı ne?</h2>
+  <div class="say" style="margin-top:0"><b>Özet:</b> SOLID, kodun kolayca değiştirilebilmesini sağlayan beş tasarım ilkesidir. Projedeki en somut sonucu şudur: yeni bir algoritma eklemek için bir dosya yazmak ve kayıt defterine bir satır eklemek yeterlidir; molekül, atölye ve komut satırı değişmez.</div>
   <div class="cards">
     <div class="card">
       <h3><span class="k">S</span>Tek sorumluluk</h3>
-      <p>Her modülün değişmek için tek bir nedeni olmalı.</p>
+      <p>Her modülün değişmesi için yalnızca bir neden olmalıdır.</p>
       <svg viewBox="0 0 330 150" role="img" aria-label="Eski tek dosya beş sorumluluğa bölündü">
         <defs><marker id="o2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker></defs>
         <rect x="4" y="22" width="96" height="108" rx="6" fill="#fbf0e0" stroke="#b06a12"/>
@@ -181,7 +181,7 @@
     </div>
     <div class="card">
       <h3><span class="k">O</span>Açık / kapalı</h3>
-      <p>Genişlemeye açık, değişikliğe kapalı: yeni özellik eski kodu değiştirmeden eklenir.</p>
+      <p>Genişlemeye açık, değişikliğe kapalı: yeni bir özellik, var olan kod değiştirilmeden eklenir.</p>
       <svg viewBox="0 0 330 150" role="img" aria-label="Molekül ve atölye kayıt defterini okur; yeni atom listeye eklenir">
         <defs><marker id="o3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker></defs>
         <rect x="4" y="14" width="116" height="40" rx="6" fill="#e8f1fc" stroke="#2a78d6"/>
@@ -198,11 +198,11 @@
         <rect x="178" y="102" width="138" height="30" rx="5" fill="#fff" stroke="#2a78d6" stroke-dasharray="4 3"/>
         <text x="247" y="122" text-anchor="middle" font-size="11" fill="#1d5aa6" font-weight="600">+ YeniAtom (1 satır)</text>
       </svg>
-      <div class="proof"><b>Kanıt:</b> Sahte bir atom eklenince molekül ve atölye hiç değişmeden onu seçer; bir test molekül kodunda atom adı geçmediğini denetler.</div>
+      <div class="proof"><b>Kanıt:</b> Sahte bir atom eklendiğinde molekül ve atölye hiç değişmeden onu seçebilir; bir test de molekül kodunda atom adı geçmediğini denetler.</div>
     </div>
     <div class="card">
       <h3><span class="k">L</span>Yerine geçebilme (Liskov)</h3>
-      <p>Bir alt sınıf, üst sınıfın beklendiği her yerde sorunsuz kullanılabilmeli.</p>
+      <p>Bir alt sınıf, üst sınıfın beklendiği her yerde sorunsuz kullanılabilmelidir.</p>
       <svg viewBox="0 0 330 150" role="img" aria-label="Her atom aynı girdiden referansla aynı çıktıyı verir">
         <defs><marker id="o4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker></defs>
         <rect x="4" y="54" width="74" height="42" rx="6" fill="#f4f3ef" stroke="#bdbcb6"/>
@@ -218,11 +218,11 @@
         <text x="288" y="70" text-anchor="middle" font-size="11" font-weight="700">= Naive</text>
         <text x="288" y="86" text-anchor="middle" font-size="10">(referans)</text>
       </svg>
-      <div class="proof"><b>Kanıt:</b> 117 sözleşme testi her atoma aynen uygulanır; 360 rastgele vakada her atomun çıktısı NaiveSearch'ünkiyle eleman eleman aynı.</div>
+      <div class="proof"><b>Kanıt:</b> 117 sözleşme testi her atoma aynen uygulanır; 360 rastgele vakada her atomun çıktısı NaiveSearch'ünkiyle eleman eleman aynıdır.</div>
     </div>
     <div class="card">
       <h3><span class="k">I</span>Arayüz ayrımı</h3>
-      <p>Kimse kullanmadığı bir yönteme bağımlı olmamalı: büyük arayüz yerine küçük roller (kesikli çizgi: rolü uygular).</p>
+      <p>Hiçbir bileşen kullanmadığı bir yönteme bağımlı olmamalıdır: büyük bir arayüz yerine küçük roller tanımlanır (kesikli çizgi: rolü uygular).</p>
       <svg viewBox="0 0 330 150" role="img" aria-label="Atom üç rolü, atölye kutusu iki rolü uygular">
         <g font-size="10.5" text-anchor="middle" font-weight="600">
           <rect x="4" y="8" width="76" height="34" rx="5" fill="#e8f1fc" stroke="#2a78d6"/><text x="42" y="29">Describable</text>
@@ -237,26 +237,26 @@
         <g stroke="#6d4bb8" stroke-width="1.3" stroke-dasharray="4 3" fill="none"><path d="M80 104 L42 42"/><path d="M95 104 L121 42"/><path d="M110 104 L202 42"/></g>
         <g stroke="#2f8f5b" stroke-width="1.3" stroke-dasharray="4 3" fill="none"><path d="M220 104 L42 42"/><path d="M270 104 L287 42"/></g>
       </svg>
-      <div class="proof"><b>Kanıt:</b> Rolleri <code>src/contracts.js</code> tanımlar. Seçim bilgisi olmayan atom kaydolur ama "auto" adayı olmaz (test). Derleme anında da denetlenir: bozuk bileşen için 11 olumsuz kontrol tür hatası verir.</div>
+      <div class="proof"><b>Kanıt:</b> Roller <code>src/contracts.js</code> dosyasında tanımlıdır. Seçim bilgisi olmayan bir atom kaydolur ama otomatik seçimde aday olmaz (testle gösterildi). Roller derleme anında da denetlenir: bozuk bileşenler için yazılan 11 olumsuz kontrol tür hatası verir.</div>
     </div>
     <div class="card" style="grid-column: 1 / span 2">
       <div class="two" style="align-items:center">
         <div>
           <h3><span class="k">D</span>Bağımlılığın tersine çevrilmesi</h3>
-          <p>Üst seviye kod alt seviye ayrıntılara değil, soyutlamalara bağlı olmalı; ayrıntılar dışarıdan verilir.</p>
-          <p>Molekül somut atomları <code>import</code> etmez: kayıt defteri, katsayılar, katalog ve hatta saat (<code>ctx.now</code>) <b>dışarıdan verilir</b>.</p>
-          <div class="proof"><b>Kanıt:</b> Testler gerçek atom yerine sahte atom, gerçek saat yerine sahte saat verir; böylece sonuçlar her makinede aynı çıkar.</div>
+          <p>Üst düzey kod, alt düzey ayrıntılara değil soyutlamalara bağlı olmalıdır; ayrıntılar dışarıdan verilir.</p>
+          <p>Molekül somut atomları içe aktarmaz (<code>import</code>); kayıt defteri, katsayılar, katalog ve hatta saat (<code>ctx.now</code>) ona <b>dışarıdan verilir</b>.</p>
+          <div class="proof"><b>Kanıt:</b> Testler gerçek atom yerine sahte atom, gerçek saat yerine sahte saat kullanır; böylece sonuçlar her makinede aynı çıkar.</div>
         </div>
         <svg viewBox="0 0 330 170" style="max-height:44mm" role="img" aria-label="Molekül soyutlamaya bağlıdır; ayrıntılar dışarıdan verilir">
           <defs><marker id="o5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker>
           <marker id="o5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff" stroke="#6d4bb8"/></marker></defs>
           <rect x="70" y="6" width="190" height="38" rx="6" fill="#e8f1fc" stroke="#2a78d6"/>
-          <text x="165" y="22" text-anchor="middle" font-size="11.5" font-weight="700">ExactMatch (üst seviye)</text>
+          <text x="165" y="22" text-anchor="middle" font-size="11.5" font-weight="700">ExactMatch (üst düzey)</text>
           <text x="165" y="37" text-anchor="middle" font-size="10">kararı verir</text>
           <rect x="70" y="72" width="190" height="34" rx="6" fill="#fff" stroke="#2a78d6" stroke-dasharray="5 3"/>
           <text x="165" y="94" text-anchor="middle" font-size="11.5" font-weight="600">Searcher rolü (soyutlama)</text>
           <rect x="70" y="132" width="190" height="34" rx="6" fill="#f0ebfa" stroke="#6d4bb8"/>
-          <text x="165" y="154" text-anchor="middle" font-size="11.5">somut atomlar (alt seviye)</text>
+          <text x="165" y="154" text-anchor="middle" font-size="11.5">somut atomlar (alt düzey)</text>
           <line x1="165" y1="44" x2="165" y2="70" stroke="#4a4945" stroke-width="1.5" marker-end="url(#o5)"/>
           <line x1="165" y1="132" x2="165" y2="108" stroke="#6d4bb8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#o5b)"/>
           <g font-size="9.5" fill="#4a4945"><text x="2" y="18">kayıt defteri →</text><text x="2" y="32">katsayılar →</text><text x="2" y="46">saat →</text></g>
@@ -268,17 +268,17 @@
 
 <!-- =================================================================== 4. DESENLER -->
 <section class="page">
-  <h2>4. Tasarım desenleri: hangi sorunu çözdüler?</h2>
+  <h2>4. Tasarım desenleri: hangi sorunları çözdü?</h2>
   <table>
     <tr><th style="width:36mm">Desen</th><th>Projede nerede</th><th>Çözdüğü sorun</th></tr>
-    <tr><td><b>Template Method</b></td><td><code>ExactSearchAtom.process</code> iskeleti; her atom yalnızca arama adımını yazar</td><td>Girdi denetimi, büyük/küçük harf, çıktı sırası 8 atomda tekrar yazılmaz</td></tr>
-    <tr><td><b>Strategy</b></td><td>Atomlar birbirinin yerine geçen stratejiler; molekül birini seçer</td><td>Algoritma çalışma anında, girdiye göre değişir</td></tr>
+    <tr><td><b>Template Method</b></td><td><code>ExactSearchAtom.process</code> iskeleti; her atom yalnızca arama adımını yazar</td><td>Girdi denetimi, büyük/küçük harf ayarı ve çıktı sırası 8 atomda ayrı ayrı yazılmaz</td></tr>
+    <tr><td><b>Strategy</b></td><td>Atomlar birbirinin yerine geçebilen stratejilerdir; molekül bunlardan birini seçer</td><td>Algoritma, çalışma anında girdiye göre değişir</td></tr>
     <tr><td><b>Registry</b> (kayıt defteri)</td><td><code>src/registry.js</code></td><td>Yeni atom eklemek için molekülü değiştirmek gerekmez</td></tr>
-    <tr><td><b>Adapter</b> (uyarlayıcı)</td><td><code>sourceToEntry</code>: kaynak dosya → FASTA kaydı</td><td>DNA için yazılmış atomlar hiç değişmeden kod ve log tarar</td></tr>
-    <tr><td><b>Command + Composite</b></td><td>Geri al / yinele (<code>history.js</code>); çok adımlı işlem tek komut</td><td>Her değişiklik geri alınabilir; yapıştırma tek Ctrl+Z ile geri gelir</td></tr>
-    <tr><td><b>Observer</b> (olay yolu)</td><td><code>web/lib/bus.js</code>: durum değişince görünümler haber alır</td><td>Denetleyici görünümleri tanımaz; yeni görünüm eklemek kolay</td></tr>
+    <tr><td><b>Adapter</b> (uyarlayıcı)</td><td><code>sourceToEntry</code>: kaynak dosya → FASTA kaydı</td><td>DNA için yazılmış atomlar hiç değişmeden kaynak kodu ve günlük kayıtlarını tarar</td></tr>
+    <tr><td><b>Command + Composite</b></td><td>Geri al / yinele (<code>history.js</code>); çok adımlı bir işlem tek komut olur</td><td>Her değişiklik geri alınabilir; yapıştırma işlemi tek bir Ctrl+Z ile geri alınır</td></tr>
+    <tr><td><b>Observer</b> (olay yolu)</td><td><code>web/lib/bus.js</code>: durum değişince görünümler haberdar edilir</td><td>Denetleyici görünümleri tanımaz; yeni bir görünüm kolayca eklenir</td></tr>
     <tr><td><b>Facade</b> (cephe)</td><td><code>web/actions.js</code>: arayüzün tek kapısı</td><td>Görünümler karmaşık alt modülleri bilmez</td></tr>
-    <tr><td><b>Humble Object</b> (görünüm modeli)</td><td><code>web/lib/view-models.js</code>: ekrana yazılacak metin ve sıra saf işlevlerde</td><td>Arayüz mantığı tarayıcı açmadan test edilir</td></tr>
+    <tr><td><b>Humble Object</b> (görünüm modeli)</td><td><code>web/lib/view-models.js</code>: ekrana yazılacak metin ve sıra saf işlevlerde hesaplanır</td><td>Arayüz mantığı tarayıcı açılmadan test edilir</td></tr>
   </table>
   <figure>
     <img src="../uml/svg/2a_sinif_atom_molekul.svg" alt="Sınıf diyagramı: ExactSearchAtom, atomlar, kayıt defteri ve ExactMatch">
@@ -287,7 +287,7 @@
 </section>
 
 <section class="page">
-  <h3 style="margin-top:0">Adapter: DNA atomları kodu nasıl tarıyor?</h3>
+  <h3 style="margin-top:0">Adapter: DNA atomları kaynak kodu nasıl tarıyor?</h3>
   <figure>
     <svg viewBox="0 0 680 96" role="img" aria-label="Kaynak dosya uyarlayıcıdan geçip FASTA kaydına dönüşür, atom değişmeden çalışır">
       <defs><marker id="o6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a4945"/></marker></defs>
@@ -307,12 +307,12 @@
       <text x="616" y="42" text-anchor="middle" font-size="12.5" font-weight="700">Atom</text>
       <text x="616" y="62" text-anchor="middle" font-size="11">hiç değişmedi</text>
     </svg>
-    <figcaption>Şekil 4. Elektrik prizi adaptörü gibi: fiş (kaynak dosya) değişmez, priz (atom) değişmez, aradaki parça uydurur.</figcaption>
+    <figcaption>Şekil 4. Priz adaptörüne benzer: fiş (kaynak dosya) de priz (atom) de değişmez; aradaki parça ikisini birbirine uydurur.</figcaption>
   </figure>
   <h3>Command + Composite: geri al / yinele</h3>
   <figure>
     <img src="../uml/svg/2c_sinif_komut_gecmisi.svg" alt="Sınıf diyagramı: History, Command arayüzü, somut komutlar, MacroCommand">
-    <figcaption>Şekil 5. Her düzenleme bir <b>komut</b> nesnesidir; <code>do()</code> ve tersi <code>undo()</code> vardır. Birden çok adımlı işlem (ör. yapıştırma) <b>MacroCommand</b> içinde tek komut olur (Composite).</figcaption>
+    <figcaption>Şekil 5. Her düzenleme bir <b>komut</b> nesnesidir; her komutun <code>do()</code> yöntemi ve onun tersi olan <code>undo()</code> yöntemi vardır. Birden çok adımlı bir işlem (ör. yapıştırma) <b>MacroCommand</b> içinde tek komut olur (Composite).</figcaption>
   </figure>
   <h3>Observer + Facade: arayüz nasıl güncelleniyor?</h3>
   <figure>
@@ -338,7 +338,7 @@
       <rect x="574" y="47" width="102" height="26" rx="5" fill="#fff" stroke="#2f8f5b"/><text x="625" y="64" text-anchor="middle">özellikler, sonuçlar</text>
       <rect x="574" y="90" width="102" height="26" rx="5" fill="#fff" stroke="#2f8f5b"/><text x="625" y="107" text-anchor="middle">palet, mini harita</text></g>
     </svg>
-    <figcaption>Şekil 6. Gazete aboneliği gibi: görünümler olay yoluna abone olur, durum değişince haber alırlar. Denetleyicinin görünümleri içe aktarmadığını bir test denetler.</figcaption>
+    <figcaption>Şekil 6. Gazete aboneliğine benzer: görünümler olay yoluna abone olur ve durum değiştiğinde haberdar edilir. Denetleyicinin görünümleri içe aktarmadığını bir test denetler.</figcaption>
   </figure>
 </section>
 
@@ -347,16 +347,16 @@
   <h2>5. Diğer yazılım mühendisliği ilkeleri</h2>
   <table>
     <tr><th style="width:38mm">İlke</th><th>Projede</th></tr>
-    <tr><td><b>DRY</b> (kendini tekrarlama)</td><td>Komut satırı ve atölye <b>aynı</b> süzgeç, aynı SARIF işlevini kullanır; "komut satırı = atölye" testleri bunu gösterir. Belgelerdeki sayılar elle yazılmaz, ölçüm dosyalarından gelir.</td></tr>
-    <tr><td><b>KISS / YAGNI</b> (basit tut, gerekmeyeni yazma)</td><td>Hiç npm paketi yok; <code>npm test</code> temiz kopyada kurulumsuz çalışır. Düzenli ifade (regex) tabanlı kurallar bilerek eklenmedi: proje tam eşleştirme üzerine.</td></tr>
-    <tr><td><b>Hızlı hata</b> (fail-fast)</td><td>Eksik üyesi olan bileşen kayıt anında, uyumsuz uçlar bağlanmadan önce, nedeniyle reddedilir.</td></tr>
-    <tr><td><b>Sorumlulukların ayrılması</b></td><td>Saf çekirdek (<code>src/</code>) / ince kabuk (<code>bin/</code>, <code>web/</code>); arayüz mantığı görünüm modellerinde.</td></tr>
-    <tr><td><b>Güvenli tasarım</b></td><td>Metin hiçbir zaman HTML olarak yazılmaz (<code>textContent</code>, XSS testi); İçerik Güvenliği Politikası (CSP); taramada gizli değerler maskelenir; CodeQL.</td></tr>
-    <tr><td><b>Erişilebilirlik</b></td><td>WCAG 2.1 AA: renk karşıtlığı, ekran okuyucu adları, yalnızca klavyeyle kullanım. 20 taramada 0 engelleyici ihlal (ilk ölçümde 25).</td></tr>
-    <tr><td><b>Yeniden üretilebilirlik</b></td><td>Tohumlu (seed) rastgele veri; doğrulama kümeleri bir kez ölçülür; çalıştırma kaydı bileşen sürümlerini ve girdilerin SHA-256 özetini tutar.</td></tr>
-    <tr><td><b>Dürüst ölçüm</b></td><td>Model kalibrasyon kümesinde ayarlandı, ayrı ve taze kümelerde bir kez ölçüldü; kötü sonuçlar (tek desen) silinmedi, sınır olarak yazıldı.</td></tr>
+    <tr><td><b>DRY</b> (kendini tekrarlama)</td><td>Komut satırı ve atölye <b>aynı</b> süzgeçleri ve aynı SARIF işlevini kullanır; "komut satırı = atölye" testleri bunu gösterir. Belgelerdeki sayılar elle yazılmaz, ölçüm dosyalarından alınır.</td></tr>
+    <tr><td><b>KISS / YAGNI</b> (basit tut, gerekmeyeni yazma)</td><td>Hiç npm paketi kullanılmaz; <code>npm test</code> temiz bir kopyada kurulum gerektirmeden çalışır. Düzenli ifade (regex) tabanlı kurallar bilerek eklenmedi, çünkü proje tam eşleştirme üzerine kuruludur.</td></tr>
+    <tr><td><b>Hızlı hata</b> (fail-fast)</td><td>Eksik üyesi olan bir bileşen kayıt sırasında, uyumsuz uçlar ise bağlanmadan önce gerekçesiyle reddedilir.</td></tr>
+    <tr><td><b>Sorumlulukların ayrılması</b></td><td>Saf çekirdek (<code>src/</code>) ile ince kabuk (<code>bin/</code>, <code>web/</code>) ayrıdır; arayüz mantığı görünüm modellerindedir.</td></tr>
+    <tr><td><b>Güvenli tasarım</b></td><td>Metin hiçbir zaman HTML olarak yazılmaz (<code>textContent</code>, XSS testi); İçerik Güvenliği Politikası (CSP) uygulanır; taramada gizli değerler maskelenir; kod CodeQL ile analiz edilir.</td></tr>
+    <tr><td><b>Erişilebilirlik</b></td><td>WCAG 2.1 AA ölçütleri: renk karşıtlığı, ekran okuyucu adları, yalnızca klavyeyle kullanım. 20 taramada 0 engelleyici ihlal bulundu (ilk ölçümde 25).</td></tr>
+    <tr><td><b>Yeniden üretilebilirlik</b></td><td>Rastgele veriler tohumla (seed) üretilir; doğrulama kümeleri yalnızca bir kez ölçülür; çalıştırma kaydı, bileşen sürümlerini ve girdilerin SHA-256 özetlerini tutar.</td></tr>
+    <tr><td><b>Dürüst ölçüm</b></td><td>Model kalibrasyon kümesinde ayarlandı, ayrı ve taze kümelerde bir kez ölçüldü; kötü sonuçlar (tek desen) silinmedi, sınır olarak belirtildi.</td></tr>
   </table>
-  <div class="say"><b>Söyle:</b> "Kalibrasyon ve doğrulama ayrı: modeli bir kümede ayarlayıp başka, hiç görmediği bir kümede ölçtük. Sınavda soruları önceden görmemek gibi."</div>
+  <div class="say"><b>Özet:</b> Kalibrasyon ve doğrulama birbirinden ayrıdır: model bir kümede ayarlandı, hiç görmediği başka bir kümede ölçüldü. Bu, sınav sorularının önceden görülmemesine benzer.</div>
 
   <h2 style="margin-top:12pt">6. Test stratejisi</h2>
   <figure>
@@ -371,7 +371,7 @@
       <text x="250" y="152" text-anchor="middle" font-size="11.5" font-weight="700">Özellik tabanlı</text>
       <text x="250" y="167" text-anchor="middle" font-size="10">360 rastgele vaka · 4 × 400 rastgele işlem</text>
       <text x="250" y="105" text-anchor="middle" font-size="11" font-weight="700">Bütünleşme</text>
-      <text x="250" y="119" text-anchor="middle" font-size="9.5">komut satırı alt süreç, paketler</text>
+      <text x="250" y="119" text-anchor="middle" font-size="9.5">komut satırı (alt süreç), paketler</text>
       <text x="250" y="60" text-anchor="middle" font-size="10.5" font-weight="700">Kabul: 56</text>
       <text x="250" y="74" text-anchor="middle" font-size="9">gerçek tarayıcı</text>
       <text x="250" y="28" text-anchor="middle" font-size="8.5" font-weight="700">WCAG</text>
@@ -384,7 +384,7 @@
       <text x="504" y="168" font-size="11">WCAG ihlali</text><text x="664" y="168" text-anchor="end" font-size="11" font-weight="700">0</text>
       <text x="583" y="190" text-anchor="middle" font-size="9.5" fill="#4a4945">her gönderimde CI'da</text>
     </svg>
-    <figcaption>Şekil 7. Test piramidi: tabanda çok sayıda hızlı birim testi, yukarı çıktıkça daha az ama daha kapsamlı testler. Sağda: testlerin kendisinin ne kadar iyi olduğu.</figcaption>
+    <figcaption>Şekil 7. Test piramidi: tabanda çok sayıda hızlı birim testi, yukarı çıkıldıkça sayıca az ama daha kapsamlı testler yer alır. Sağda testlerin kendi kalitesine ilişkin ölçümler görülür.</figcaption>
   </figure>
 </section>
 
@@ -393,24 +393,24 @@
     <div class="card">
       <h3>Referans uygulama (oracle) yöntemi</h3>
       <p>Hızlı ama karmaşık her atomun çıktısı, yavaş ama doğruluğu apaçık <b>NaiveSearch</b>'ün çıktısıyla eleman eleman karşılaştırılır.</p>
-      <p class="small">Örnek: Bir hesap makinesinin sonucunu elle yapılan toplamayla denetlemek gibi. Elle yapmak yavaştır ama yanlış olma ihtimali çok düşüktür.</p>
+      <p class="small">Örnek: Hesap makinesinin sonucunu elle yapılan toplamayla denetlemek. Elle hesaplamak yavaştır ama yanılma olasılığı çok düşüktür.</p>
     </div>
     <div class="card">
       <h3>Mutasyon testi: testler hata yakalıyor mu?</h3>
-      <p>Koda bilerek küçük hatalar konur (<code>&lt;</code> yerine <code>&lt;=</code>, kaymayı bir artırmak, metni <code>innerHTML</code> ile yazmak…) ve testlerin kalıp kalmadığına bakılır.</p>
-      <p class="small"><b>36 hatanın 36'sı yakalandı.</b> İlk turda biri kaçmıştı; sebep testteydi, test güçlendirildi.</p>
+      <p>Koda bilerek küçük hatalar konur (<code>&lt;</code> yerine <code>&lt;=</code> yazmak, kaymayı bir artırmak, metni <code>innerHTML</code> ile yazmak…) ve testlerin bu hataları yakalayıp yakalamadığına bakılır.</p>
+      <p class="small"><b>36 hatanın 36'sı yakalandı.</b> İlk turda biri gözden kaçmıştı; nedeni testteki bir eksiklikti ve test güçlendirildi.</p>
     </div>
   </div>
   <div class="two" style="margin-top:8pt">
     <div class="card">
       <h3>Özellik tabanlı test</h3>
-      <p>Birkaç elle seçilmiş örnek yerine yüzlerce rastgele girdi üretilir ve her birinde bir <i>özelliğin</i> tuttuğu denetlenir.</p>
-      <p class="small">Örnek: geri al / yinele 4 tohumla 400'er rastgele düzenleme işlemi yapılarak sınanır; her adımda sonuç basit bir durum modeliyle karşılaştırılır.</p>
+      <p>Elle seçilmiş birkaç örnek yerine yüzlerce rastgele girdi üretilir ve her birinde belirli bir <i>özelliğin</i> korunduğu denetlenir.</p>
+      <p class="small">Örnek: Geri al / yinele işlevi 4 tohumla 400'er rastgele düzenleme işlemiyle sınanır; her adımda sonuç basit bir durum modeliyle karşılaştırılır.</p>
     </div>
     <div class="card">
       <h3>Negatif kontrol</h3>
-      <p>Bir denetimin gerçekten çalıştığını göstermek için hata bilerek geri konur ve denetimin kaldığı görülür.</p>
-      <p class="small">Örnek: Yasaklı işlev taraması kendisine verilen kötü örnekleri yakaladığını da sınar. Bozuk bir bileşen için yazılan 11 olumsuz kontrol de derleme hatası verir.</p>
+      <p>Bir denetimin gerçekten çalıştığını göstermek için hata bilerek koda geri konur ve denetimin başarısız olduğu görülür.</p>
+      <p class="small">Örnek: Yasaklı işlev taraması, kendisine verilen kötü örnekleri yakaladığını da sınar. Bozuk bileşenler için yazılan 11 olumsuz kontrol de derleme hatası verir.</p>
     </div>
   </div>
 
@@ -443,44 +443,44 @@
       <text x="617" y="120" text-anchor="middle" font-size="10">biri kalırsa</text>
       <text x="617" y="134" text-anchor="middle" font-size="10">gönderim kırmızı ✗</text>
     </svg>
-    <figcaption>Şekil 8. Sürekli entegrasyon: her gönderimde kapılar kendiliğinden ve paralel çalışır. Ayrıca site GitHub Pages'e kendiliğinden yayınlanır; Dependabot kullanılan araçların sürümlerini izler.</figcaption>
+    <figcaption>Şekil 8. Sürekli entegrasyon: her gönderimde kalite kapıları kendiliğinden ve paralel çalışır. Site de GitHub Pages'e kendiliğinden yayımlanır; Dependabot, kullanılan araçların sürümlerini izler.</figcaption>
   </figure>
-  <div class="say"><b>Söyle:</b> "Kalite elle bakmaya bırakılmadı. Biri yanlış bir şey gönderirse GitHub bunu kırmızıyla gösterir. Örneğin kendi tarayıcımız, yeni eklenen bir dosyanın yorumundaki parola deseni adını bile yakaladı."</div>
+  <div class="say"><b>Özet:</b> Kalite elle denetime bırakılmadı; hatalı bir gönderim GitHub'da kırmızıyla işaretlenir. Örneğin projenin kendi tarayıcısı, yeni eklenen bir dosyanın yorum satırındaki parola deseni adını bile yakaladı.</div>
 </section>
 
 <!-- =================================================================== 8. SÜREÇ + SONUÇ -->
 <section class="page">
-  <h2>8. Süreç: nasıl çalıştık?</h2>
+  <h2>8. Süreç: nasıl çalışıldı?</h2>
   <ul>
-    <li><b>Sürüm denetimi (Git):</b> Her özellik ayrı commit; açıklama neyin neden değiştiğini söyler. Geçmiş, ölçümlerin hangi kodla alındığını gösterir.</li>
-    <li><b>Karar kaydı (<code>KARARLAR.md</code>):</b> Her tasarım kararı gerekçesiyle ve alternatifleriyle yazıldı; yanlış çıkan kararlar da silinmedi.</li>
-    <li><b>Değişiklik günlüğü ve sürümler:</b> <code>CHANGELOG.md</code>, Anlamsal Sürümleme (1.0.0); maliyet modelinin kendi sürümleri (v1 → v4) ayrı tutuldu.</li>
-    <li><b>Benzer projeler:</b> GitHub'da yıldıza göre 71 ilgili depo incelendi (n8n, ComfyUI, ripgrep, gitleaks, semgrep…); alınan ve bilerek alınmayan fikirler gerekçesiyle yazıldı.</li>
-    <li><b>UML:</b> 10 diyagram: kullanım durumu, 4 sınıf, 4 sıralı, 1 paket diyagramı (<code>docs/uml/UML_Diyagramlari.pdf</code>).</li>
-    <li><b>Yapay zekâ kullanımı:</b> Ders politikası serbest bırakıyor; kod, testler ve belgeler bir yapay zekâ kodlama aracıyla (Claude Code) üretildi ve bu açıkça yazıldı. Bütün sayılar çalıştırılan komutlardan.</li>
+    <li><b>Sürüm denetimi (Git):</b> Her özellik ayrı bir kayıt (commit) olarak eklendi; kayıt iletisi neyin, neden değiştiğini açıklar. Geçmiş, ölçümlerin hangi kodla alındığını gösterir.</li>
+    <li><b>Karar kaydı (<code>KARARLAR.md</code>):</b> Her tasarım kararı gerekçesi ve seçenekleriyle birlikte yazıldı; yanlış çıkan kararlar da silinmedi.</li>
+    <li><b>Değişiklik günlüğü ve sürümler:</b> <code>CHANGELOG.md</code> tutuldu ve Anlamsal Sürümleme (1.0.0) kullanıldı; maliyet modelinin kendi sürümleri (v1 → v4) ayrıca izlendi.</li>
+    <li><b>Benzer projeler:</b> GitHub'da yıldız sayısına göre sıralanan 71 ilgili depo incelendi (n8n, ComfyUI, ripgrep, gitleaks, semgrep…); alınan ve bilerek alınmayan fikirler gerekçeleriyle yazıldı.</li>
+    <li><b>UML:</b> Kullanım durumu, 4 sınıf, 4 sıralı ve 1 paket diyagramı olmak üzere 10 diyagram çizildi (<code>docs/uml/UML_Diyagramlari.pdf</code>).</li>
+    <li><b>Yapay zekâ kullanımı:</b> Ders politikası yapay zekâ kullanımına izin veriyor. Kod, testler ve belgeler bir yapay zekâ kodlama aracıyla (Claude Code) üretildi ve bu durum belgelerde açıkça belirtildi. Bütün sayılar çalıştırılan komutların çıktısından alındı.</li>
   </ul>
 
-  <h2 style="margin-top:12pt">9. Sınırlar (dürüstçe)</h2>
+  <h2 style="margin-top:12pt">9. Sınırlar</h2>
   <div class="warn">
     <ul style="margin:0">
-      <li><b>Tek desen:</b> Molekül uçtan uca hep Horspool'un ve Allmer kuralının gerisinde (1,300'e karşı 1,198 ve 1,192).</li>
-      <li><b>Karar ilk kayda göre:</b> Sözleşme bunu istiyor; ilk dosya küçükse seçim kötü olabilir.</li>
-      <li><b>Ölçüm:</b> Farklı makinelerde alınan v3 ve v4 ölçümleri doğrudan karşılaştırılamaz; bu raporda yazılı.</li>
-      <li><b>Arayüz:</b> Sürükleme ve yakınlaştırma gibi tuval etkileşimleri birim testli değil; yalnızca gerçek tarayıcıdaki 56 denetimle sınanıyor.</li>
+      <li><b>Tek desen:</b> Uçtan uca ölçümde molekül, her zaman Horspool'u kullanmanın ve Allmer kuralının gerisinde kalıyor (1,300'e karşı 1,198 ve 1,192).</li>
+      <li><b>Karar ilk kayda göre verilir:</b> Sözleşme bunu gerektiriyor; ilk dosya küçükse seçim isabetsiz olabilir.</li>
+      <li><b>Ölçüm:</b> Farklı makinelerde alınan v3 ve v4 ölçümleri doğrudan karşılaştırılamaz; bu durum raporda belirtildi.</li>
+      <li><b>Arayüz:</b> Sürükleme ve yakınlaştırma gibi tuval etkileşimleri birim testleriyle sınanmıyor; yalnızca gerçek tarayıcıdaki 56 denetimle sınanıyor.</li>
     </ul>
   </div>
 
   <h2 style="margin-top:12pt">10. Olası sorular ve kısa yanıtlar</h2>
   <table class="small">
     <tr><th style="width:56mm">Soru</th><th>Yanıt</th></tr>
-    <tr><td>Neden kural tabanlı değil de maliyet modeli?</td><td>Yeni atom eklenince eşikleri elle yeniden düşünmek gerekmiyor; atom kendi özelliklerini verir, kalibrasyon katsayıları bulur, molekül değişmez.</td></tr>
-    <tr><td>Doğrulama kümesine bakıp modeli düzelttiniz mi?</td><td>Hayır. Katsayılar yalnızca kalibrasyon verisiyle bulundu; her model sürümü yeni ve taze bir kümede yalnızca bir kez ölçüldü.</td></tr>
-    <tr><td>Hep Wu-Manber kullansak?</td><td>Çok desende hayır: 1,131'e karşı 1,051. Tek desende ise dürüst cevap evet; bunu sınır olarak yazdık.</td></tr>
-    <tr><td>Atomlarda hazır <code>indexOf</code> kullanmadığınızı nasıl biliyoruz?</td><td><code>forbidden.test.js</code> kaynakları tarar (indexOf, RegExp, console, saat, rastgelelik…); taramanın kötü örnekleri yakaladığını da ayrıca sınar.</td></tr>
-    <tr><td>Testler gerçekten hata yakalıyor mu?</td><td>Mutasyon denetimi: koda konan 36 küçük hatanın 36'sı yakalandı.</td></tr>
-    <tr><td>Yeni bir atom nasıl eklenir?</td><td><code>ExactSearchAtom</code>'dan türeyen bir sınıf, kayıt defterine bir satır, sonra <code>npm run calibrate</code>. Atölyede kendiliğinden kutu olarak görünür.</td></tr>
-    <tr><td>Atölye algoritmaları kopyalıyor mu?</td><td>Hayır; tarayıcı <code>src/</code> modüllerini doğrudan içe aktarır. Altı hazır paketin her birinde atölye ile komut satırı aynı sayıda bulgu verir.</td></tr>
-    <tr><td>SOLID nerede?</td><td>Sayfa 4: her ilke bir yerde ve bir testle (tek sorumluluk: 450 satır sınırı; açık/kapalı: sahte atom; Liskov: 117 sözleşme testi; arayüz ayrımı: roller; bağımlılığın tersine çevrilmesi: dışarıdan verilen kayıt defteri).</td></tr>
+    <tr><td>Neden kural tabanlı bir seçim yerine maliyet modeli kullanıldı?</td><td>Yeni bir atom eklendiğinde eşikleri elle yeniden belirlemek gerekmez: atom kendi özelliklerini bildirir, kalibrasyon katsayıları bulur ve molekül değişmez.</td></tr>
+    <tr><td>Model, doğrulama kümesine bakılarak düzeltildi mi?</td><td>Hayır. Katsayılar yalnızca kalibrasyon verisiyle bulundu; her model sürümü yeni ve taze bir kümede yalnızca bir kez ölçüldü.</td></tr>
+    <tr><td>Her zaman Wu-Manber kullanılsa daha iyi olmaz mı?</td><td>Çok desende hayır: molekül 1,051, her zaman Wu-Manber 1,131. Tek desende ise evet; bu durum sınır olarak belirtildi.</td></tr>
+    <tr><td>Atomlarda hazır <code>indexOf</code> kullanılmadığı nasıl biliniyor?</td><td><code>forbidden.test.js</code> kaynak dosyaları tarar (indexOf, RegExp, console, saat, rastgelelik…) ve taramanın kötü örnekleri yakaladığını da ayrıca sınar.</td></tr>
+    <tr><td>Testler gerçekten hata yakalıyor mu?</td><td>Evet. Mutasyon denetiminde koda konan 36 küçük hatanın 36'sı yakalandı.</td></tr>
+    <tr><td>Yeni bir atom nasıl eklenir?</td><td><code>ExactSearchAtom</code>'dan türeyen bir sınıf yazılır, kayıt defterine bir satır eklenir ve <code>npm run calibrate</code> çalıştırılır. Yeni atom, atölyede kendiliğinden bir kutu olarak görünür.</td></tr>
+    <tr><td>Atölye algoritmaları kopyalıyor mu?</td><td>Hayır. Tarayıcı, <code>src/</code> modüllerini doğrudan içe aktarır; altı hazır paketin her birinde atölye ile komut satırı aynı sayıda bulgu verir.</td></tr>
+    <tr><td>SOLID ilkeleri nerede uygulandı?</td><td>Sayfa 4'te her ilke, projedeki yeri ve kanıtıyla verildi: tek sorumluluk için 450 satır sınırı, açık/kapalı için sahte atom, Liskov için 117 sözleşme testi, arayüz ayrımı için roller, bağımlılığın tersine çevrilmesi için dışarıdan verilen kayıt defteri.</td></tr>
   </table>
 </section>
 
@@ -488,28 +488,28 @@
 <section class="page">
   <h2>Terimler sözlüğü</h2>
   <dl class="gloss">
-    <dt>Atom / molekül</dt><dd>IoS'ta atom tek bir dönüşümdür (burada tek bir arama algoritması); molekül aynı işi yapan atomlardan girdiye göre seçim yapan bileşendir.</dd>
+    <dt>Atom / molekül</dt><dd>IoS'ta atom tek bir dönüşümdür (burada tek bir arama algoritması); molekül, aynı işi yapan atomlar arasından girdiye göre seçim yapan bileşendir.</dd>
     <dt>Maliyet modeli</dt><dd>Her atomun bir girdide ne kadar süreceğini tahmin eden formül; katsayıları ölçümlerden (kalibrasyon) bulunur.</dd>
-    <dt>Kalibrasyon / doğrulama</dt><dd>Kalibrasyon modeli ayarlamaktır; doğrulama, ayarlanmış modeli hiç görmediği verilerde ölçmektir.</dd>
-    <dt>Geometrik ortalama yavaşlama</dt><dd>Seçilen atomun süresinin o vakadaki en hızlı atomun süresine oranı, vakalar üzerinde çarpımsal ortalama. 1 = her seferinde en hızlıyı bulmak.</dd>
+    <dt>Kalibrasyon / doğrulama</dt><dd>Kalibrasyon, modeli ölçümlere göre ayarlamaktır; doğrulama, ayarlanmış modeli hiç görmediği verilerde ölçmektir.</dd>
+    <dt>Geometrik ortalama yavaşlama</dt><dd>Seçilen atomun süresinin, o vakadaki en hızlı atomun süresine oranının vakalar üzerindeki çarpımsal ortalaması. 1 değeri, her vakada en hızlı atomun seçildiği anlamına gelir.</dd>
     <dt>SOLID</dt><dd>Beş tasarım ilkesinin baş harfleri: tek sorumluluk, açık/kapalı, yerine geçebilme, arayüz ayrımı, bağımlılığın tersine çevrilmesi.</dd>
-    <dt>Tasarım deseni</dt><dd>Sık karşılaşılan bir tasarım sorununa denenmiş, adı konmuş çözüm kalıbı (ör. Strategy, Command).</dd>
-    <dt>Kayıt defteri (registry)</dt><dd>Bileşenlerin adıyla kaydolduğu liste; kullanan kod bileşenleri tek tek tanımadan listeden alır.</dd>
-    <dt>Uyarlayıcı (adapter)</dt><dd>Uyumsuz iki arayüzü birbirine bağlayan ara katman.</dd>
+    <dt>Tasarım deseni</dt><dd>Sık karşılaşılan bir tasarım sorunu için denenmiş ve adı konmuş çözüm kalıbı (ör. Strategy, Command).</dd>
+    <dt>Kayıt defteri (registry)</dt><dd>Bileşenlerin adlarıyla kaydolduğu liste; onları kullanan kod, bileşenleri tek tek tanımadan bu listeden alır.</dd>
+    <dt>Uyarlayıcı (adapter)</dt><dd>Birbirine uymayan iki arayüzü bağlayan ara katman.</dd>
     <dt>Olay yolu (event bus)</dt><dd>Bir değişikliği, onu dinleyen herkese duyuran ortak kanal (Observer deseni).</dd>
     <dt>Birim testi</dt><dd>Kodun tek bir parçasını diğerlerinden ayrı sınayan küçük test.</dd>
-    <dt>Kapsama (coverage)</dt><dd>Testlerin çalıştırdığı kod satırlarının ve dallarının oranı.</dd>
-    <dt>Mutasyon testi</dt><dd>Koda bilerek hata koyup testlerin yakalayıp yakalamadığını ölçmek; testlerin kalitesini gösterir.</dd>
-    <dt>Özellik tabanlı test</dt><dd>Çok sayıda rastgele girdide bir özelliğin her zaman doğru kaldığını denetleyen test.</dd>
-    <dt>Referans uygulama (oracle)</dt><dd>Yavaş ama doğruluğu apaçık bir uygulama; hızlı uygulamaların çıktısı onunkiyle karşılaştırılır.</dd>
+    <dt>Kapsama (coverage)</dt><dd>Testlerin çalıştırdığı kod satırlarının ve dallarının tüm koda oranı.</dd>
+    <dt>Mutasyon testi</dt><dd>Koda bilerek hata koyup testlerin bunu yakalayıp yakalamadığını ölçmek; testlerin kalitesini gösterir.</dd>
+    <dt>Özellik tabanlı test</dt><dd>Çok sayıda rastgele girdide belirli bir özelliğin her zaman korunduğunu denetleyen test.</dd>
+    <dt>Referans uygulama (oracle)</dt><dd>Yavaş ama doğruluğu apaçık bir uygulama; hızlı uygulamaların çıktısı bununla karşılaştırılır.</dd>
     <dt>Sürekli entegrasyon (CI)</dt><dd>Her gönderimde testlerin ve denetimlerin kendiliğinden çalışması.</dd>
     <dt>Statik tür denetimi</dt><dd>Kodu çalıştırmadan, yanlış alan adı ya da eksik argüman gibi hataları bulmak.</dd>
-    <dt>WCAG</dt><dd>Web erişilebilirliği ölçütü: renk karşıtlığı, ekran okuyucu, klavyeyle kullanım.</dd>
-    <dt>XSS / CSP</dt><dd>XSS: sayfaya dışarıdan kod sokulması saldırısı. CSP: tarayıcıya hangi betiklerin çalışabileceğini söyleyen güvenlik politikası.</dd>
+    <dt>WCAG</dt><dd>Web erişilebilirliği ölçütleri: renk karşıtlığı, ekran okuyucu desteği, klavyeyle kullanım.</dd>
+    <dt>XSS / CSP</dt><dd>XSS, sayfaya dışarıdan kod sokulmasına dayanan bir saldırıdır. CSP, tarayıcıya hangi betiklerin çalışabileceğini bildiren güvenlik politikasıdır.</dd>
     <dt>SARIF</dt><dd>Tarama sonuçları için ortak dosya biçimi; GitHub'ın güvenlik ekranı bunu okur.</dd>
-    <dt>Web Worker</dt><dd>Tarayıcıda ağır işi arka planda çalıştıran iş parçacığı; arayüz donmaz.</dd>
+    <dt>Web Worker</dt><dd>Tarayıcıda ağır işleri arka planda yürüten iş parçacığı; bu sayede arayüz donmaz.</dd>
   </dl>
-  <p class="small" style="margin-top:12pt;color:var(--muted)">Ayrıntılar: rapor (<code>docs/rapor/Rapor.pdf</code>), UML diyagramları (<code>docs/uml/UML_Diyagramlari.pdf</code>), sorular için <code>docs/sunum.md</code>, her bölümün anlatımı için <code>docs/anlatim.md</code>.</p>
+  <p class="small" style="margin-top:12pt;color:var(--muted)">Ayrıntılar için: rapor (<code>docs/rapor/Rapor.pdf</code>), UML diyagramları (<code>docs/uml/UML_Diyagramlari.pdf</code>), olası sorular (<code>docs/sunum.md</code>) ve bölümlerin ayrıntılı anlatımı (<code>docs/anlatim.md</code>).</p>
 </section>
 
 </main>

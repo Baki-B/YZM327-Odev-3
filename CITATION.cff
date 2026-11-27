@@ -3,7 +3,8 @@ message: "Bu yazılımı kullanırsanız lütfen aşağıdaki bilgilerle atıf y
 title: "Kod Bilimi Atölyesi: akıllı tam desen eşleştirme (IoS sequence.pattern-match.exact)"
 type: software
 authors:
-  - given-names: "Baki"   # soyadı: [soyad]
+  - given-names: "Abdülbaki"
+    family-names: "Bayır"
   - given-names: "Seyyid Abdulbaki"
     family-names: "Bozkurt"
   - given-names: "Alparslan Tuğra"
